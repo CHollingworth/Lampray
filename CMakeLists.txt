@@ -39,9 +39,6 @@ target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/nfd/lib/libnfd.a )
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/nfd/include/include/nfd.h )
 
 
-#add_subdirectory( ${CMAKE_SOURCE_DIR}/bit7z )
-#target_link_libraries(${PROJECT_NAME} bit7z64 )
-
 pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARIES})
