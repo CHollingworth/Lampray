@@ -7,9 +7,16 @@ Please feel free to make pull requests and aid me in maintaining this tool
 
 ## Requirements
 Vulkan
+
 Pugixml-dev
+
 GLFW
+
 PkgConfig
 
 C++ 17
+
 Zenity
+
+
+![Tool Image]([https://github.com/your-username/your-repo/raw/main/images/logo.png](https://github.com/CHollingworth/Lamp/blob/master/github-images/Screenshot%20from%202023-09-07%2022-10-09.png)https://github.com/CHollingworth/Lamp/blob/master/github-images/Screenshot%20from%202023-09-07%2022-10-09.png)
