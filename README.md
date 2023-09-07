@@ -18,5 +18,4 @@ C++ 17
 
 Zenity
 
-
-![Tool Image]([https://github.com/your-username/your-repo/raw/main/images/logo.png](https://github.com/CHollingworth/Lamp/blob/master/github-images/Screenshot%20from%202023-09-07%2022-10-09.png)https://github.com/CHollingworth/Lamp/blob/master/github-images/Screenshot%20from%202023-09-07%2022-10-09.png)
+![GitHub Logo](https://github.com/CHollingworth/Lamp/blob/e4505112bdce7b07c635a7b5cd33a20f255a1d40/github-images/Screenshot%20from%202023-09-07%2022-10-09.png)
