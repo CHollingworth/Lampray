@@ -14,6 +14,8 @@
 #include "imgui/imgui_impl_vulkan.h"
 #include "lampMenus.h"
 #include "lampConfig.h"
+#include "lampFilesystem.h"
+#include "game-data/BG3/BG3.h"
 #include <stdio.h>          // printf, fprintf
 #include <stdlib.h>         // abort
 
@@ -400,7 +402,7 @@ int main(int, char**)
     }
 
 
-    // [!] glfwSetDropCallback(window, LampFS::getInstance().fileDrop);
+    glfwSetDropCallback(window, Lamp::Core::lampFilesystem::fileDrop);
 
     ImVector<const char*> extensions;
     uint32_t extensions_count = 0;
@@ -499,24 +501,20 @@ int main(int, char**)
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-
-    if(!Lamp::Core::lampConfig::getInstance().init()){
+    if(!Lamp::Core::lampFilesystem::getInstance().init()){
         return 0;
     }
 
-     //Refrence to our menu Functions
+    if(!Lamp::Core::lampFilesystem::getInstance().init_config()){
+        return 0;
+    }
+
+    // Load our modlists
+    Lamp::Game::BG3::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::BG3);
+     //Reference to our menu Functions
     Lamp::Core::lampMenus * Menus = new Lamp::Core::lampMenus();
     /*
-   std::filesystem::create_directories("Holding/Archives");
-   std::filesystem::create_directories("Holding/ext");
-   std::filesystem::create_directories("Holding/PreDeployment/bin");
-   std::filesystem::create_directories("Holding/PreDeployment/data");
-   std::filesystem::create_directories("Holding/PreDeployment/Mods");
-   std::filesystem::create_directories("Holding/PreDeployment/PlayerProfiles/Public");
 
-
-   LampFS::getInstance().loadArchives();
-   LampFS::getInstance().loadConfig();
 */
     // Main loop
     while (!glfwWindowShouldClose(window))

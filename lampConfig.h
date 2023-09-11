@@ -28,17 +28,13 @@ namespace Lamp {
             };
 
             std::map<Game, std::string> GameStringMap = {
+                    {UNK, "LAMP CONFIG"},
                     {BG3, "Baldur's Gate 3"}
             };
 
             Game CurrentGame = UNK;
             bool ShowIntroMenu = true;
-            int Profile = 0;
 
-            bool init();
-
-            void load_conifg();
-            void save_config();
         private:
             lampConfig() {}
 

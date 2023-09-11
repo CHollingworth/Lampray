@@ -21,7 +21,6 @@ add_executable(Lamp main.cpp
         imgui/imstb_truetype.h
         imgui/imgui_impl_glfw.cpp
         json/json.hpp
-        lampConfig.cpp
         lampConfig.h
         lampMenus.cpp
         lampMenus.h

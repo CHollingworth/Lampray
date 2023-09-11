@@ -4,7 +4,9 @@
 
 #include "lampMenus.h"
 #include "lampConfig.h"
-
+#include "lampFilesystem.h"
+#include "game-data/BG3/BG3.h"
+#include "game-data/gameControl.h"
 void Lamp::Core::lampMenus::CreateMenus() {
 
     ImGuiIO &io = ImGui::GetIO();
@@ -84,7 +86,7 @@ void Lamp::Core::lampMenus::IntroMenu() {
 
     if(ImGui::Button("I have read and understood the text above.")){
         Lamp::Core::lampConfig::getInstance().ShowIntroMenu = false;
-        Lamp::Core::lampConfig::getInstance().save_config();
+        Lamp::Core::lampFilesystem::getInstance().save_config();
     }
     ImGui::End();
 }
@@ -92,7 +94,10 @@ void Lamp::Core::lampMenus::IntroMenu() {
 void Lamp::Core::lampMenus::GameSelect() {
     ImGui::Begin("Blank Menu", NULL, DefaultFlags());
     DefaultMenuBar();
-    ImGui::Button("Test");
+    ImGui::Text("Welcome to Lamp! At the moment there is only support for BG3, hopefully more to come!");
+    if(ImGui::Button(lampConfig::getInstance().GameStringMap[lampConfig::BG3].c_str())){
+        lampConfig::getInstance().CurrentGame = lampConfig::BG3;
+    }
     ImGui::End();
 }
 
@@ -103,7 +108,17 @@ void Lamp::Core::lampMenus::LampConfigMenu() {
 void Lamp::Core::lampMenus::ModMenu() {
     ImGui::Begin("Blank Menu", NULL, DefaultFlags());
     DefaultMenuBar();
-    ImGui::Button("Test");
+    switch (lampConfig::getInstance().CurrentGame) {
+        case lampConfig::UNK:
+            currentMenu = LAMP_GAME_SELECT;
+            break;
+        case lampConfig::BG3:
+            ImGui::Begin("Blank Menu", NULL, DefaultFlags());
+            DefaultMenuBar();
+            Lamp::Game::BG3::getInstance().listArchives();
+            ImGui::End();
+            break;
+    }
     ImGui::End();
 }
 
