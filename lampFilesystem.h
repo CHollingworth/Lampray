@@ -7,13 +7,53 @@
 
 #include <string>
 #include <list>
-
+#include <GLFW/glfw3.h>
+#include "bitformat.hpp"
+#include "lampMod.h"
+#include "lampConfig.h"
 namespace Lamp {
     namespace Core {
         class lampFilesystem {
         public:
-            bool createFileStructure(std::list<std::string> structure);
+            static lampFilesystem& getInstance()
+            {
+                static lampFilesystem instance;
+                return instance;
+            }
+
+            lampFilesystem(lampFilesystem const&)               = delete;
+            void operator=(lampFilesystem const&)  = delete;
+
+            bool init();
+
+            bool init_config();
+
+            void load_conifg();
+            void save_config();
+
+            bool createFileStructure(Lamp::Core::lampConfig::Game Game, std::list<std::string> structure);
+
+            void extract(Lamp::Core::lampConfig::Game Game, Lamp::Core::lampMod::Mod mod, std::string localExtractionPath);
+            void extractSpecificFileType(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod mod, std::string extractionPath, std::string extension);
+
+            std::list<Lamp::Core::lampMod::Mod *> loadModList(Lamp::Core::lampConfig::Game Game);
+            bool saveModList(Lamp::Core::lampConfig::Game Game, std::list<Lamp::Core::lampMod::Mod *> ModList);
+
+            bool saveKeyData(Lamp::Core::lampConfig::Game Game, std::string key, std::string data);
+            std::string loadKeyData(Lamp::Core::lampConfig::Game Game, std::string key);
+
+            static void fileDrop(GLFWwindow* window, int count, const char** paths);
+        private:
+            lampFilesystem() {}
+
+            const std::string baseDataPath = "Lamp_Data/";
+            const std::string saveDataPath = baseDataPath+"Mod_Lists/";
+            const std::string archiveDataPath = baseDataPath+"Archives/";
+            const std::string ConfigDataPath = baseDataPath+"Config/";
+
         };
+
+
     }
 } // Lamp
 

@@ -9,20 +9,46 @@
     namespace Lamp::Game {
         class BG3: public gameControl {
         public:
-            bool init() override;
 
-            bool close(std::list<Lamp::Core::lampMod> ModList) override;
+            enum ModType{
+                BG3_ENGINE_INJECTION = 0,
+                BG3_MOD,
+                BG3_BIN_OVERRIDE,
+                BG3_DATA_OVERRIDE,
+                NaN
+            };
 
-            int internalTypeToInt(Lamp::Core::lampMod Mod) override;
-            std::list<std::string> internalTypeListToStrings() override;
+            std::list<Lamp::Core::lampMod::Mod *> ModList;
 
-            void ConfigMenu() override;
-            bool createFileStructure() override;
+            static BG3& getInstance()
+            {
+                static BG3 instance;
+                return instance;
+            }
 
-            bool preCleanUp() override;
-            bool preDeployment() override;
-            bool deployment() override;
-            void postDeploymentTasks() override;
+            BG3(BG3 const&) = delete;
+            void operator=(BG3 const&)  = delete;
+
+            bool init() override{};
+
+            bool close(std::list<Lamp::Core::lampMod> ModList) override{};
+
+            int internalTypeToInt(Lamp::Core::lampMod Mod) override{};
+            std::list<std::string> internalTypeListToStrings() override{};
+
+            void registerArchive(std::string Path) override;
+
+            void ConfigMenu() override{};
+            bool createFileStructure() override{};
+
+            bool preCleanUp() override{};
+            bool preDeployment() override{};
+            bool deployment() override{};
+            void postDeploymentTasks() override{};
+
+            void listArchives() override;
+        private:
+            BG3(){};
         };
     }
 // Lamp
