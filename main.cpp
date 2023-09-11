@@ -12,7 +12,8 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_vulkan.h"
-#include "LampMenus.h"
+#include "lampMenus.h"
+#include "lampConfig.h"
 #include <stdio.h>          // printf, fprintf
 #include <stdlib.h>         // abort
 
@@ -24,7 +25,6 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
-#include "LampFS.h"
 //#include <vulkan/vulkan_beta.h>
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
@@ -400,7 +400,7 @@ int main(int, char**)
     }
 
 
-    glfwSetDropCallback(window, LampFS::getInstance().fileDrop);
+    // [!] glfwSetDropCallback(window, LampFS::getInstance().fileDrop);
 
     ImVector<const char*> extensions;
     uint32_t extensions_count = 0;
@@ -499,19 +499,25 @@ int main(int, char**)
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    // Refrence to our menu Functions
-    LampMenus * Menus = new LampMenus();
-    std::filesystem::create_directories("Holding/Archives");
-    std::filesystem::create_directories("Holding/ext");
-    std::filesystem::create_directories("Holding/PreDeployment/bin");
-    std::filesystem::create_directories("Holding/PreDeployment/data");
-    std::filesystem::create_directories("Holding/PreDeployment/Mods");
-    std::filesystem::create_directories("Holding/PreDeployment/PlayerProfiles/Public");
+
+    if(!Lamp::Core::lampConfig::getInstance().init()){
+        return 0;
+    }
+
+     //Refrence to our menu Functions
+    Lamp::Core::lampMenus * Menus = new Lamp::Core::lampMenus();
+    /*
+   std::filesystem::create_directories("Holding/Archives");
+   std::filesystem::create_directories("Holding/ext");
+   std::filesystem::create_directories("Holding/PreDeployment/bin");
+   std::filesystem::create_directories("Holding/PreDeployment/data");
+   std::filesystem::create_directories("Holding/PreDeployment/Mods");
+   std::filesystem::create_directories("Holding/PreDeployment/PlayerProfiles/Public");
 
 
-    LampFS::getInstance().loadArchives();
-    LampFS::getInstance().loadConfig();
-
+   LampFS::getInstance().loadArchives();
+   LampFS::getInstance().loadConfig();
+*/
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -542,7 +548,7 @@ int main(int, char**)
         ImGui::NewFrame();
 
 
-        Menus->Menu();
+        Menus->CreateMenus();
 
 
         // Rendering
