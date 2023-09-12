@@ -49,7 +49,7 @@
             bool deployment() override;
             void postDeploymentTasks() override;
 
-            void collectJsonData();
+            bool collectJsonData();
 
             void listArchives() override;
         private:
