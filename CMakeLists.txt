@@ -20,11 +20,16 @@ add_executable(Lamp main.cpp
         imgui/imstb_textedit.h
         imgui/imstb_truetype.h
         imgui/imgui_impl_glfw.cpp
-        LampMenus.cpp
-        LampMenus.h
-        LampFS.cpp
-        LampFS.h
-        json/json.hpp)
+        json/json.hpp
+        lampConfig.h
+        lampMenus.cpp
+        lampMenus.h
+        lampFilesystem.cpp
+        lampFilesystem.h
+        lampMod.h
+        game-data/gameControl.h
+        game-data/BG3/BG3.cpp
+        game-data/BG3/BG3.h)
 
 
 
