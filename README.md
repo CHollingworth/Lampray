@@ -31,6 +31,10 @@ This tool is in its early days please see the contributing section to help add m
 - [ ] Mod version validation.
 - [ ] Support for Profiles.
 
+## Running Requirements
+- Vulkan Support
+- Zenity
+
 ## Build Requirements
 - Vulkan
 - Pugixml-dev
