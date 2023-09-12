@@ -29,7 +29,8 @@ add_executable(Lamp main.cpp
         lampMod.h
         game-data/gameControl.h
         game-data/BG3/BG3.cpp
-        game-data/BG3/BG3.h)
+        game-data/BG3/BG3.h
+)
 
 
 
