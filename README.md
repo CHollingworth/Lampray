@@ -46,16 +46,11 @@ I welcome contributions from the community to make this tool even better. Whethe
 
 7. **Push**: Push your changes to your forked repository.
 
-
 8. **Create a Pull Request**: Go to the original repository and click on the "New Pull Request" button. Provide a descriptive title and detailed description of your changes in the pull request.
 
 9. **Discuss and Review**: Engage in discussions with the maintainers and the community about your pull request. Be prepared to make any necessary adjustments based on feedback.
 
 10. **Merge**: Once your pull request is reviewed and approved, it will be merged into the main branch.
-
-### Code of Conduct
-
-Please note that we have a [Code of Conduct](CODE_OF_CONDUCT.md) in place to ensure a respectful and inclusive environment for all contributors.
 
 ### Issues and Feature Requests
 
