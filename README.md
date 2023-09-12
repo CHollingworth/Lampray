@@ -7,11 +7,17 @@ This tool is in its early days please see the contributing section to help add m
 # Usage
 
 1.Download the tool and place it in an empty folder of your choice.
+
 2.Run the tool, and it will create its directory structure for you.
+
 3.Choose your game and open the game configuration to set up the necessary paths.
+
 4.Simply drag and drop your archives into the window. Arrange them as you like.
+
 5.When you're ready, hit "deploy." This will open a window; just press "start" and wait for it to finish.
+
 6.Close the tool. (Important!)
+
 7.Now, go ahead and enjoy your modded game!
 
 ## List of currently supported games
