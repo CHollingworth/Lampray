@@ -24,7 +24,7 @@ This tool is in its early days please see the contributing section to help add m
 - Baldur's Gate 3
 
 ## Current Goals
-- [ ] Add Support for Bethesda Tittles.
+- [ ] Add Support for Bethesda Titles.
 - [ ] Add FoMod Support.
 - [ ] Add The Sims 3 & 4 Support.
 - [ ] Nexus Api inclusion with link Support.
