@@ -29,6 +29,7 @@ This tool is in its early days please see the contributing section to help add m
 - [ ] Add The Sims 3 & 4 Support.
 - [ ] Nexus Api inclusion with link Support.
 - [ ] Mod version validation.
+- [ ] File path validation popups.
 - [ ] Support for Profiles.
 
 ## Running Requirements
