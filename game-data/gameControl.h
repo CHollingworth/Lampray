@@ -18,8 +18,10 @@ namespace Lamp {
 
         class gameControl {
         public:
-            virtual bool init() = 0;
-
+            /**
+             * @brief Registers an archive into the modlist.
+             * @see fileDrop(GLFWwindow* window, int count, const char** paths)
+             */
             virtual void registerArchive(std::string Path) = 0;
 
 
