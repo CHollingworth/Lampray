@@ -11,6 +11,9 @@
 #include "bitformat.hpp"
 #include "lampMod.h"
 #include "lampConfig.h"
+#include "bit7zlibrary.hpp"
+#include "bitarchivereader.hpp"
+#include "bitexception.hpp"
 namespace Lamp {
     namespace Core {
         class lampFilesystem {
@@ -33,8 +36,10 @@ namespace Lamp {
 
             bool createFileStructure(Lamp::Core::lampConfig::Game Game, std::list<std::string> structure);
 
-            void extract(Lamp::Core::lampConfig::Game Game, Lamp::Core::lampMod::Mod mod, std::string localExtractionPath);
-            void extractSpecificFileType(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod mod, std::string extractionPath, std::string extension);
+            void extract(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod, std::string localExtractionPath);
+            void extractSpecificFileType(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod, std::string localExtractionPath, std::string extension);
+
+            std::string getGameSpecificStoragePath(Lamp::Core::lampConfig::Game Game);
 
             std::list<Lamp::Core::lampMod::Mod *> loadModList(Lamp::Core::lampConfig::Game Game);
             bool saveModList(Lamp::Core::lampConfig::Game Game, std::list<Lamp::Core::lampMod::Mod *> ModList);
@@ -50,6 +55,7 @@ namespace Lamp {
             const std::string saveDataPath = baseDataPath+"Mod_Lists/";
             const std::string archiveDataPath = baseDataPath+"Archives/";
             const std::string ConfigDataPath = baseDataPath+"Config/";
+            const std::string DeploymentDataPath = baseDataPath+"Deployment/";
 
         };
 

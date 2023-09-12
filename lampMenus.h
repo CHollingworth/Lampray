@@ -14,7 +14,6 @@ namespace Lamp {
             enum Menus{
                 LAMP_INTRO_MENU,
                 LAMP_GAME_SELECT,
-                LAMP_CONFIG_MENU,
                 GAME_MOD_MENU,
                 GAME_CONFIG_MENU
             };
@@ -26,9 +25,10 @@ namespace Lamp {
 
         private:
 
+            bool deployCheck = false;
+
             void IntroMenu();
             void GameSelect();
-            void LampConfigMenu();
             void ModMenu();
             void GameConfigMenu();
 

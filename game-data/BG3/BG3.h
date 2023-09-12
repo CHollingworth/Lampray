@@ -6,9 +6,16 @@
 #define LAMP_BG3_H
 
 #include "../gameControl.h"
+
+#include "../../imgui/imgui.h"
+#include "../../lampFilesystem.h"
+#include "../../nfd/include/nfd.h"
     namespace Lamp::Game {
         class BG3: public gameControl {
         public:
+
+            std::string installDirPath = "steam/install/path";
+            std::string appDataPath = "app/data/path";
 
             enum ModType{
                 BG3_ENGINE_INJECTION = 0,
@@ -31,24 +38,27 @@
 
             bool init() override{};
 
-            bool close(std::list<Lamp::Core::lampMod> ModList) override{};
-
-            int internalTypeToInt(Lamp::Core::lampMod Mod) override{};
-            std::list<std::string> internalTypeListToStrings() override{};
-
             void registerArchive(std::string Path) override;
 
-            void ConfigMenu() override{};
-            bool createFileStructure() override{};
+            bool ConfigMenu() override;
+            bool createFileStructure() override;
 
-            bool preCleanUp() override{};
-            bool preDeployment() override{};
-            bool deployment() override{};
-            void postDeploymentTasks() override{};
+            bool startDeployment() override;
+
+            bool preCleanUp() override;
+            bool preDeployment() override;
+            bool deployment() override;
+            void postDeploymentTasks() override;
+
+            void collectJsonData();
 
             void listArchives() override;
         private:
-            BG3(){};
+            BG3(){
+                installDirPath = Lamp::Core::lampFilesystem::getInstance().loadKeyData(Core::lampConfig::BG3, "installDirPath");
+                appDataPath = Lamp::Core::lampFilesystem::getInstance().loadKeyData(Core::lampConfig::BG3, "appDataPath");
+
+            };
         };
     }
 // Lamp

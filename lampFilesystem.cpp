@@ -15,6 +15,15 @@ namespace Lamp {
         std::filesystem::create_directories(saveDataPath);
         std::filesystem::create_directories(archiveDataPath);
         std::filesystem::create_directories(ConfigDataPath);
+        std::filesystem::create_directories(DeploymentDataPath);
+
+        std::map<Lamp::Core::lampConfig::Game, std::string>::iterator it;
+
+        for (it = Core::lampConfig::getInstance().GameStringMap.begin(); it != Core::lampConfig::getInstance().GameStringMap.end(); it++)
+        {
+            std::filesystem::create_directories(DeploymentDataPath + it->second);
+        }
+
         return true;
     }
 
@@ -67,16 +76,58 @@ namespace Lamp {
         return false;
     }
 
-    void Core::lampFilesystem::extract(Lamp::Core::lampConfig::Game Game, Lamp::Core::lampMod::Mod mod,
+    void Core::lampFilesystem::extract(Lamp::Core::lampConfig::Game Game,const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod,
                                        std::string localExtractionPath) {
+        std::string workingDir = getGameSpecificStoragePath(Game);
+        try {
+            bit7z::Bit7zLibrary lib{};
+            bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
+            reader.test();
+            reader.extract(workingDir+localExtractionPath);
+        } catch (const bit7z::BitException &ex) { std::cout << ex.what() << std::endl << ex.code() << std::endl; }
+
+
 
     }
 
     void
     Core::lampFilesystem::extractSpecificFileType(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat &Type,
-                                                  Lamp::Core::lampMod::Mod mod, std::string extractionPath,
+                                                  Lamp::Core::lampMod::Mod * mod, std::string extractionPath,
                                                   std::string extension) {
+        std::string workingDir = getGameSpecificStoragePath(Game);
 
+        for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext")) {
+            std::filesystem::remove_all(entry.path());
+        }
+
+        try {
+            bit7z::Bit7zLibrary lib{};
+            bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
+            reader.test();
+            reader.extract(workingDir+"/ext");
+        } catch (const bit7z::BitException &ex) { std::cout << ex.what() << std::endl << ex.code() << std::endl; }
+
+
+        for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext")) {
+            if(entry.is_directory()){
+                std::cout << entry  << '\n';
+                for (const auto& subentry : std::filesystem::directory_iterator(entry)){
+                    if(std::regex_match (subentry.path().filename().string(), std::regex("^.*\\.("+extension+")$") )){
+                        try {
+                            std::filesystem::rename(subentry.path(),workingDir+extractionPath + "/" + subentry.path().filename().string());
+                        } catch (std::filesystem::filesystem_error& e) {
+                            std::cout << e.what() << '\n';
+                        }
+                    }
+                }
+            }else if(std::regex_match (entry.path().filename().string(), std::regex("^.*\\.("+extension+")$") )){
+                try {
+                        std::filesystem::rename(entry.path(), workingDir+extractionPath + "/" + entry.path().filename().string());
+                } catch (std::filesystem::filesystem_error& e) {
+                    std::cout << e.what() << '\n';
+                }
+            }
+        }
     }
 
     std::list<Lamp::Core::lampMod::Mod *>
@@ -235,5 +286,9 @@ namespace Lamp {
     void Core::lampFilesystem::save_config() {
         saveKeyData(lampConfig::UNK, "ShowIntroMenu", std::to_string(lampConfig::getInstance().ShowIntroMenu));
         saveKeyData(lampConfig::UNK, "CurrentGame", std::to_string(lampConfig::getInstance().CurrentGame));
+    }
+
+    std::string Core::lampFilesystem::getGameSpecificStoragePath(Lamp::Core::lampConfig::Game Game) {
+        return DeploymentDataPath + Core::lampConfig::getInstance().GameStringMap[Game];
     }
 } // Lamp
