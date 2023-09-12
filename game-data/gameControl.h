@@ -11,25 +11,31 @@
 
 namespace Lamp {
     namespace Game {
+
+        /**
+             * @brief Not to be used directly rather it is to be used as a template for gamedata.
+         */
+
         class gameControl {
         public:
             virtual bool init() = 0;
 
-            virtual bool close(std::list<Lamp::Core::lampMod> ModList) = 0;
-
-            virtual int internalTypeToInt(Lamp::Core::lampMod Mod) = 0;
-            virtual std::list<std::string> internalTypeListToStrings() = 0;
-
             virtual void registerArchive(std::string Path) = 0;
 
 
-            virtual void ConfigMenu() = 0;
+            virtual bool ConfigMenu() = 0;
 
             /**
              * @brief Create the file structure for the game.
              * @return If the creation succeeded.
              */
             virtual bool createFileStructure() = 0;
+
+            /**
+             * @brief Start deployment.
+             * @return If the deployment succeeded.
+             */
+            virtual bool startDeployment() = 0;
 
             /**
              * @brief Clean and remove all files within the created file structure and in the game.

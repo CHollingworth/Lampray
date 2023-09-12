@@ -10,8 +10,6 @@
 void Lamp::Core::lampMenus::CreateMenus() {
 
     ImGuiIO &io = ImGui::GetIO();
-    io.DisplaySize.x;
-    io.DisplaySize.y;
     ImGui::SetNextWindowSize(io.DisplaySize, 0);
     ImGui::SetNextWindowPos(ImVec2(0, 0));
 
@@ -30,13 +28,11 @@ void Lamp::Core::lampMenus::CreateMenus() {
                 currentMenu = GAME_MOD_MENU;
             }
             break;
-        case LAMP_CONFIG_MENU:
-            break;
         case GAME_MOD_MENU:
-            DefaultMenuBar();
             ModMenu();
             break;
         case GAME_CONFIG_MENU:
+            GameConfigMenu();
             break;
     }
 }
@@ -101,29 +97,77 @@ void Lamp::Core::lampMenus::GameSelect() {
     ImGui::End();
 }
 
-void Lamp::Core::lampMenus::LampConfigMenu() {
-
-}
 
 void Lamp::Core::lampMenus::ModMenu() {
     ImGui::Begin("Blank Menu", NULL, DefaultFlags());
     DefaultMenuBar();
+
+    ImGuiStyle& style = ImGui::GetStyle();
+    float size = ImGui::CalcTextSize("Drag archives onto this window to start adding mods to your game!").x + style.FramePadding.x * 2.0f;
+    float avail = ImGui::GetContentRegionAvail().x;
+
+    float off = (avail - size) * 0.5f;
+    if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
+    ImGui::Text("Drag archives onto this window to start adding mods to your game!");
+
+    size = ImGui::CalcTextSize("Deploy").x + style.FramePadding.x * 2.0f;
+    avail = ImGui::GetContentRegionAvail().x;
+
+    off = (avail - size) * 0.5f;
+    if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
+    if(ImGui::Button("Deploy")) {
+        deployCheck = true;
+    }
+
+    if(deployCheck) {
+        ImGuiIO &io = ImGui::GetIO();
+        ImGui::SetNextWindowSize(io.DisplaySize, 0);
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+
+        ImGui::Begin("Checks", NULL, DefaultFlags());
+        ImGui::Text("Start Deployment?");
+
+        if(ImGui::Button("Start")){
+            deployCheck = !deployCheck;
+            switch (lampConfig::getInstance().CurrentGame) {
+                case lampConfig::BG3:
+                    Lamp::Game::BG3::getInstance().startDeployment();
+                    break;
+            }
+
+        }
+        ImGui::SameLine();
+        if(ImGui::Button("Go Back")){ deployCheck = !deployCheck; }
+
+        ImGui::End();
+    }
+
+    ImGui::Separator();
     switch (lampConfig::getInstance().CurrentGame) {
         case lampConfig::UNK:
             currentMenu = LAMP_GAME_SELECT;
             break;
         case lampConfig::BG3:
-            ImGui::Begin("Blank Menu", NULL, DefaultFlags());
-            DefaultMenuBar();
             Lamp::Game::BG3::getInstance().listArchives();
-            ImGui::End();
             break;
     }
     ImGui::End();
 }
 
 void Lamp::Core::lampMenus::GameConfigMenu() {
-
+    ImGui::Begin("GameConfig", NULL, DefaultFlags());
+    DefaultMenuBar();
+    switch (lampConfig::getInstance().CurrentGame) {
+        case lampConfig::UNK:
+            currentMenu = LAMP_GAME_SELECT;
+            break;
+        case lampConfig::BG3:
+            if(Lamp::Game::BG3::getInstance().ConfigMenu()){
+                currentMenu = GAME_MOD_MENU;
+            }
+            break;
+    }
+    ImGui::End();
 }
 
 ImGuiWindowFlags Lamp::Core::lampMenus::DefaultFlags() {
@@ -139,9 +183,12 @@ ImGuiWindowFlags Lamp::Core::lampMenus::DefaultFlags() {
 void Lamp::Core::lampMenus::DefaultMenuBar() {
     if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("Game Selection")) {
+            Lamp::Core::lampConfig::getInstance().CurrentGame = Lamp::Core::lampConfig::UNK;
+            currentMenu = LAMP_GAME_SELECT;
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Game Configuration")) {
+            currentMenu = GAME_CONFIG_MENU;
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("About")) {
