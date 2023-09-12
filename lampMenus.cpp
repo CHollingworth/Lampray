@@ -191,6 +191,10 @@ void Lamp::Core::lampMenus::DefaultMenuBar() {
             currentMenu = GAME_CONFIG_MENU;
             ImGui::EndMenu();
         }
+        if (ImGui::BeginMenu("About")) {
+            ImGui::MenuItem("Created by Charles Hollingworth");
+            ImGui::EndMenu();
+        }
         ImGui::EndMenuBar();
     }
 }
