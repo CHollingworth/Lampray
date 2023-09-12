@@ -27,6 +27,7 @@
 
             std::list<Lamp::Core::lampMod::Mod *> ModList;
 
+
             static BG3& getInstance()
             {
                 static BG3 instance;
@@ -35,8 +36,6 @@
 
             BG3(BG3 const&) = delete;
             void operator=(BG3 const&)  = delete;
-
-            bool init() override{};
 
             void registerArchive(std::string Path) override;
 

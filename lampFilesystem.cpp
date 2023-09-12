@@ -71,10 +71,6 @@ namespace Lamp {
         }
     }
 
-    bool
-    Core::lampFilesystem::createFileStructure(Lamp::Core::lampConfig::Game Game, std::list<std::string> structure) {
-        return false;
-    }
 
     void Core::lampFilesystem::extract(Lamp::Core::lampConfig::Game Game,const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod,
                                        std::string localExtractionPath) {
