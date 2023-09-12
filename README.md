@@ -23,6 +23,14 @@ This tool is in its early days please see the contributing section to help add m
 ## List of currently supported games
 - Baldur's Gate 3
 
+## Current Goals
+- [ ] Add Support for Bethesda Tittles.
+- [ ] Add FoMod Support.
+- [ ] Add The Sims 3 & 4 Support.
+- [ ] Nexus Api inclusion with link Support.
+- [ ] Mod version validation.
+- [ ] Support for Profiles.
+
 ## Build Requirements
 - Vulkan
 - Pugixml-dev
