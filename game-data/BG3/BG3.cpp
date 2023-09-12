@@ -196,7 +196,12 @@ namespace Lamp {
     }
 
     bool Game::BG3::startDeployment() {
-
+        if(appDataPath == "" || appDataPath == " "){
+            return false;
+        }
+        if(installDirPath == "" || installDirPath == " "){
+            return false;
+        }
 
         if(preCleanUp()){
             if(preDeployment()){
