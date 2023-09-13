@@ -38,14 +38,13 @@ For now i am just one person working on this tool updates will be slow.
 - Zenity
 - glfw
 - X11
-- p7zip-full
+- p7zip-full & p7zip-rar 
 
 ## Build Requirements
 - Vulkan
 - GLFW
 - PkgConfig
 - Pugixml-dev
-- p7zip-full
 
 - Zenity
 
