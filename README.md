@@ -36,6 +36,7 @@ This tool is in its early days please see the contributing section to help add m
 - Vulkan Support
 - Zenity
 - glfw
+- X11 
 
 ## Build Requirements
 - Vulkan
