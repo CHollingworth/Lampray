@@ -7,6 +7,8 @@
 #include "lampFilesystem.h"
 #include "game-data/BG3/BG3.h"
 #include "game-data/gameControl.h"
+#include "lampWarn.h"
+
 void Lamp::Core::lampMenus::CreateMenus() {
 
     ImGuiIO &io = ImGui::GetIO();

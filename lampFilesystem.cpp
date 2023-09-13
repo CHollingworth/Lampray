@@ -8,22 +8,28 @@
 #include "lampFilesystem.h"
 #include "game-data/BG3/BG3.h"
 #include "game-data/gameControl.h"
+#include "lampWarn.h"
 
 namespace Lamp {
     bool Core::lampFilesystem::init() {
-
-        std::filesystem::create_directories(saveDataPath);
-        std::filesystem::create_directories(archiveDataPath);
-        std::filesystem::create_directories(ConfigDataPath);
-        std::filesystem::create_directories(DeploymentDataPath);
+        Lamp::Core::lampWarn::getInstance().log("Initializing Lamp FileSystem");
+        try {
+            std::filesystem::create_directories(saveDataPath);
+            std::filesystem::create_directories(archiveDataPath);
+            std::filesystem::create_directories(ConfigDataPath);
+            std::filesystem::create_directories(DeploymentDataPath);
+        }catch(std::exception ex){
+            Lamp::Core::lampWarn::getInstance().log("Could not create base directories", lampWarn::ERROR);
+        }
 
         std::map<Lamp::Core::lampConfig::Game, std::string>::iterator it;
-
+        Lamp::Core::lampWarn::getInstance().log("Creating Game directories");
         for (it = Core::lampConfig::getInstance().GameStringMap.begin(); it != Core::lampConfig::getInstance().GameStringMap.end(); it++)
         {
             std::filesystem::create_directories(DeploymentDataPath + it->second);
+            Lamp::Core::lampWarn::getInstance().log(it->second);
         }
-
+        Lamp::Core::lampWarn::getInstance().log("Finished creating Game directories");
         return true;
     }
 
@@ -34,7 +40,8 @@ namespace Lamp {
         int i;
         for (i = 0; i < count; i++){
             // Thank you! Roi Danton on stackoverflow for this clean code.
-            std::cout << paths[i] << std::endl;
+            std::string pth = paths[i];
+            Lamp::Core::lampWarn::getInstance().log("File Drop Detected: " +pth);
             std::filesystem::path path(paths[i]);
             std::error_code ec;
             if (std::filesystem::is_regular_file(path, ec))
@@ -56,7 +63,8 @@ namespace Lamp {
                     }
                     catch (std::exception& e)
                     {
-                        std::cout << e.what();
+                        std::string ex  = e.what();
+                        Lamp::Core::lampWarn::getInstance().log("File Drop Failed: " +ex, lampWarn::ERROR, true);
                     }
                 }
 
@@ -65,9 +73,8 @@ namespace Lamp {
 
             if (ec)
             {
-                std::cerr << "Error" << ec.message();
+                Lamp::Core::lampWarn::getInstance().log("ec: " +ec.message(), lampWarn::ERROR, true);
             }
-            std::cout << std::endl<< std::endl;
         }
     }
 
@@ -80,7 +87,10 @@ namespace Lamp {
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
             reader.test();
             reader.extract(workingDir+localExtractionPath);
-        } catch (const bit7z::BitException &ex) { std::cout << ex.what() << std::endl << ex.code() << std::endl; }
+        } catch (const bit7z::BitException &ex) {
+            Lamp::Core::lampWarn::getInstance().log("Could not extract file: " +mod->ArchivePath, lampWarn::ERROR, true);
+
+        }
 
 
 
@@ -91,7 +101,8 @@ namespace Lamp {
                                                   Lamp::Core::lampMod::Mod * mod, std::string extractionPath,
                                                   std::string extension) {
         std::string workingDir = getGameSpecificStoragePath(Game);
-
+        Lamp::Core::lampWarn::getInstance().log("Extracting: " +mod->ArchivePath );
+        Lamp::Core::lampWarn::getInstance().log("Extension: ." +extension );
         for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext")) {
             std::filesystem::remove_all(entry.path());
         }
@@ -101,18 +112,19 @@ namespace Lamp {
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
             reader.test();
             reader.extract(workingDir+"/ext");
-        } catch (const bit7z::BitException &ex) { std::cout << ex.what() << std::endl << ex.code() << std::endl; }
+        } catch (const bit7z::BitException &ex) {
+            Lamp::Core::lampWarn::getInstance().log("Could not extract file: " +mod->ArchivePath, lampWarn::ERROR, true);
+        }
 
 
         for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext")) {
             if(entry.is_directory()){
-                std::cout << entry  << '\n';
                 for (const auto& subentry : std::filesystem::directory_iterator(entry)){
                     if(std::regex_match (subentry.path().filename().string(), std::regex("^.*\\.("+extension+")$") )){
                         try {
                             std::filesystem::rename(subentry.path(),workingDir+extractionPath + "/" + subentry.path().filename().string());
                         } catch (std::filesystem::filesystem_error& e) {
-                            std::cout << e.what() << '\n';
+                            Lamp::Core::lampWarn::getInstance().log("Could not copy: " +mod->ArchivePath, lampWarn::ERROR, true);
                         }
                     }
                 }
@@ -120,7 +132,7 @@ namespace Lamp {
                 try {
                         std::filesystem::rename(entry.path(), workingDir+extractionPath + "/" + entry.path().filename().string());
                 } catch (std::filesystem::filesystem_error& e) {
-                    std::cout << e.what() << '\n';
+                    Lamp::Core::lampWarn::getInstance().log("Could not copy: " +mod->ArchivePath, lampWarn::ERROR, true);
                 }
             }
         }
@@ -151,12 +163,12 @@ namespace Lamp {
 
                     // Print the loaded Mod objects
                     for (const Lamp::Core::lampMod::Mod * mod : newList) {
-                        std::cout << "ArchivePath: " << mod->ArchivePath << ", modType: " << mod->modType << ", enabled: " << mod->enabled << std::endl;
+                        Lamp::Core::lampWarn::getInstance().log("Loaded Mod: " +mod->ArchivePath+ "| Mod Type: " + std::to_string(mod->modType) +"| Enabled" + std::to_string(mod->enabled));
                     }
 
                     return newList;
                 } else {
-                    std::cerr << "Failed to load XML file." << std::endl;
+                    Lamp::Core::lampWarn::getInstance().log("Could not load modlist.", lampWarn::ERROR, true);
                 }
 
             break;
@@ -192,7 +204,9 @@ namespace Lamp {
     }
 //
     bool Core::lampFilesystem::saveKeyData(Lamp::Core::lampConfig::Game Game, std::string key, std::string data) {
+
         std::string game = Core::lampConfig::getInstance().GameStringMap[Game];
+        Lamp::Core::lampWarn::getInstance().log("Saving "+game+":"+key+":"+data);
         std::string xmlPath =ConfigDataPath+"conf.mdf";
 
         // Load the existing XML file or create a new one if it doesn't exist
@@ -229,13 +243,14 @@ namespace Lamp {
                 return true; // Successfully saved the data
             }
         }
-
+        Lamp::Core::lampWarn::getInstance().log("Failed to save "+game+":"+key+":"+":"+data, lampWarn::ERROR, true);
         return false; // Failed to save the data
 
     }
 
     std::string Core::lampFilesystem::loadKeyData(Lamp::Core::lampConfig::Game Game, std::string key) {
         std::string game = Core::lampConfig::getInstance().GameStringMap[Game];
+        Lamp::Core::lampWarn::getInstance().log("Loading "+game+":"+key);
         std::string xmlPath =ConfigDataPath+"conf.mdf";
 
         pugi::xml_document doc;
@@ -256,13 +271,14 @@ namespace Lamp {
                 }
             }
         }
-
+        Lamp::Core::lampWarn::getInstance().log("Unable to load "+game+":"+key, lampWarn::ERROR, true);
         return ""; // Return an empty string if data is not found or there's an error
 
 
     }
 
     bool Core::lampFilesystem::init_config() {
+        Lamp::Core::lampWarn::getInstance().log("Loading Lamp Config");
         load_conifg();
         return true;
     }
