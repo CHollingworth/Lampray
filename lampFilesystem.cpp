@@ -30,6 +30,21 @@ namespace Lamp {
             Lamp::Core::lampWarn::getInstance().log(it->second);
         }
         Lamp::Core::lampWarn::getInstance().log("Finished creating Game directories");
+
+        std::filesystem::path f{ "/usr/libexec/p7zip/7z.so" };
+        if (std::filesystem::exists(f)) {
+            bit7zLibaryLocation = "/usr/libexec/p7zip/7z.so";
+        }else if(exists(std::filesystem::path{"/usr/lib/p7zip/7z.so"})){
+            bit7zLibaryLocation = "/usr/lib/p7zip/7z.so";
+        }else if(exists(std::filesystem::path{"/usr/libexec/7z.so"})){
+            bit7zLibaryLocation = "/usr/libexec/7z.so";
+        }else{
+            Lamp::Core::lampWarn::getInstance().log("Fatal. Cannot locate 7z.so",lampWarn::ERROR,true);
+        }
+
+
+
+
         return true;
     }
 
@@ -83,7 +98,7 @@ namespace Lamp {
                                        std::string localExtractionPath) {
         std::string workingDir = getGameSpecificStoragePath(Game);
         try {
-            bit7z::Bit7zLibrary lib{};
+            bit7z::Bit7zLibrary lib{bit7zLibaryLocation};
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
             reader.test();
             reader.extract(workingDir+localExtractionPath);
@@ -108,7 +123,7 @@ namespace Lamp {
         }
 
         try {
-            bit7z::Bit7zLibrary lib{};
+            bit7z::Bit7zLibrary lib{bit7zLibaryLocation};
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
             reader.test();
             reader.extract(workingDir+"/ext");
@@ -299,6 +314,7 @@ namespace Lamp {
         if(CG != ""){
             lampConfig::getInstance().CurrentGame = (lampConfig::Game) std::stoi(CG);
         }
+
     }
 
     void Core::lampFilesystem::save_config() {

@@ -27,6 +27,8 @@ namespace Lamp {
             lampFilesystem(lampFilesystem const&)               = delete;
             void operator=(lampFilesystem const&)  = delete;
 
+            std::string bit7zLibaryLocation = "/usr/lib/p7zip/7z.so";
+
             bool init();
             bool init_config();
             void load_conifg();
