@@ -29,22 +29,26 @@ For now i am just one person working on this tool updates will be slow.
 - [ ] Add The Sims 3 & 4 Support.
 - [ ] Nexus Api inclusion with link Support.
 - [ ] Mod version validation.
-- [ ] Add error feedback.
+- [X] Add error feedback.
+- [ ] internalize the 7zip shared libary
 - [ ] Support for Profiles.
 
 ## Running Requirements
 - Vulkan Support
 - Zenity
 - glfw
-- X11 
+- X11
+- p7zip-full & p7zip-rar 
 
 ## Build Requirements
 - Vulkan
-- Pugixml-dev
 - GLFW
 - PkgConfig
+- Pugixml-dev
+
+- Zenity
+
 - C++ 17
-- Zenity 
 - GCC
 
 ## Contributing
