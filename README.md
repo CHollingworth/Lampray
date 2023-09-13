@@ -82,3 +82,8 @@ I welcome contributions from the community to make this tool even better. Whethe
 If you encounter any issues, bugs, or have ideas for new features, please open an issue on the Issue Tracker.
 
 Thank you for your contributions and support in making this tool better!
+
+### Credits
+Creator: Charles Hollingworth 
+Pugixml: zeux
+bit7z: rikyoz
