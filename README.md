@@ -27,7 +27,7 @@ For now i am just one person working on this tool updates will be slow.
 - [ ] Add Support for Bethesda Titles.
 - [ ] Add FoMod Support.
 - [ ] Add The Sims 3 & 4 Support.
-- [ ] Nexus Api inclusion with link Support.
+- [ ] Nexus Api inclusion
 - [ ] Mod version validation.
 - [X] Add error feedback.
 - [ ] internalize the 7zip shared libary
