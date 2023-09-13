@@ -27,6 +27,8 @@
 
             std::list<Lamp::Core::lampMod::Mod *> ModList;
 
+            bool checkLock = false;
+
 
             static BG3& getInstance()
             {
