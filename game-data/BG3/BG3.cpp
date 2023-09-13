@@ -146,22 +146,22 @@ namespace Lamp {
         ImGui::Begin("BG3 Steam Path Setup", NULL,windowFlags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 
         ImGui::Text("BG3 Steam Directory");
-        if(ImGui::Button((installDirPath+"##installpath").c_str())){
+        if(ImGui::Button((installDirPath+"##installpath").c_str())) {
             nfdchar_t *outPath = NULL;
-            nfdresult_t result = NFD_PickFolder( NULL, &outPath );
+            nfdresult_t result = NFD_PickFolder(NULL, &outPath);
 
-            if ( result == NFD_OKAY ) {
+            if (result == NFD_OKAY) {
                 puts(outPath);
                 installDirPath = outPath;
                 Lamp::Core::lampFilesystem::getInstance().saveKeyData(Core::lampConfig::BG3, "installDirPath",installDirPath);
-            }
-            else if ( result == NFD_CANCEL ) {
+
+            } else if (result == NFD_CANCEL) {
                 puts("User pressed cancel.");
-            }
-            else {
-                printf("Error: %s\n", NFD_GetError() );
+            } else {
+                printf("Error: %s\n", NFD_GetError());
             }
         }
+
         ImGui::Separator();
 
         ImGui::Text("BG3 AppData Directory");
@@ -183,9 +183,43 @@ namespace Lamp {
         }
         ImGui::Separator();
 
+        if(checkLock) {
+            ImGui::Separator();
+            ImGui::Text("WARNING: Incorrect folder may be selected.");
+        }
+
+
         if (ImGui::Button("Close")){
+
+            std::stringstream ss(installDirPath);
+            std::stringstream ssE(appDataPath);
+            std::string token;
+            std::string folderNameA;
+            std::string folderNameB;
+            while (std::getline(ss, token, '/')) {
+                // Skip empty tokens (e.g., double slashes)
+                if (!token.empty()) {
+                    folderNameA = token;
+                }
+            }
+            while (std::getline(ssE, token, '/')) {
+                // Skip empty tokens (e.g., double slashes)
+                if (!token.empty()) {
+                    folderNameB = token;
+                }
+            }
+
+            if(folderNameA == "Baldurs Gate 3" && folderNameB == "Baldur's Gate 3"){
+                ImGui::End();
+                checkLock = false;
+                return true;
+            }else{
+                checkLock = true;
+            }
+
+
             ImGui::End();
-            return true;
+            return false;
         }
 
         ImGui::End();
@@ -336,15 +370,21 @@ namespace Lamp {
                         if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(zip)$"))) {
                             Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
                                     Lamp::Core::lampConfig::BG3, bit7z::BitFormat::Zip, (*it), "/Mods", "pak");
-                            collectJsonData();
+                            if(collectJsonData()){
+                                break;
+                            }
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(rar)$"))) {
                             Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
                                     Lamp::Core::lampConfig::BG3, bit7z::BitFormat::Rar, (*it), "/Mods", "pak");
-                            collectJsonData();
+                            if(collectJsonData()){
+                                break;
+                            }
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(7z)$"))) {
                             Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
                                     Lamp::Core::lampConfig::BG3, bit7z::BitFormat::SevenZip, (*it), "/Mods", "pak");
-                            collectJsonData();
+                            if(collectJsonData()){
+                                break;
+                            }
                         } else {
                             break;
                         }
@@ -361,7 +401,7 @@ namespace Lamp {
         return true;
     }
 
-    void Game::BG3::collectJsonData() {
+    bool Game::BG3::collectJsonData() {
         std::string workingDir = Lamp::Core::lampFilesystem::getInstance().getGameSpecificStoragePath(
                 Lamp::Core::lampConfig::BG3);
         for (const auto& entry : std::filesystem::directory_iterator((workingDir + "/ext").c_str())) {
@@ -372,13 +412,13 @@ namespace Lamp {
 
                 if (!jsonFile.is_open()) {
                     std::cerr << "Failed to open JSON file." << std::endl;
-                    return;
+                    return false;
                 }
 
 
                 if (!doc.load_file((workingDir + "/PlayerProfiles/Public/modsettings.lsx").c_str())) {
                     std::cerr << "Failed to load XML file." << std::endl;
-                    return;
+                    return false;
                 }
 
                 nlohmann::json jsonData;
@@ -462,10 +502,12 @@ namespace Lamp {
                         if (!doc.save_file((workingDir + "/PlayerProfiles/Public/modsettings.lsx").c_str())) {
                             std::cerr << "Failed to save XML file." << std::endl;
                         }
+
+                        return true;
                     }
                 } else {
                     std::cerr << "JSON data does not contain 'mods' key." << std::endl;
-                    return;
+                    return false;
                 }
 
             }
