@@ -401,7 +401,6 @@ int main(int, char**)
         return 1;
     }
 
-
     glfwSetDropCallback(window, Lamp::Core::lampFilesystem::fileDrop);
 
     ImVector<const char*> extensions;

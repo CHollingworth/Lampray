@@ -206,8 +206,14 @@ namespace Lamp {
                 gameNode.append_attribute("name").set_value(game.c_str());
             }
 
+            pugi::xml_node keyNode = gameNode.child(key.c_str());
+            if (keyNode) {
+                // Key node already exists, so remove it
+                gameNode.remove_child(key.c_str());
+            }
+
             // Add a new key node with data as its child value
-            pugi::xml_node keyNode = gameNode.append_child(key.c_str());
+            keyNode = gameNode.append_child(key.c_str());
             keyNode.text().set(data.c_str());
 
             // Save the modified XML back to the file

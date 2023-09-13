@@ -146,42 +146,21 @@ namespace Lamp {
 
         ImGui::Text("BG3 Steam Directory");
         if(ImGui::Button((installDirPath+"##installpath").c_str())) {
-            while (true) {
             nfdchar_t *outPath = NULL;
             nfdresult_t result = NFD_PickFolder(NULL, &outPath);
 
             if (result == NFD_OKAY) {
                 puts(outPath);
-
-                std::stringstream ss(outPath);
-                std::string token;
-                std::string folderName;
-
-                while (std::getline(ss, token, '/')) {
-                    // Skip empty tokens (e.g., double slashes)
-                    if (!token.empty()) {
-                        folderName = token;
-                    }
-                }
-
-                if (folderName == "Baldurs Gate 3"){
-                    installDirPath = outPath;
-                    Lamp::Core::lampFilesystem::getInstance().saveKeyData(Core::lampConfig::BG3, "installDirPath",
-                                                                          installDirPath);
-                    break;
-                }
-
-
-
+                installDirPath = outPath;
+                Lamp::Core::lampFilesystem::getInstance().saveKeyData(Core::lampConfig::BG3, "installDirPath",installDirPath);
 
             } else if (result == NFD_CANCEL) {
                 puts("User pressed cancel.");
-                break;
             } else {
                 printf("Error: %s\n", NFD_GetError());
             }
         }
-        }
+
         ImGui::Separator();
 
         ImGui::Text("BG3 AppData Directory");
@@ -203,9 +182,43 @@ namespace Lamp {
         }
         ImGui::Separator();
 
+        if(checkLock) {
+            ImGui::Separator();
+            ImGui::Text("WARNING: Incorrect folder may be selected.");
+        }
+
+
         if (ImGui::Button("Close")){
+
+            std::stringstream ss(installDirPath);
+            std::stringstream ssE(appDataPath);
+            std::string token;
+            std::string folderNameA;
+            std::string folderNameB;
+            while (std::getline(ss, token, '/')) {
+                // Skip empty tokens (e.g., double slashes)
+                if (!token.empty()) {
+                    folderNameA = token;
+                }
+            }
+            while (std::getline(ssE, token, '/')) {
+                // Skip empty tokens (e.g., double slashes)
+                if (!token.empty()) {
+                    folderNameB = token;
+                }
+            }
+
+            if(folderNameA == "Baldurs Gate 3" && folderNameB == "Baldur's Gate 3"){
+                ImGui::End();
+                checkLock = false;
+                return true;
+            }else{
+                checkLock = true;
+            }
+
+
             ImGui::End();
-            return true;
+            return false;
         }
 
         ImGui::End();
