@@ -8,6 +8,7 @@
 #include <fstream>
 #include "BG3.h"
 #include "../../json/json.hpp"
+#include "../../lampWarn.h"
 
 
 namespace Lamp {
@@ -208,12 +209,16 @@ namespace Lamp {
                 // doing it early.
                 postDeploymentTasks();
                 if(deployment()){
+                    Lamp::Core::lampWarn::getInstance().log("Deployment Successful!", Core::lampWarn::LOG, true);
                     return true;
                 }
+                Lamp::Core::lampWarn::getInstance().log("Deployment failed! Aborting Deployment", Core::lampWarn::ERROR, true, Core::lampWarn::LMP_DEOPLYMENTFAILED);
                 return false;
             }
+            Lamp::Core::lampWarn::getInstance().log("PreDeployment failed! Aborting Deployment", Core::lampWarn::ERROR, true, Core::lampWarn::LMP_PREDEPLOYFAILED);
             return false;
         }
+        Lamp::Core::lampWarn::getInstance().log("Cleanup failed! Aborting Deployment", Core::lampWarn::ERROR, true, Core::lampWarn::LMP_CLEANUPFAILED);
         return false;
     }
 
@@ -475,21 +480,27 @@ namespace Lamp {
         try {
             std::filesystem::path sourceDirectory = workingDir+"/bin/";
             std::filesystem::path destinationDirectory = installDirPath+"/bin/";
+            Lamp::Core::lampWarn::getInstance().log("Copying Bin");
             std::filesystem::copy(sourceDirectory, destinationDirectory, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
+
 
             sourceDirectory = workingDir+"/data/";
             destinationDirectory = installDirPath+"/data/";
+            Lamp::Core::lampWarn::getInstance().log("Copying Data");
             std::filesystem::copy(sourceDirectory, destinationDirectory, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
 
             sourceDirectory = workingDir+"/Mods";
             destinationDirectory = appDataPath+"/Mods/";
+            Lamp::Core::lampWarn::getInstance().log("Copying Mods");
             std::filesystem::copy(sourceDirectory, destinationDirectory, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
 
             sourceDirectory =  workingDir+"/PlayerProfiles";
             destinationDirectory = appDataPath+"/PlayerProfiles/";
+            Lamp::Core::lampWarn::getInstance().log("Copying ModProfile");
             std::filesystem::copy(sourceDirectory, destinationDirectory, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
+            return true;
         } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
+            return false;
         }
     }
 
@@ -520,7 +531,7 @@ namespace Lamp {
                 }
             }
         } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
+            Lamp::Core::lampWarn::getInstance().log("Json Extraction Failed", Core::lampWarn::ERROR, true);
         }
     }
 
