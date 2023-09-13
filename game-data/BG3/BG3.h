@@ -27,6 +27,8 @@
 
             std::list<Lamp::Core::lampMod::Mod *> ModList;
 
+            bool checkLock = false;
+
 
             static BG3& getInstance()
             {
@@ -49,7 +51,7 @@
             bool deployment() override;
             void postDeploymentTasks() override;
 
-            void collectJsonData();
+            bool collectJsonData();
 
             void listArchives() override;
         private:
