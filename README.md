@@ -36,15 +36,19 @@ For now i am just one person working on this tool updates will be slow.
 - Vulkan Support
 - Zenity
 - glfw
-- X11 
+- X11
+- p7zip-full
 
 ## Build Requirements
 - Vulkan
-- Pugixml-dev
 - GLFW
 - PkgConfig
+- Pugixml-dev
+- p7zip-full
+
+- Zenity
+
 - C++ 17
-- Zenity 
 - GCC
 
 ## Contributing
