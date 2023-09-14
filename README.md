@@ -23,6 +23,11 @@ For now i am just one person working on this tool updates will be slow.
 ## List of currently supported games
 - Baldur's Gate 3
 
+## List of currently suppoted archives
+- zip
+- 7z
+- rar
+
 ## Current Goals
 - [ ] Add Support for Bethesda Titles.
 - [ ] Add FoMod Support.
@@ -38,7 +43,7 @@ For now i am just one person working on this tool updates will be slow.
 - Zenity
 - glfw
 - X11
-- p7zip-full & p7zip-rar 
+- p7zip-full & p7zip-rar
 
 ## Build Requirements
 - Vulkan
@@ -82,3 +87,8 @@ I welcome contributions from the community to make this tool even better. Whethe
 If you encounter any issues, bugs, or have ideas for new features, please open an issue on the Issue Tracker.
 
 Thank you for your contributions and support in making this tool better!
+
+### Credits
+Creator: Charles Hollingworth 
+Pugixml: zeux
+bit7z: rikyoz
