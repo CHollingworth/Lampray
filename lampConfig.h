@@ -30,7 +30,8 @@ namespace Lamp {
              */
             enum Game{
                 UNK = -1, ///< Unknown game.
-                BG3 = 0   ///< Baldur's Gate 3.
+                BG3 = 0,   ///< Baldur's Gate 3.
+                FO4 = 1 ///< I dont want to set the world on fire.
             };
 
             /**
@@ -41,7 +42,8 @@ namespace Lamp {
              */
             std::map<Game, std::string> GameStringMap = {
                     {UNK, "LAMP CONFIG"},  ///< Unknown game string.
-                    {BG3, "Baldur's Gate 3"} ///< Baldur's Gate 3 game string.
+                    {BG3, "Baldur's Gate 3"}, ///< Baldur's Gate 3 game string.
+                    {FO4, "Fallout 4"} ///< IIIII JUST WANT TO START A FLAME IN YOUR HEARRRRRRRRT
             };
 
             /**

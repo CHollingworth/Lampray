@@ -9,6 +9,7 @@
 #include "game-data/BG3/BG3.h"
 #include "game-data/gameControl.h"
 #include "lampWarn.h"
+#include "game-data/FO4/FO4.h"
 
 namespace Lamp {
     bool Core::lampFilesystem::init() {
@@ -72,6 +73,9 @@ namespace Lamp {
                             case Lamp::Core::lampConfig::Game::BG3:
                                 Lamp::Game::BG3::getInstance().registerArchive(target);
                                 break;
+                            case Lamp::Core::lampConfig::Game::FO4:
+                                Lamp::Game::FO4::getInstance().registerArchive(target);
+                                break;
                         }
 
 
@@ -97,6 +101,7 @@ namespace Lamp {
     void Core::lampFilesystem::extract(Lamp::Core::lampConfig::Game Game,const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod,
                                        std::string localExtractionPath) {
         std::string workingDir = getGameSpecificStoragePath(Game);
+        std::filesystem::create_directories(workingDir+localExtractionPath);
         try {
             bit7z::Bit7zLibrary lib{bit7zLibaryLocation};
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
@@ -313,6 +318,8 @@ namespace Lamp {
         std::string CG = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "CurrentGame");
         if(CG != ""){
             lampConfig::getInstance().CurrentGame = (lampConfig::Game) std::stoi(CG);
+
+
         }
 
     }

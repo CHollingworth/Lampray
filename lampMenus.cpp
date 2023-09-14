@@ -96,6 +96,9 @@ void Lamp::Core::lampMenus::GameSelect() {
     if(ImGui::Button(lampConfig::getInstance().GameStringMap[lampConfig::BG3].c_str())){
         lampConfig::getInstance().CurrentGame = lampConfig::BG3;
     }
+    if(ImGui::Button(lampConfig::getInstance().GameStringMap[lampConfig::FO4].c_str())){
+        lampConfig::getInstance().CurrentGame = lampConfig::FO4;
+    }
     ImGui::End();
 }
 

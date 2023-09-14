@@ -30,7 +30,10 @@ add_executable(Lamp main.cpp
         game-data/gameControl.h
         game-data/BG3/BG3.cpp
         game-data/BG3/BG3.h
-        lampWarn.h)
+        lampWarn.h
+        game-data/FO4/FO4.cpp
+        game-data/FO4/FO4.h
+        lampFoMod.h)
 
 
 
