@@ -300,10 +300,55 @@ namespace Lamp {
                     std::cerr << "Mods section not found in XML." << std::endl;
                 }
 
+
+
+                /// adding GustavDev
+
+                pugi::xml_node moduleNode = doc.select_node("//node[@id='ModOrder']").node();
+                pugi::xml_node childrenNode = moduleNode.child("children");
+                pugi::xml_node newNode = childrenNode.append_child("node");
+                newNode.append_attribute("id") = "Module";
+                pugi::xml_node attributes = newNode.append_child("attribute");
+                attributes.append_attribute("id") = "UUID";
+                attributes.append_attribute("value") = "28ac9ce2-2aba-8cda-b3b5-6e922f71b6b8";
+                attributes.append_attribute("type") = "FixedString";
+
+                pugi::xml_node modsNode2 = doc.select_node("//node[@id='Mods']").node();
+                childrenNode = modsNode2.child("children");
+
+                pugi::xml_node newShortDescNode = childrenNode.append_child("node");
+                newShortDescNode.append_attribute("id") = "ModuleShortDesc";
+
+                pugi::xml_node folderAttrib = newShortDescNode.append_child("attribute");
+                folderAttrib.append_attribute("id") = "Folder";
+                folderAttrib.append_attribute("type") = "LSString";
+                folderAttrib.append_attribute("value") = "GustavDev";
+
+                pugi::xml_node md5Attrib = newShortDescNode.append_child("attribute");
+                md5Attrib.append_attribute("id") = "MD5";
+                md5Attrib.append_attribute("type") = "LSString";
+                md5Attrib.append_attribute("value") = "";
+
+                pugi::xml_node nameAttrib = newShortDescNode.append_child("attribute");
+                nameAttrib.append_attribute("id") = "Name";
+                nameAttrib.append_attribute("type") = "LSString";
+                nameAttrib.append_attribute("value") = "GustavDev";
+
+                pugi::xml_node uuidAttrib = newShortDescNode.append_child("attribute");
+                uuidAttrib.append_attribute("id") = "UUID";
+                uuidAttrib.append_attribute("type") = "FixedString";
+                uuidAttrib.append_attribute("value") = "28ac9ce2-2aba-8cda-b3b5-6e922f71b6b8";
+
+
+                pugi::xml_node versionAttrib = newShortDescNode.append_child("attribute");
+                versionAttrib.append_attribute("id") = "Version64";
+                versionAttrib.append_attribute("value") = "36028797018963968";
+                versionAttrib.append_attribute("type") = "int64";
+
+
                 if (!doc.save_file((workingDir + "/PlayerProfiles/Public/modsettings.lsx").c_str())) {
                     std::cerr << "Failed to save XML file." << std::endl;
                 }
-
             }
             return true;
         }catch (std::exception ex){
