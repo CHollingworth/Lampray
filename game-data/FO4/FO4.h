@@ -6,6 +6,8 @@
 #define LAMP_FO4_H
 
 #include "../gameControl.h"
+#include "../../lampFilesystem.h"
+#include "../../lampConfig.h"
 
 namespace Lamp {
     namespace Game {
@@ -17,9 +19,9 @@ namespace Lamp {
             std::string appDataPath = "app/data/path";
 
             enum ModType{
-                BG3_NO_FOMOD = 0,
-                BG3_WITH_FOMOD,
-                ENB,
+                F04_NO_FOMOD = 0,
+                F04_WITH_FOMOD,
+                F04_MAINFOLDER,
                 NaN
             };
 
@@ -53,7 +55,10 @@ namespace Lamp {
 
             void listArchives() override;
         private:
-            FO4 (){}
+            FO4 (){
+
+
+            }
         };
 
     } // Lamp

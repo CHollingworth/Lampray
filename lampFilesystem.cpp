@@ -160,38 +160,32 @@ namespace Lamp {
 
     std::list<Lamp::Core::lampMod::Mod *>
     Core::lampFilesystem::loadModList(Lamp::Core::lampConfig::Game Game) {
-        switch (Game) {
-            case lampConfig::BG3:
+        std::string xmlPath=saveDataPath+lampConfig::getInstance().GameShorthandMap[Game]+".mdf";
+        std::list<Lamp::Core::lampMod::Mod *> newList;
+        pugi::xml_document doc;
+        if (doc.load_file(xmlPath.c_str())) {
+            // Find the Profile node
+            pugi::xml_node profileNode = doc.child("root").child("Profile");
 
-                std::string xmlPath =saveDataPath+"BG3.mdf";
-                std::list<Lamp::Core::lampMod::Mod *> newList;
-                pugi::xml_document doc;
-                if (doc.load_file(xmlPath.c_str())) {
-                    // Find the Profile node
-                    pugi::xml_node profileNode = doc.child("root").child("Profile");
+            // Iterate through the Mod nodes and deserialize them
+            for (pugi::xml_node modNode = profileNode.child("Mod"); modNode; modNode = modNode.next_sibling("Mod")) {
+                std::string archivePath = modNode.attribute("ArchivePath").as_string();
+                int modType = modNode.attribute("modType").as_int();
+                bool enabled = modNode.attribute("enabled").as_bool();
 
-                    // Iterate through the Mod nodes and deserialize them
-                    for (pugi::xml_node modNode = profileNode.child("Mod"); modNode; modNode = modNode.next_sibling("Mod")) {
-                        std::string archivePath = modNode.attribute("ArchivePath").as_string();
-                        int modType = modNode.attribute("modType").as_int();
-                        bool enabled = modNode.attribute("enabled").as_bool();
+                lampMod::Mod * temp = new lampMod::Mod{archivePath, modType, enabled};
 
-                        lampMod::Mod * temp = new lampMod::Mod{archivePath, modType, enabled};
+                newList.emplace_back(temp);
+            }
 
-                        newList.emplace_back(temp);
-                    }
+            // Print the loaded Mod objects
+            for (const Lamp::Core::lampMod::Mod * mod : newList) {
+                Lamp::Core::lampWarn::getInstance().log("Loaded Mod: " +mod->ArchivePath+ "| Mod Type: " + std::to_string(mod->modType) +"| Enabled" + std::to_string(mod->enabled));
+            }
 
-                    // Print the loaded Mod objects
-                    for (const Lamp::Core::lampMod::Mod * mod : newList) {
-                        Lamp::Core::lampWarn::getInstance().log("Loaded Mod: " +mod->ArchivePath+ "| Mod Type: " + std::to_string(mod->modType) +"| Enabled" + std::to_string(mod->enabled));
-                    }
-
-                    return newList;
-                } else {
-                    Lamp::Core::lampWarn::getInstance().log("Could not load modlist.", lampWarn::ERROR, true);
-                }
-
-            break;
+            return newList;
+        } else {
+            Lamp::Core::lampWarn::getInstance().log("Could not load modlist.", lampWarn::ERROR, true);
         }
 
 
@@ -199,28 +193,21 @@ namespace Lamp {
     }
 
     bool Core::lampFilesystem::saveModList(Lamp::Core::lampConfig::Game Game, std::list<Lamp::Core::lampMod::Mod *> ModList) {
+        // Create an XML document
+        pugi::xml_document doc;
+        pugi::xml_node rootNode = doc.append_child("root");
 
-        switch (Game) {
-            case lampConfig::BG3:
-                // Create an XML document
-                pugi::xml_document doc;
-                pugi::xml_node rootNode = doc.append_child("root");
+        // Create a profile node to hold the Mod objects
+        pugi::xml_node profileNode = rootNode.append_child("Profile");
 
-                // Create a profile node to hold the Mod objects
-                pugi::xml_node profileNode = rootNode.append_child("Profile");
-
-                // Serialize the list of Mod objects
-                for (const Lamp::Core::lampMod::Mod * mod : ModList) {
-                    mod->serialize(profileNode);
-                }
-
-                // Save the XML to a file
-                std::string xmlPath =saveDataPath+"BG3.mdf";
-                doc.save_file(xmlPath.c_str());
-                return true;
+        // Serialize the list of Mod objects
+        for (const Lamp::Core::lampMod::Mod * mod : ModList) {
+            mod->serialize(profileNode);
         }
 
-        return false;
+        std::string xmlPath = saveDataPath+lampConfig::getInstance().GameShorthandMap[Game]+".mdf";
+        doc.save_file(xmlPath.c_str());
+        return true;
     }
 //
     bool Core::lampFilesystem::saveKeyData(Lamp::Core::lampConfig::Game Game, std::string key, std::string data) {

@@ -46,6 +46,12 @@ namespace Lamp {
                     {FO4, "Fallout 4"} ///< IIIII JUST WANT TO START A FLAME IN YOUR HEARRRRRRRRT
             };
 
+            std::map<Game, std::string> GameShorthandMap = {
+                    {UNK, "UNK"},  ///< Unknown game string.
+                    {BG3, "BG3"}, ///< Baldur's Gate 3 game string.
+                    {FO4, "FO4"} ///< IIIII JUST WANT TO START A FLAME IN YOUR HEARRRRRRRRT
+            };
+
             /**
              * @brief The currently selected game.
              *

@@ -12,7 +12,6 @@ namespace Lamp {
     namespace Game {
         void FO4::registerArchive(std::string Path) {
 
-            // okay we gotta force a modtype selection before running ANY of this fancy shit.
             Lamp::Core::lampMod::Mod  * newArchive = new Lamp::Core::lampMod::Mod{Path,ModType::NaN, false};
 
             std::filesystem::path file_path(Path);
@@ -65,21 +64,21 @@ namespace Lamp {
 
             if (fs::exists(directoryPath) && fs::is_directory(directoryPath)) {
                 std::cout << "The directory exists." << std::endl;
-                newArchive->modType = BG3_WITH_FOMOD;
+                newArchive->modType = F04_WITH_FOMOD;
             } else {
                 Lamp::Core::lampWarn::getInstance().log("Checking for fomod");
                 directoryPath = Lamp::Core::lampFilesystem::getInstance().getGameSpecificStoragePath(Core::lampConfig::FO4)+"/"+newfolder+"/fomod";
                 if (fs::exists(directoryPath) && fs::is_directory(directoryPath)) {
                     std::cout << "The directory exists." << std::endl;
-                    newArchive->modType = BG3_WITH_FOMOD;
+                    newArchive->modType = F04_WITH_FOMOD;
                 }else{
-                    newArchive->modType = BG3_NO_FOMOD;
+                    newArchive->modType = F04_NO_FOMOD;
                 }
 
             }
 
             ModList.push_back(newArchive);
-            Lamp::Core::lampFilesystem::getInstance().saveModList(Core::lampConfig::BG3,ModList);
+            Lamp::Core::lampFilesystem::getInstance().saveModList(Core::lampConfig::FO4,ModList);
         }
 
         bool FO4::ConfigMenu() {
@@ -133,6 +132,108 @@ namespace Lamp {
 
         void FO4::listArchives() {
 
+            if(ImGui::BeginTable("Split", 6, ImGuiTableFlags_SizingFixedFit)) {
+
+                ImGui::TableNextColumn();
+                ImGui::Text("Enabled");
+                ImGui::TableNextColumn();
+                ImGui::Text("Mod Name");
+                ImGui::TableNextColumn();
+                ImGui::Text("Mod Type");
+                ImGui::TableNextColumn();
+                ImGui::Text("Mod Order");
+                ImGui::TableNextColumn();
+                ImGui::Text("Change Order");
+                ImGui::TableNextColumn();
+                ImGui::Text("Remove Mod");
+                ImGui::TableNextRow();
+                std::list<Lamp::Core::lampMod::Mod *>::iterator it;
+                int i = 0;
+                for (it = ModList.begin(); it != ModList.end(); ++it) {
+
+                    std::filesystem::path path((*it)->ArchivePath);
+                    ImGui::TableNextColumn();
+
+                    if((*it)->enabled) {
+                        if (ImGui::Button(("Enabled##" + std::to_string(i)).c_str())) {
+                            (*it)->enabled = false;
+                            Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::FO4, ModList);
+                        }
+                    }else{
+                        if (ImGui::Button(("Disabled##" + std::to_string(i)).c_str())) {
+                            (*it)->enabled = true;
+                            Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::FO4, ModList);
+                        }
+                    }
+                    ImGui::TableNextColumn();
+                    ImGui::Text(path.filename().c_str());
+
+
+                    ImGui::TableNextColumn();
+
+                    std::string Type = "";
+
+                    switch ((*it)->modType) {
+                        case ModType::F04_NO_FOMOD:
+                            Type = "Standard Mod";
+                            break;
+                        case ModType::F04_WITH_FOMOD:
+                            Type = "FOMOD Installer";
+                            break;
+                        case ModType::F04_MAINFOLDER:
+                            Type = "Main Folder Overwrite";
+                            break;
+                        case ModType::NaN:
+                            Type = "Select Type";
+                            break;
+                    }
+
+
+                    if (ImGui::BeginMenu((Type + "##" + std::to_string(i)).c_str())) {
+
+                        if (ImGui::MenuItem("Standard Mod")) {
+                            (*it)->modType = ModType::F04_NO_FOMOD;
+                            Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::FO4, ModList);
+                        }
+                        if (ImGui::MenuItem("FOMOD Installer")) {
+                            (*it)->modType = ModType::F04_WITH_FOMOD;
+                            Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::FO4, ModList);
+                        }
+                        if (ImGui::MenuItem("Main Folder Overwrite")) {
+                            (*it)->modType = ModType::F04_MAINFOLDER;
+                            Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::FO4, ModList);
+                        }
+                        ImGui::EndMenu();
+                    }
+                    ImGui::TableNextColumn();
+                    ImGui::Text((std::to_string(i)).c_str());
+                    ImGui::TableNextColumn();
+                    if(ImGui::Button(("Move Up##" + std::to_string(i)).c_str())){
+                        auto prev = std::prev(it);
+                        if (it != ModList.begin()) {
+                            ModList.splice(prev, ModList, it);
+                        }else{
+                            auto last = std::prev(ModList.end());
+                            ModList.splice(last, ModList, it);
+                            it = last;
+                        }
+                        Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::FO4, ModList);
+                    }
+
+                    ImGui::TableNextColumn();
+                    if (ImGui::Button(("Delete Mod##" + std::to_string(i)).c_str())) {
+                        std::remove(absolute(path).c_str());
+                        std::cout << absolute(path).c_str() << std::endl;
+                        ModList.remove((*it));
+                        Lamp::Core::lampFilesystem::getInstance().saveModList(Core::lampConfig::BG3,ModList);
+                        break;
+                    }
+
+                    ImGui::TableNextRow();
+                    i++;
+                }
+                ImGui::EndTable();
+            }
         }
     } // Lamp
 } // Game
