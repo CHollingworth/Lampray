@@ -198,14 +198,18 @@ ImGuiWindowFlags Lamp::Core::lampMenus::DefaultFlags() {
 
 void Lamp::Core::lampMenus::DefaultMenuBar() {
     if (ImGui::BeginMenuBar()) {
-        if (ImGui::BeginMenu("Game Selection")) {
+
+
+        if (ImGui::Button("Game Selection")) {
             Lamp::Core::lampConfig::getInstance().CurrentGame = Lamp::Core::lampConfig::UNK;
             currentMenu = LAMP_GAME_SELECT;
-            ImGui::EndMenu();
+           // ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Game Configuration")) {
-            currentMenu = GAME_CONFIG_MENU;
-            ImGui::EndMenu();
+        if(currentMenu != LAMP_GAME_SELECT) {
+            if (ImGui::Button("Game Configuration")) {
+                currentMenu = GAME_CONFIG_MENU;
+                //ImGui::EndMenu();
+            }
         }
 
 

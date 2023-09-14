@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 
+
 add_executable(Lamp main.cpp
         imgui/imconfig.h
         imgui/imgui.cpp
@@ -33,13 +34,13 @@ add_executable(Lamp main.cpp
         lampWarn.h
         game-data/FO4/FO4.cpp
         game-data/FO4/FO4.h
-        lampFoMod.h)
+        lampFoMod.h
+        VERSION)
 
 
 
 
 find_package(PkgConfig REQUIRED)
-
 
 target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/bit7z/lib/x64/libbit7z64.a )
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/bit7z/include/include/bit7z )
@@ -51,6 +52,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/nfd/includ
 pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARIES})
+
 
 
 find_package(Vulkan REQUIRED)
