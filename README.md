@@ -50,6 +50,7 @@ For now i am just one person working on this tool updates will be slow.
 - GLFW
 - PkgConfig
 - Pugixml-dev
+- libcurl4-openssl-dev
 
 - Zenity
 
