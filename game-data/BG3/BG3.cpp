@@ -287,6 +287,8 @@ namespace Lamp {
                     pugi::xml_node childrenNode = modOrderNode.child("children");
                     if (childrenNode) {
                         childrenNode.remove_children();
+                    }else{
+                        modOrderNode.append_child("children");
                     }
                 } else {
                     std::cerr << "ModOrder section not found in XML." << std::endl;
@@ -297,6 +299,8 @@ namespace Lamp {
                     pugi::xml_node childrenNode = modsNode.child("children");
                     if (childrenNode) {
                         childrenNode.remove_children();
+                    }else{
+                        modsNode.append_child("children");
                     }
                 } else {
                     std::cerr << "Mods section not found in XML." << std::endl;

@@ -177,10 +177,6 @@ namespace Lamp {
 
 
             bool downloadFile(const std::string &url, const std::string &output_filename);
-
-            std::string extractXMLHeader(const std::string &hexdump);
-
-            std::string extractHiddenXML(const std::string &filePath);
         };
 
 
