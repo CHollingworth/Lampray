@@ -41,6 +41,7 @@ For now i am just one person working on this tool updates will be slow.
 - [ ] internalize the 7zip shared libary
 - [ ] Support for Profiles.
 - [ ] Drag and Drop Reordering
+- [ ] Update Checking and replacement for newer files
 - [ ] Move Data & Configs to a persistant path
 
 ## Running Requirements
