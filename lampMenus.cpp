@@ -98,10 +98,11 @@ void Lamp::Core::lampMenus::GameSelect() {
         lampConfig::getInstance().CurrentGame = lampConfig::BG3;
         Lamp::Core::lampFilesystem::getInstance().save_config();
     }
-    if(ImGui::Button(lampConfig::getInstance().GameStringMap[lampConfig::FO4].c_str())){
-        lampConfig::getInstance().CurrentGame = lampConfig::FO4;
-        Lamp::Core::lampFilesystem::getInstance().save_config();
-    }
+
+//    if(ImGui::Button(lampConfig::getInstance().GameStringMap[lampConfig::FO4].c_str())){
+//        lampConfig::getInstance().CurrentGame = lampConfig::FO4;
+//        Lamp::Core::lampFilesystem::getInstance().save_config();
+//    }
     ImGui::End();
 }
 

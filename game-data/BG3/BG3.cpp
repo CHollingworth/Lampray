@@ -146,6 +146,7 @@ namespace Lamp {
         ImGui::Begin("BG3 Steam Path Setup", NULL,windowFlags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 
         ImGui::Text("BG3 Steam Directory");
+        ImGui::Text("This is usually (steampath)/steamapps/common/Baldurs Gate 3");
         if(ImGui::Button((installDirPath+"##installpath").c_str())) {
             nfdchar_t *outPath = NULL;
             nfdresult_t result = NFD_PickFolder(NULL, &outPath);
@@ -165,6 +166,7 @@ namespace Lamp {
         ImGui::Separator();
 
         ImGui::Text("BG3 AppData Directory");
+        ImGui::Text("This is usually (steampath)/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios/Baldur's Gate 3");
         if(ImGui::Button((appDataPath+"##appdatapath").c_str())){
             nfdchar_t *outPath = NULL;
             nfdresult_t result = NFD_PickFolder( NULL, &outPath );

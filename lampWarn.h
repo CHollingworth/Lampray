@@ -82,7 +82,8 @@ namespace Lamp::Core{
 
                     ImGui::Text(x.c_str());
                     ImGui::Separator();
-                    ImGui::Text("If the error persists please create an issue on GitHub.");
+
+                    ImGui::Text("If an error persists please create an issue on GitHub.");
                     if (ImGui::Button("Okay")) {
                         poplist.erase(it);
                     } else {
