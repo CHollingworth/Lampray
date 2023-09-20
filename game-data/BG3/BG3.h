@@ -22,6 +22,7 @@
                 BG3_MOD,
                 BG3_BIN_OVERRIDE,
                 BG3_DATA_OVERRIDE,
+                BG3_MOD_FIXER,
                 NaN
             };
 

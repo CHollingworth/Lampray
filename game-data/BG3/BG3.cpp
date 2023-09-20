@@ -13,6 +13,35 @@
 
 namespace Lamp {
     void Game::BG3::registerArchive(std::string Path) {
+
+        std::list<Lamp::Core::lampMod::Mod *>::iterator it;
+        for (it = ModList.begin(); it != ModList.end(); ++it) {
+
+            std::filesystem::path NewFilePath = Path;
+            std::filesystem::path TestingAgainstPath = (*it)->ArchivePath;
+
+
+            std::string NewFilePathCut = NewFilePath.filename();
+            size_t posA = NewFilePathCut.find('-');
+            if (posA != std::string::npos) {
+                NewFilePathCut.erase(posA);
+            }
+
+            std::string TestingAgainstPathCut = TestingAgainstPath.filename();
+            size_t posB = TestingAgainstPathCut.find('-');
+            if (posB != std::string::npos) {
+                TestingAgainstPathCut.erase(posB);
+            }
+
+
+            if(NewFilePathCut == TestingAgainstPathCut){
+                (*it)->ArchivePath = Path;
+                Lamp::Core::lampFilesystem::getInstance().saveModList(Core::lampConfig::BG3,ModList);
+                return;
+            }
+
+        }
+
         Lamp::Core::lampMod::Mod  * newArchive = new Lamp::Core::lampMod::Mod{Path,ModType::NaN, false};
         ModList.push_back(newArchive);
         Lamp::Core::lampFilesystem::getInstance().saveModList(Core::lampConfig::BG3,ModList);
@@ -54,7 +83,18 @@ namespace Lamp {
                     }
                 }
                 ImGui::TableNextColumn();
-                ImGui::Text(path.filename().c_str());
+
+
+                std::string cutname = path.filename().c_str();
+                size_t pos = cutname.find('-');
+
+                // Check if the "-" symbol was found
+                if (pos != std::string::npos) {
+                    // Remove everything after the "-" symbol
+                    cutname.erase(pos);
+                }
+
+                ImGui::Text(cutname.c_str());
 
 
                 ImGui::TableNextColumn();
@@ -73,6 +113,9 @@ namespace Lamp {
                         break;
                     case ModType::BG3_DATA_OVERRIDE:
                         Type = "Data Overwrite";
+                        break;
+                    case ModType::BG3_MOD_FIXER:
+                        Type = "ModFixer/ScriptExtender Mod";
                         break;
                     case ModType::NaN:
                         Type = "Select Type";
@@ -96,6 +139,10 @@ namespace Lamp {
                     }
                     if (ImGui::MenuItem("Data Overwrite")) {
                         (*it)->modType = ModType::BG3_DATA_OVERRIDE;
+                        Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
+                    }
+                    if (ImGui::MenuItem("ModFixer/ScriptExtender Mod")) {
+                        (*it)->modType = ModType::BG3_MOD_FIXER;
                         Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
                     }
                     ImGui::EndMenu();
@@ -309,18 +356,18 @@ namespace Lamp {
 
 
                 /// adding GustavDev
-
-                pugi::xml_node moduleNode = doc.select_node("//node[@id='ModOrder']").node();
-                pugi::xml_node childrenNode = moduleNode.child("children");
-                pugi::xml_node newNode = childrenNode.append_child("node");
-                newNode.append_attribute("id") = "Module";
-                pugi::xml_node attributes = newNode.append_child("attribute");
-                attributes.append_attribute("id") = "UUID";
-                attributes.append_attribute("value") = "28ac9ce2-2aba-8cda-b3b5-6e922f71b6b8";
-                attributes.append_attribute("type") = "FixedString";
+// patch 4 doesnt want this.
+//                pugi::xml_node moduleNode = doc.select_node("//node[@id='ModOrder']").node();
+//                pugi::xml_node childrenNode = moduleNode.child("children");
+//                pugi::xml_node newNode = childrenNode.append_child("node");
+//                newNode.append_attribute("id") = "Module";
+//                pugi::xml_node attributes = newNode.append_child("attribute");
+//                attributes.append_attribute("id") = "UUID";
+//                attributes.append_attribute("value") = "28ac9ce2-2aba-8cda-b3b5-6e922f71b6b8";
+//                attributes.append_attribute("type") = "FixedString";
 
                 pugi::xml_node modsNode2 = doc.select_node("//node[@id='Mods']").node();
-                childrenNode = modsNode2.child("children");
+                pugi::xml_node childrenNode = modsNode2.child("children");
 
                 pugi::xml_node newShortDescNode = childrenNode.append_child("node");
                 newShortDescNode.append_attribute("id") = "ModuleShortDesc";
@@ -413,6 +460,20 @@ namespace Lamp {
                             Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
                                                                               bit7z::BitFormat::SevenZip, (*it),
                                                                               "/Data");
+                        } else {
+                            break;
+                        }
+                        break;
+                    case ModType::BG3_MOD_FIXER:
+                        if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(zip)$"))) {
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                                    Lamp::Core::lampConfig::BG3, bit7z::BitFormat::Zip, (*it), "/Mods", "pak");
+                        } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(rar)$"))) {
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                                    Lamp::Core::lampConfig::BG3, bit7z::BitFormat::Rar, (*it), "/Mods", "pak");
+                        } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(7z)$"))) {
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                                    Lamp::Core::lampConfig::BG3, bit7z::BitFormat::SevenZip, (*it), "/Mods", "pak");
                         } else {
                             break;
                         }
