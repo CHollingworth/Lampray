@@ -23,20 +23,26 @@ For now i am just one person working on this tool updates will be slow.
 ## List of currently supported games
 - Baldur's Gate 3
 
+## List of planned support
+- [ ] Skyrim (SE & AE)
+- [ ] Fallout 4
+- [ ] Oblivion
+- [ ] Morrowind
+- [ ] The Sims 4
+
 ## List of currently suppoted archives
 - zip
 - 7z
 - rar
 
 ## Current Goals
-- [ ] Add Support for Bethesda Titles.
 - [ ] Add FoMod Support.
-- [ ] Add The Sims 3 & 4 Support.
 - [ ] Nexus Api inclusion
-- [ ] Mod version validation.
-- [X] Add error feedback.
 - [ ] internalize the 7zip shared libary
 - [ ] Support for Profiles.
+- [ ] Drag and Drop Reordering
+- [ ] Update Checking and replacement for newer files
+- [ ] Move Data & Configs to a persistant path
 
 ## Running Requirements
 - Vulkan Support
@@ -50,6 +56,7 @@ For now i am just one person working on this tool updates will be slow.
 - GLFW
 - PkgConfig
 - Pugixml-dev
+- libcurl4-openssl-dev
 
 - Zenity
 
