@@ -30,7 +30,9 @@ add_executable(Lamp main.cpp
         game-data/gameControl.h
         game-data/BG3/BG3.cpp
         game-data/BG3/BG3.h
-        lampWarn.h)
+        lampWarn.h
+        l4z/lz4.c
+        l4z/lz4.h)
 
 
 
@@ -43,6 +45,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/bit7z/incl
 
 target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/nfd/lib/libnfd.a )
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/nfd/include/include/nfd.h )
+
 
 
 pkg_search_module(GLFW REQUIRED glfw3)
@@ -58,4 +61,11 @@ find_package(pugixml REQUIRED)
 target_link_libraries(${PROJECT_NAME} pugixml::pugixml)
 add_definitions(-DGLFW_INCLUDE_VULKAN)
 
+
+find_package(CURL REQUIRED)
+include_directories(${CURL_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
+
+target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/l4z/liblz4.so)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/l4z/)
 

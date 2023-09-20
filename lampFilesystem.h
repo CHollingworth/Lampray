@@ -14,6 +14,7 @@
 #include "bit7zlibrary.hpp"
 #include "bitarchivereader.hpp"
 #include "bitexception.hpp"
+#include "lz4.h"
 namespace Lamp {
     namespace Core {
         class lampFilesystem {
@@ -69,7 +70,7 @@ namespace Lamp {
              * @note The extracted file will be stored in the local directory specified by 'localExtractionPath'.
              * @note If multiple files match the specified extension, all of them will be extracted.
              */
-            void extractSpecificFileType(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod, std::string localExtractionPath, std::string extension);
+            std::vector<std::string> extractSpecificFileType(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod, std::string localExtractionPath, std::string extension);
 
 
             /**
@@ -163,6 +164,8 @@ namespace Lamp {
              * @note 'count' indicates the number of files being dropped, and 'paths' contains their file paths.
              */
             static void fileDrop(GLFWwindow* window, int count, const char** paths);
+
+
         private:
             lampFilesystem() {}
 
@@ -172,6 +175,12 @@ namespace Lamp {
             const std::string ConfigDataPath = baseDataPath+"Config/";
             const std::string DeploymentDataPath = baseDataPath+"Deployment/";
 
+
+            bool downloadFile(const std::string &url, const std::string &output_filename);
+
+            std::string extractXMLHeader(const std::string &hexdump);
+
+            std::string extractHiddenXML(const std::string &filePath);
         };
 
 

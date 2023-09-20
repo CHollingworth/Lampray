@@ -268,7 +268,7 @@ namespace Lamp {
             }
 
             std::filesystem::create_directories(workingDir + "/bin/NativeMods");
-            std::filesystem::create_directories(workingDir + "/data");
+            std::filesystem::create_directories(workingDir + "/Data");
             std::filesystem::create_directories(workingDir + "/Mods");
             std::filesystem::create_directories(workingDir + "/PlayerProfiles/Public");
             std::filesystem::create_directories(workingDir + "/ext");
@@ -399,36 +399,43 @@ namespace Lamp {
                     case ModType::BG3_DATA_OVERRIDE:
                         if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(zip)$"))) {
                             Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
-                                                                              bit7z::BitFormat::Zip, (*it), "/data");
+                                                                              bit7z::BitFormat::Zip, (*it), "/Data");
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(rar)$"))) {
                             Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
-                                                                              bit7z::BitFormat::Rar, (*it), "/data");
+                                                                              bit7z::BitFormat::Rar, (*it), "/Data");
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(7z)$"))) {
                             Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
                                                                               bit7z::BitFormat::SevenZip, (*it),
-                                                                              "/data");
+                                                                              "/Data");
                         } else {
                             break;
                         }
                         break;
                     case ModType::BG3_MOD:
+                        std::vector<std::string> xx;
                         if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(zip)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                            xx = Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
                                     Lamp::Core::lampConfig::BG3, bit7z::BitFormat::Zip, (*it), "/Mods", "pak");
                             if(collectJsonData()){
                                 break;
+                            }else{
+                                findJsonData(xx);
                             }
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(rar)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                            xx = Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
                                     Lamp::Core::lampConfig::BG3, bit7z::BitFormat::Rar, (*it), "/Mods", "pak");
                             if(collectJsonData()){
                                 break;
+                            }else{
+                                findJsonData(xx);
                             }
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(7z)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                            xx = Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
                                     Lamp::Core::lampConfig::BG3, bit7z::BitFormat::SevenZip, (*it), "/Mods", "pak");
                             if(collectJsonData()){
                                 break;
+                            }else{
+                                findJsonData(xx);
                             }
                         } else {
                             break;
@@ -445,6 +452,96 @@ namespace Lamp {
         }
         return true;
     }
+
+    bool Game::BG3::findJsonData(std::vector<std::string> xx){
+
+        pugi::xml_document doc;
+        std::string uuidout;
+
+        std::string workingDir = Lamp::Core::lampFilesystem::getInstance().getGameSpecificStoragePath(
+                Lamp::Core::lampConfig::BG3);
+        if (!doc.load_file((workingDir + "/PlayerProfiles/Public/modsettings.lsx").c_str())) {
+            std::cerr << "Failed to load XML file." << std::endl;
+            return false;
+        }
+
+        for (const std::string& str : xx) {
+            std::cout << str << std::endl;
+            std::ifstream inputFile(str);
+
+            // Check if the file is open
+            if (!inputFile.is_open()) {
+                std::cerr << "Failed to open the file!" << std::endl;
+                return 1;
+            }
+
+            std::regex uuidPattern("\\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\b");
+
+            std::string line;
+
+            while (std::getline(inputFile, line)) {
+                std::smatch match;
+                if (std::regex_search(line, match, uuidPattern)) {
+                    std::cout << "Found UUID in line: " << line << std::endl;
+                    uuidout = match[0];
+
+                    break;
+                }
+            }
+
+            std::filesystem::path assumedFolderName(str.c_str());
+
+            if(uuidout != ""){
+            pugi::xml_node moduleNode = doc.select_node("//node[@id='ModOrder']").node();
+            pugi::xml_node childrenNode = moduleNode.child("children");
+            pugi::xml_node newNode = childrenNode.append_child("node");
+            newNode.append_attribute("id") = "Module";
+            pugi::xml_node attributes = newNode.append_child("attribute");
+            attributes.append_attribute("id") = "UUID";
+            attributes.append_attribute("value") = uuidout.c_str();
+            attributes.append_attribute("type") = "FixedString";
+
+            pugi::xml_node modsNode = doc.select_node("//node[@id='Mods']").node();
+            childrenNode = modsNode.child("children");
+
+            pugi::xml_node newShortDescNode = childrenNode.append_child("node");
+            newShortDescNode.append_attribute("id") = "ModuleShortDesc";
+
+            pugi::xml_node folderAttrib = newShortDescNode.append_child("attribute");
+            folderAttrib.append_attribute("id") = "Folder";
+            folderAttrib.append_attribute("type") = "LSString";
+            folderAttrib.append_attribute("value") = assumedFolderName.filename().c_str();
+
+            pugi::xml_node md5Attrib = newShortDescNode.append_child("attribute");
+            md5Attrib.append_attribute("id") = "MD5";
+            md5Attrib.append_attribute("type") = "LSString";
+            md5Attrib.append_attribute("value") = "";
+
+            pugi::xml_node nameAttrib = newShortDescNode.append_child("attribute");
+            nameAttrib.append_attribute("id") = "Name";
+            nameAttrib.append_attribute("type") = "LSString";
+            nameAttrib.append_attribute("value") = assumedFolderName.filename().c_str();
+
+            pugi::xml_node uuidAttrib = newShortDescNode.append_child("attribute");
+            uuidAttrib.append_attribute("id") = "UUID";
+            uuidAttrib.append_attribute("type") = "FixedString";
+            uuidAttrib.append_attribute("value") = uuidout.c_str();
+
+
+            pugi::xml_node versionAttrib = newShortDescNode.append_child("attribute");
+            versionAttrib.append_attribute("id") = "Version64";
+            versionAttrib.append_attribute("value") = "36028797018963968";
+            versionAttrib.append_attribute("type") = "int64";
+
+
+            if (!doc.save_file((workingDir + "/PlayerProfiles/Public/modsettings.lsx").c_str())) {
+                std::cerr << "Failed to save XML file." << std::endl;
+            }
+
+            inputFile.close();
+        }
+        }
+        }
 
     bool Game::BG3::collectJsonData() {
         std::string workingDir = Lamp::Core::lampFilesystem::getInstance().getGameSpecificStoragePath(
@@ -498,9 +595,9 @@ namespace Lamp {
 
                         std::string UUID = mod["UUID"];
 
-                        std::cout << "Mod Name: " << modName << std::endl;
-                        std::cout << "UUID: " << UUID << std::endl;
-                        std::cout << "Folder Name: " << folderName << std::endl;
+                        //std::cout << "Mod Name: " << modName << std::endl;
+                        //std::cout << "UUID: " << UUID << std::endl;
+                        //std::cout << "Folder Name: " << folderName << std::endl;
 
                         pugi::xml_node moduleNode = doc.select_node("//node[@id='ModOrder']").node();
                         pugi::xml_node childrenNode = moduleNode.child("children");
@@ -571,8 +668,8 @@ namespace Lamp {
             std::filesystem::copy(sourceDirectory, destinationDirectory, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
 
 
-            sourceDirectory = workingDir+"/data/";
-            destinationDirectory = installDirPath+"/data/";
+            sourceDirectory = workingDir+"/Data/";
+            destinationDirectory = installDirPath+"/Data/";
             Lamp::Core::lampWarn::getInstance().log("Copying Data");
             std::filesystem::copy(sourceDirectory, destinationDirectory, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
 

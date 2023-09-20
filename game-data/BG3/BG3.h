@@ -60,6 +60,8 @@
                 appDataPath = Lamp::Core::lampFilesystem::getInstance().loadKeyData(Core::lampConfig::BG3, "appDataPath");
 
             };
+
+            bool findJsonData(std::vector<std::string> xx);
         };
     }
 // Lamp

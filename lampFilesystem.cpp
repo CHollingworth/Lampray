@@ -5,12 +5,22 @@
 #include <iostream>
 #include <filesystem>
 #include <regex>
+#include <fstream>
 #include "lampFilesystem.h"
 #include "game-data/BG3/BG3.h"
 #include "game-data/gameControl.h"
 #include "lampWarn.h"
-
+#include "curl/curl.h"
 namespace Lamp {
+
+    size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp) {
+        size_t total_size = size * nmemb;
+        std::ofstream *output_stream = (std::ofstream *)userp;
+        output_stream->write((char *)contents, total_size);
+        return total_size;
+    }
+
+
     bool Core::lampFilesystem::init() {
         Lamp::Core::lampWarn::getInstance().log("Initializing Lamp FileSystem");
         try {
@@ -18,32 +28,121 @@ namespace Lamp {
             std::filesystem::create_directories(archiveDataPath);
             std::filesystem::create_directories(ConfigDataPath);
             std::filesystem::create_directories(DeploymentDataPath);
-        }catch(std::exception ex){
+        } catch (std::exception ex) {
             Lamp::Core::lampWarn::getInstance().log("Could not create base directories", lampWarn::ERROR);
         }
 
         std::map<Lamp::Core::lampConfig::Game, std::string>::iterator it;
         Lamp::Core::lampWarn::getInstance().log("Creating Game directories");
-        for (it = Core::lampConfig::getInstance().GameStringMap.begin(); it != Core::lampConfig::getInstance().GameStringMap.end(); it++)
-        {
+        for (it = Core::lampConfig::getInstance().GameStringMap.begin();
+             it != Core::lampConfig::getInstance().GameStringMap.end(); it++) {
             std::filesystem::create_directories(DeploymentDataPath + it->second);
             Lamp::Core::lampWarn::getInstance().log(it->second);
         }
         Lamp::Core::lampWarn::getInstance().log("Finished creating Game directories");
 
-        std::filesystem::path f{ "/usr/libexec/p7zip/7z.so" };
+        std::filesystem::path f{"/usr/libexec/p7zip/7z.so"};
         if (std::filesystem::exists(f)) {
             bit7zLibaryLocation = "/usr/libexec/p7zip/7z.so";
-        }else if(exists(std::filesystem::path{"/usr/lib/p7zip/7z.so"})){
+        } else if (exists(std::filesystem::path{"/usr/lib/p7zip/7z.so"})) {
             bit7zLibaryLocation = "/usr/lib/p7zip/7z.so";
-        }else if(exists(std::filesystem::path{"/usr/libexec/7z.so"})){
+        } else if (exists(std::filesystem::path{"/usr/libexec/7z.so"})) {
             bit7zLibaryLocation = "/usr/libexec/7z.so";
-        }else{
-            Lamp::Core::lampWarn::getInstance().log("Fatal. Cannot locate 7z.so",lampWarn::ERROR,true);
+        } else {
+            Lamp::Core::lampWarn::getInstance().log("Fatal. Cannot locate 7z.so", lampWarn::ERROR, true);
         }
 
 
+//        Lamp::Core::lampWarn::getInstance().log("Downloading QuickBMS");
+//        const std::string url = "http://aluigi.altervista.org/papers/quickbms_linux.zip";
+//        if(!fs::exists("quickbms_4gb_files") && !fs::is_regular_file("quickbms_4gb_files")) {
+//            if (downloadFile(url, "quckbms.zip")) {
+//                bit7z::Bit7zLibrary lib{bit7zLibaryLocation};
+//                bit7z::BitArchiveReader reader{lib, "quckbms.zip", bit7z::BitFormat::Zip};
+//                reader.test();
+//                reader.extract("");
+//
+//                const char* command = "chmod +x quickbms_4gb_files";
+//                int returnCode = std::system(command);
+//
+//                if (returnCode == 0) {
+//                    std::cout << "Command executed successfully." << std::endl;
+//                } else {
+//                    std::cerr << "Command failed with return code: " << returnCode << std::endl;
+//                }
+//            }
+//        }
 
+
+
+
+        return true;
+    }
+
+    bool Core::lampFilesystem::downloadFile(const std::string& url, const std::string& output_filename) {
+        // Logging
+        Lamp::Core::lampWarn::getInstance().log("Downloading QuickBMS");
+
+        CURL *curl;
+        CURLcode res;
+
+        // Initialize libcurl
+        curl = curl_easy_init();
+        if (!curl) {
+            std::cerr << "Failed to initialize libcurl" << std::endl;
+            return false;
+        }
+
+        // Open the file for writing
+        std::ofstream output_file(output_filename, std::ios::binary);
+        if (!output_file.is_open()) {
+            std::cerr << "Failed to open the output file for writing" << std::endl;
+            curl_easy_cleanup(curl);
+            return false;
+        }
+
+        // Set libcurl options
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &output_file);
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, "LAMP");
+
+
+        // Follow redirects manually
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 0L);
+
+        // Perform the download
+        res = curl_easy_perform(curl);
+
+        // Handle redirects
+        if (res == CURLE_OK) {
+            long response_code;
+            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+
+            if (response_code == 302) {
+                char *new_url;
+                curl_easy_getinfo(curl, CURLINFO_REDIRECT_URL, &new_url);
+
+                if (new_url) {
+                    std::cout << "Redirected to: " << new_url << std::endl;
+
+                    // Recursively download the redirected URL
+                    curl_easy_cleanup(curl);
+                    output_file.close();
+                    return downloadFile(new_url, output_filename);
+                }
+            }
+        }
+
+        // Clean up libcurl
+        curl_easy_cleanup(curl);
+        output_file.close();
+
+        if (res != CURLE_OK) {
+            std::cerr << "libcurl download failed: " << curl_easy_strerror(res) << std::endl;
+            return false;
+        }
 
         return true;
     }
@@ -111,10 +210,13 @@ namespace Lamp {
 
     }
 
-    void
+    std::vector<std::string>
     Core::lampFilesystem::extractSpecificFileType(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat &Type,
                                                   Lamp::Core::lampMod::Mod * mod, std::string extractionPath,
                                                   std::string extension) {
+
+        std::vector<std::string> xx;
+
         std::string workingDir = getGameSpecificStoragePath(Game);
         Lamp::Core::lampWarn::getInstance().log("Extracting: " +mod->ArchivePath );
         Lamp::Core::lampWarn::getInstance().log("Extension: ." +extension );
@@ -138,6 +240,7 @@ namespace Lamp {
                     if(std::regex_match (subentry.path().filename().string(), std::regex("^.*\\.("+extension+")$") )){
                         try {
                             std::filesystem::rename(subentry.path(),workingDir+extractionPath + "/" + subentry.path().filename().string());
+                            xx.push_back(workingDir+extractionPath + "/" + subentry.path().filename().string());
                         } catch (std::filesystem::filesystem_error& e) {
                             Lamp::Core::lampWarn::getInstance().log("Could not copy: " +mod->ArchivePath, lampWarn::ERROR, true);
                         }
@@ -146,11 +249,13 @@ namespace Lamp {
             }else if(std::regex_match (entry.path().filename().string(), std::regex("^.*\\.("+extension+")$") )){
                 try {
                         std::filesystem::rename(entry.path(), workingDir+extractionPath + "/" + entry.path().filename().string());
+                        xx.push_back(workingDir+extractionPath + "/" + entry.path().filename().string());
                 } catch (std::filesystem::filesystem_error& e) {
                     Lamp::Core::lampWarn::getInstance().log("Could not copy: " +mod->ArchivePath, lampWarn::ERROR, true);
                 }
             }
         }
+        return xx;
     }
 
     std::list<Lamp::Core::lampMod::Mod *>
@@ -325,4 +430,10 @@ namespace Lamp {
     std::string Core::lampFilesystem::getGameSpecificStoragePath(Lamp::Core::lampConfig::Game Game) {
         return DeploymentDataPath + Core::lampConfig::getInstance().GameStringMap[Game];
     }
+
+
+
+
+
+
 } // Lamp
