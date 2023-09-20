@@ -8,6 +8,7 @@
 #include "game-data/BG3/BG3.h"
 #include "game-data/gameControl.h"
 #include "lampWarn.h"
+#include "game-data/FO4/FO4.h"
 
 void Lamp::Core::lampMenus::CreateMenus() {
 
@@ -95,6 +96,11 @@ void Lamp::Core::lampMenus::GameSelect() {
     ImGui::Text("Welcome to Lamp! At the moment there is only support for BG3, hopefully more to come!");
     if(ImGui::Button(lampConfig::getInstance().GameStringMap[lampConfig::BG3].c_str())){
         lampConfig::getInstance().CurrentGame = lampConfig::BG3;
+        Lamp::Core::lampFilesystem::getInstance().save_config();
+    }
+    if(ImGui::Button(lampConfig::getInstance().GameStringMap[lampConfig::FO4].c_str())){
+        lampConfig::getInstance().CurrentGame = lampConfig::FO4;
+        Lamp::Core::lampFilesystem::getInstance().save_config();
     }
     ImGui::End();
 }
@@ -152,6 +158,9 @@ void Lamp::Core::lampMenus::ModMenu() {
         case lampConfig::BG3:
             Lamp::Game::BG3::getInstance().listArchives();
             break;
+        case lampConfig::FO4:
+            Lamp::Game::FO4::getInstance().listArchives();
+            break;
     }
     ImGui::End();
 }
@@ -165,6 +174,11 @@ void Lamp::Core::lampMenus::GameConfigMenu() {
             break;
         case lampConfig::BG3:
             if(Lamp::Game::BG3::getInstance().ConfigMenu()){
+                currentMenu = GAME_MOD_MENU;
+            }
+            break;
+        case lampConfig::FO4:
+            if(Lamp::Game::FO4::getInstance().ConfigMenu()){
                 currentMenu = GAME_MOD_MENU;
             }
             break;
@@ -184,14 +198,18 @@ ImGuiWindowFlags Lamp::Core::lampMenus::DefaultFlags() {
 
 void Lamp::Core::lampMenus::DefaultMenuBar() {
     if (ImGui::BeginMenuBar()) {
-        if (ImGui::BeginMenu("Game Selection")) {
+
+
+        if (ImGui::Button("Game Selection")) {
             Lamp::Core::lampConfig::getInstance().CurrentGame = Lamp::Core::lampConfig::UNK;
             currentMenu = LAMP_GAME_SELECT;
-            ImGui::EndMenu();
+           // ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Game Configuration")) {
-            currentMenu = GAME_CONFIG_MENU;
-            ImGui::EndMenu();
+        if(currentMenu != LAMP_GAME_SELECT) {
+            if (ImGui::Button("Game Configuration")) {
+                currentMenu = GAME_CONFIG_MENU;
+                //ImGui::EndMenu();
+            }
         }
 
 

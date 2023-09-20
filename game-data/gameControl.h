@@ -12,10 +12,6 @@
 namespace Lamp {
     namespace Game {
 
-        /**
-             * @brief Not to be used directly rather it is to be used as a template for gamedata.
-         */
-
         class gameControl {
         public:
             /**
