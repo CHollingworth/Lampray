@@ -97,5 +97,20 @@ Thank you for your contributions and support in making this tool better!
 
 ### Credits
 Creator: Charles Hollingworth 
+
 Pugixml: zeux
+
 bit7z: rikyoz
+
+### Special Thanks
+Id like to take a moment to thank these lovely people for helping me fix issue i wouldnt of known existed without their input:
+- alterNERDtive
+- Azurion42
+- LT-Batman
+- pepper-jk
+- GraithTiger
+- StuffOfSonny
+- nick-scott
+- Unhall0w3d
+
+  Thank you all for your time, input, and help. May this list continue to grow! 
