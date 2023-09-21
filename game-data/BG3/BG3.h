@@ -6,10 +6,18 @@
 #define LAMP_BG3_H
 
 #include "../gameControl.h"
+#include <filesystem>
+#include <iostream>
+#include <regex>
+#include <fstream>
 
+#include "../../json/json.hpp"
+#include "../../lampWarn.h"
+#include "../../lampArchiveDisplayHelper.h"
 #include "../../imgui/imgui.h"
 #include "../../lampFilesystem.h"
 #include "../../nfd/include/nfd.h"
+
     namespace Lamp::Game {
         class BG3: public gameControl {
         public:
@@ -25,6 +33,7 @@
                 BG3_MOD_FIXER,
                 NaN
             };
+
 
             std::list<Lamp::Core::lampMod::Mod *> ModList;
 
@@ -59,7 +68,6 @@
             BG3(){
                 installDirPath = Lamp::Core::lampFilesystem::getInstance().loadKeyData(Core::lampConfig::BG3, "installDirPath");
                 appDataPath = Lamp::Core::lampFilesystem::getInstance().loadKeyData(Core::lampConfig::BG3, "appDataPath");
-
             };
 
             bool findJsonData(std::vector<std::string> xx);

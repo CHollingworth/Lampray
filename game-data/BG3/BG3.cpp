@@ -1,14 +1,7 @@
 //
 // Created by charles on 11/09/23.
 //
-
-#include <filesystem>
-#include <iostream>
-#include <regex>
-#include <fstream>
 #include "BG3.h"
-#include "../../json/json.hpp"
-#include "../../lampWarn.h"
 
 
 namespace Lamp {
@@ -49,133 +42,12 @@ namespace Lamp {
 
     void Game::BG3::listArchives() {
 
-        if(ImGui::BeginTable("Split", 6, ImGuiTableFlags_SizingFixedFit)) {
-
-            ImGui::TableNextColumn();
-            ImGui::Text("Enabled");
-            ImGui::TableNextColumn();
-            ImGui::Text("Mod Name");
-            ImGui::TableNextColumn();
-            ImGui::Text("Mod Type");
-            ImGui::TableNextColumn();
-            ImGui::Text("Mod Order");
-            ImGui::TableNextColumn();
-            ImGui::Text("Change Order");
-            ImGui::TableNextColumn();
-            ImGui::Text("Remove Mod");
-            ImGui::TableNextRow();
-            std::list<Lamp::Core::lampMod::Mod *>::iterator it;
-            int i = 0;
-            for (it = ModList.begin(); it != ModList.end(); ++it) {
-
-                std::filesystem::path path((*it)->ArchivePath);
-                ImGui::TableNextColumn();
-
-                if((*it)->enabled) {
-                    if (ImGui::Button(("Enabled##" + std::to_string(i)).c_str())) {
-                        (*it)->enabled = false;
-                        Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
-                    }
-                }else{
-                    if (ImGui::Button(("Disabled##" + std::to_string(i)).c_str())) {
-                        (*it)->enabled = true;
-                        Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
-                    }
-                }
-                ImGui::TableNextColumn();
-
-
-                std::string cutname = path.filename().c_str();
-                size_t pos = cutname.find('-');
-
-                // Check if the "-" symbol was found
-                if (pos != std::string::npos) {
-                    // Remove everything after the "-" symbol
-                    cutname.erase(pos);
-                }
-
-                ImGui::Text(cutname.c_str());
-
-
-                ImGui::TableNextColumn();
-
-                std::string Type = "";
-
-                switch ((*it)->modType) {
-                    case ModType::BG3_ENGINE_INJECTION:
-                        Type = "Engine Injection";
-                        break;
-                    case ModType::BG3_MOD:
-                        Type = "Standard Mod";
-                        break;
-                    case ModType::BG3_BIN_OVERRIDE:
-                        Type = "Bin Overwrite";
-                        break;
-                    case ModType::BG3_DATA_OVERRIDE:
-                        Type = "Data Overwrite";
-                        break;
-                    case ModType::BG3_MOD_FIXER:
-                        Type = "ModFixer/ScriptExtender Mod";
-                        break;
-                    case ModType::NaN:
-                        Type = "Select Type";
-                        break;
-                }
-
-
-                if (ImGui::BeginMenu((Type + "##" + std::to_string(i)).c_str())) {
-
-                    if (ImGui::MenuItem("Engine Injection")) {
-                        (*it)->modType = ModType::BG3_ENGINE_INJECTION;
-                        Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
-                    }
-                    if (ImGui::MenuItem("Standard Mod")) {
-                        (*it)->modType = ModType::BG3_MOD;
-                        Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
-                    }
-                    if (ImGui::MenuItem("Bin Overwrite")) {
-                        (*it)->modType = ModType::BG3_BIN_OVERRIDE;
-                        Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
-                    }
-                    if (ImGui::MenuItem("Data Overwrite")) {
-                        (*it)->modType = ModType::BG3_DATA_OVERRIDE;
-                        Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
-                    }
-                    if (ImGui::MenuItem("ModFixer/ScriptExtender Mod")) {
-                        (*it)->modType = ModType::BG3_MOD_FIXER;
-                        Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
-                    }
-                    ImGui::EndMenu();
-                }
-                ImGui::TableNextColumn();
-                ImGui::Text((std::to_string(i)).c_str());
-                ImGui::TableNextColumn();
-                if(ImGui::Button(("Move Up##" + std::to_string(i)).c_str())){
-                    auto prev = std::prev(it);
-                    if (it != ModList.begin()) {
-                        ModList.splice(prev, ModList, it);
-                    }else{
-                        auto last = std::prev(ModList.end());
-                        ModList.splice(last, ModList, it);
-                        it = last;
-                    }
-                    Lamp::Core::lampFilesystem::getInstance().saveModList(Lamp::Core::lampConfig::BG3, ModList);
-                }
-
-                ImGui::TableNextColumn();
-                if (ImGui::Button(("Delete Mod##" + std::to_string(i)).c_str())) {
-                    std::remove(absolute(path).c_str());
-                    std::cout << absolute(path).c_str() << std::endl;
-                    ModList.remove((*it));
-                    Lamp::Core::lampFilesystem::getInstance().saveModList(Core::lampConfig::BG3,ModList);
-                    break;
-                }
-
-                ImGui::TableNextRow();
-                i++;
-            }
-            ImGui::EndTable();
-        }
+        Core::lampArchiveDisplayHelper::lampArchiveListBuilder(
+                std::list<std::string>{},
+                ModList,
+                std::vector<std::string>{"Engine Injection", "Standard Mod", "Bin Overwrite","Data Overwrite","ModFixer/ScriptExtender Mod", "Select Type"},
+                Lamp::Core::lampConfig::BG3,
+                std::list<std::pair<std::string,std::function<void>&>>{}).createImguiMenu();
     }
 
     bool Game::BG3::ConfigMenu() {

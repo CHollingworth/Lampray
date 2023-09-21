@@ -493,6 +493,8 @@ int main(int, char**)
     if(!Lamp::Core::lampFilesystem::getInstance().init_config()){
         return 0;
     }
+
+
     Lamp::Game::BG3::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::BG3);
     Lamp::Game::FO4::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::FO4);
      //Reference to our menu Functions

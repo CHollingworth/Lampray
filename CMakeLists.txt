@@ -37,7 +37,9 @@ add_executable(Lamp main.cpp
         game-data/FO4/FO4.cpp
         game-data/FO4/FO4.h
         lampFoMod.h
-        VERSION)
+        VERSION
+        lampArchiveDisplayHelper.h
+)
 
 
 
