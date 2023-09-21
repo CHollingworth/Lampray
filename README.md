@@ -38,12 +38,11 @@ For now i am just one person working on this tool updates will be slow.
 ## Current Goals
 - [ ] Add FoMod Support.
 - [ ] Nexus Api inclusion
-- [ ] internalize the 7zip shared libary
 - [ ] Support for Profiles.
 - [ ] Drag and Drop Reordering
 - [X] Update Checking and replacement for newer files
 - [ ] Move Data & Configs to a persistant path
-- [ ] Genericize ListArchives
+- [X] Genericize ListArchives
 - [ ] MasterList AutoTyping for mods
 
 ## Running Requirements
