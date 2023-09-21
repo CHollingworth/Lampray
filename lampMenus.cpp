@@ -9,6 +9,7 @@
 #include "game-data/gameControl.h"
 #include "lampWarn.h"
 #include "game-data/FO4/FO4.h"
+#include "lampUpdate.h"
 
 void Lamp::Core::lampMenus::CreateMenus() {
 
@@ -218,6 +219,8 @@ void Lamp::Core::lampMenus::DefaultMenuBar() {
             ImGui::MenuItem("Created by Charles Hollingworth");
             ImGui::EndMenu();
         }
+
+        lampUpdate::getInstance().getButton();
         ImGui::EndMenuBar();
     }
 }

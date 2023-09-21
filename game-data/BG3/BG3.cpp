@@ -148,9 +148,6 @@ namespace Lamp {
         return false;
     }
 
-    bool Game::BG3::createFileStructure() {
-        return false;
-    }
 
     bool Game::BG3::startDeployment() {
         if(appDataPath == "" || appDataPath == " "){

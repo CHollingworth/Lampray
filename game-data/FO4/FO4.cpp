@@ -50,9 +50,6 @@ namespace Lamp {
             return false;
         }
 
-        bool FO4::createFileStructure() {
-            return false;
-        }
 
         bool FO4::startDeployment() {
             if(appDataPath == "" || appDataPath == " "){

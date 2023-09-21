@@ -35,7 +35,6 @@ namespace Lamp {
             ImGuiWindowFlags DefaultFlags();
             void DefaultMenuBar();
 
-            void SelectLibary();
         };
     }
 }

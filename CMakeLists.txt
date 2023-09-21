@@ -39,6 +39,7 @@ add_executable(Lamp main.cpp
         lampFoMod.h
         VERSION
         lampArchiveDisplayHelper.h
+        lampUpdate.h
 )
 
 

@@ -17,6 +17,7 @@
 #include "lampFilesystem.h"
 #include "game-data/BG3/BG3.h"
 #include "lampWarn.h"
+#include "lampUpdate.h"
 #include "game-data/FO4/FO4.h"
 #include "lampFoMod.h"
 #include <stdio.h>          // printf, fprintf
@@ -500,6 +501,7 @@ int main(int, char**)
      //Reference to our menu Functions
     Lamp::Core::lampMenus * Menus = new Lamp::Core::lampMenus();
 
+    Lamp::Core::lampUpdate::getInstance().checkForUpdates();
 
 
     //std::string fomodFolderPath = "Lamp_Data/Deployment/Fallout 4/";
