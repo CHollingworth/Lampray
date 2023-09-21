@@ -4,6 +4,10 @@ A Mod Manager for games, made for Linux! As an alternative to Vortex and MO2.
 This tool is in its early days please see the contributing section to help add more to it, 
 For now i am just one person working on this tool updates will be slow.
 
+### Discussions
+The Discussion board has been moved to [discord](https://discord.gg/5macMedevy)
+
+
 # Usage
 
 1.Download the tool and place it in an empty folder of your choice.
@@ -38,12 +42,11 @@ For now i am just one person working on this tool updates will be slow.
 ## Current Goals
 - [ ] Add FoMod Support.
 - [ ] Nexus Api inclusion
-- [ ] internalize the 7zip shared libary
 - [ ] Support for Profiles.
 - [ ] Drag and Drop Reordering
 - [X] Update Checking and replacement for newer files
 - [ ] Move Data & Configs to a persistant path
-- [ ] Genericize ListArchives
+- [X] Genericize ListArchives
 - [ ] MasterList AutoTyping for mods
 
 ## Running Requirements
@@ -65,6 +68,7 @@ For now i am just one person working on this tool updates will be slow.
 
 - C++ 17
 - GCC
+
 
 ## Contributing
 
