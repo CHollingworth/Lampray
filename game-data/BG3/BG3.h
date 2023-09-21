@@ -52,7 +52,6 @@
             void registerArchive(std::string Path) override;
 
             bool ConfigMenu() override;
-            bool createFileStructure() override;
 
             bool startDeployment() override;
 
@@ -60,6 +59,7 @@
             bool preDeployment() override;
             bool deployment() override;
             void postDeploymentTasks() override;
+
 
             bool collectJsonData();
 

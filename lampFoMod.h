@@ -25,27 +25,28 @@ namespace Lamp::Core{
         lampFoMod(lampFoMod const&) = delete;
         void operator=(lampFoMod const&)  = delete;
 
-        struct Folder {
-            std::string source;
-            std::string destination;
-            int priority;
+        struct ConditionFlag {
+            std::string name;
+            int value;
+        };
+
+        struct FileDependency {
+            std::string file;
+            std::string state;
         };
 
         struct TypeDescriptor {
-            std::string type;
-        };
-
-        struct ConditionFlag {
             std::string name;
-            std::string value;
+            std::string defaultType;
         };
 
         struct Plugin {
             std::string name;
             std::string description;
-            std::vector<Folder> files;
-            TypeDescriptor type_descriptor;
-            std::vector<ConditionFlag> condition_flags;
+            std::string image;
+            std::vector<ConditionFlag> conditionFlags;
+            TypeDescriptor typeDescriptor;
+            std::vector<FileDependency> fileDependencies;
         };
 
         struct OptionalFileGroup {
@@ -56,197 +57,130 @@ namespace Lamp::Core{
 
         struct InstallStep {
             std::string name;
-            std::vector<OptionalFileGroup> optional_file_groups;
-        };
-
-        struct RequiredInstallFile {
-            std::string source;
-            std::string destination;
-        };
-
-        struct FlagDependency {
-            std::string flag;
-            std::string value;
+            std::vector<OptionalFileGroup> optionalFileGroups;
         };
 
         struct FilePattern {
-            std::string source;
-            std::string destination;
+            std::string pattern;
+            std::vector<ConditionFlag> dependencies;
+            std::string folderSource;
+            std::string folderDestination;
             int priority;
-            std::vector<FlagDependency> dependencies;
-        };
-
-        struct ConditionalFileInstalls {
-            std::vector<FilePattern> patterns;
         };
 
         struct Config {
-            std::string module_name;
-            std::string module_image_path;
-            std::vector<RequiredInstallFile> required_install_files;
-            std::vector<InstallStep> install_steps;
-            ConditionalFileInstalls conditional_file_installs;
-            std::map<std::string, std::string> flags;
+            std::string moduleName;
+            std::string moduleImage;
+            std::string moduleDependenciesOperator;
+            std::vector<FileDependency> moduleDependencies;
+            std::vector<InstallStep> installSteps;
+            std::vector<FilePattern> conditionalFilePatterns;
 
             InstallStep currentStep;
             OptionalFileGroup currentGroup;
-            bool populated = false;
+            bool populated = true;
         };
 
         Config ParseModuleConfig(const std::string& xmlContent) {
-            Config config;
-
+            // Load and parse the XML document
             pugi::xml_document doc;
-
-
-            if (doc.load_file(xmlContent.c_str())) {
-                pugi::xml_node root = doc.child("config");
-
-                if (root) {
-                    config.module_name = root.child_value("moduleName");
-                    config.module_image_path = root.child("moduleImage").attribute("path").value();
-
-                    // Parse requiredInstallFiles
-                    pugi::xml_node requiredInstallFilesNode = root.child("requiredInstallFiles");
-                    if (requiredInstallFilesNode) {
-                        for (pugi::xml_node folderNode = requiredInstallFilesNode.child("folder");
-                             folderNode;
-                             folderNode = folderNode.next_sibling("folder")) {
-                            RequiredInstallFile requiredInstallFile;
-                            requiredInstallFile.source = folderNode.attribute("source").value();
-                            requiredInstallFile.destination = folderNode.attribute("destination").value();
-                            config.required_install_files.push_back(requiredInstallFile);
-                        }
-                    }
-
-                    // Parse installSteps
-                    pugi::xml_node installStepsNode = root.child("installSteps");
-                    if (installStepsNode) {
-                        for (pugi::xml_node installStepNode = installStepsNode.child("installStep");
-                             installStepNode;
-                             installStepNode = installStepNode.next_sibling("installStep")) {
-                            InstallStep installStep;
-                            installStep.name = installStepNode.attribute("name").value();
-
-                            // Parse optionalFileGroups within installStep
-                            for (pugi::xml_node optionalFileGroupNode = installStepNode.child("optionalFileGroups").child("group");
-                                 optionalFileGroupNode;
-                                 optionalFileGroupNode = optionalFileGroupNode.next_sibling("group")) {
-                                OptionalFileGroup optionalFileGroup;
-                                optionalFileGroup.name = optionalFileGroupNode.attribute("name").value();
-                                optionalFileGroup.type = optionalFileGroupNode.attribute("type").value();
-
-                                // Parse plugins within optionalFileGroup
-                                for (pugi::xml_node pluginNode = optionalFileGroupNode.child("plugins").child("plugin");
-                                     pluginNode;
-                                     pluginNode = pluginNode.next_sibling("plugin")) {
-                                    Plugin plugin;
-                                    plugin.name = pluginNode.attribute("name").value();
-                                    plugin.description = pluginNode.child("description").text().get();
-
-                                    // Parse conditionFlags within plugin
-                                    for (pugi::xml_node conditionFlagNode = pluginNode.child("conditionFlags").child("flag");
-                                         conditionFlagNode;
-                                         conditionFlagNode = conditionFlagNode.next_sibling("flag")) {
-                                        ConditionFlag flag;
-                                        flag.name = conditionFlagNode.attribute("name").value();
-                                        flag.value = conditionFlagNode.text().get();
-                                        plugin.condition_flags.push_back(flag);
-                                    }
-
-                                    // Parse files within plugin
-                                    for (pugi::xml_node fileNode = pluginNode.child("files").child("folder");
-                                         fileNode;
-                                         fileNode = fileNode.next_sibling("folder")) {
-                                        Folder file;
-                                        file.source = fileNode.attribute("source").value();
-                                        file.destination = fileNode.attribute("destination").value();
-                                        file.priority = std::stoi(fileNode.attribute("priority").value());
-                                        plugin.files.push_back(file);
-                                    }
-
-                                    // Parse typeDescriptor within plugin
-                                    pugi::xml_node typeDescriptorNode = pluginNode.child("typeDescriptor").child("type");
-                                    if (typeDescriptorNode) {
-                                        plugin.type_descriptor.type = typeDescriptorNode.attribute("name").value();
-                                    }
-
-                                    optionalFileGroup.plugins.push_back(plugin);
-                                }
-
-                                installStep.optional_file_groups.push_back(optionalFileGroup);
-                            }
-
-                            config.install_steps.push_back(installStep);
-                        }
-                    }
-
-
-                    pugi::xml_node conditionalFileInstallsNode = root.child("conditionalFileInstalls");
-                    if (conditionalFileInstallsNode) {
-                        for (pugi::xml_node patternNode = conditionalFileInstallsNode.child("patterns").child("pattern");
-                             patternNode;
-                             patternNode = patternNode.next_sibling("pattern")) {
-                            FilePattern filePattern;
-                            filePattern.source = patternNode.child("files").child("folder").attribute("source").value();
-                            filePattern.destination = patternNode.child("files").child("folder").attribute("destination").value();
-                            try {
-                                filePattern.priority = std::stoi(
-                                        patternNode.child("files").child("folder").attribute("priority").value());
-                            }catch (std::exception sx){
-                                std::cout << "the heck at "<< filePattern.source << std::endl;
-                            }
-                            // Parse flagDependencies within pattern
-                            for (pugi::xml_node flagDependencyNode = patternNode.child("dependencies").child("flagDependency");
-                                 flagDependencyNode;
-                                 flagDependencyNode = flagDependencyNode.next_sibling("flagDependency")) {
-                                FlagDependency flagDependency;
-                                flagDependency.flag = flagDependencyNode.attribute("flag").value();
-                                flagDependency.value = flagDependencyNode.attribute("value").value();
-                                filePattern.dependencies.push_back(flagDependency);
-                            }
-
-                            config.conditional_file_installs.patterns.push_back(filePattern);
-                        }
-                    }
-                    config.populated = true;
-                } else {
-                    std::cerr << "Error: Root node 'config' not found in XML." << std::endl;
-                    config.populated = false;
-                }
-            } else {
-                std::cerr << "Error: XML parsing failed." << std::endl;
+            pugi::xml_parse_result result = doc.load_file(xmlContent.c_str());
+            Config config;
+            if (!result) {
+                std::cerr << "Error parsing XML: " << result.description() << std::endl;
                 config.populated = false;
+                return config;
             }
 
-//            std::cout << "Module Name: " << config.module_name << std::endl;
-//            std::cout << "Module Image Path: " << config.module_image_path << std::endl;
-//
-//            std::cout << "Required Install Files:" << std::endl;
-//            for (const RequiredInstallFile& file : config.required_install_files) {
-//                std::cout << "    Source: " << file.source << ", Destination: " << file.destination << std::endl;
-//            }
-//
-//            std::cout << "Install Steps:" << std::endl;
-//            for (const InstallStep& installStep : config.install_steps) {
-//                std::cout << "  Name: " << installStep.name << std::endl;
-//                for (const OptionalFileGroup& optionalFileGroup : installStep.optional_file_groups) {
-//                    std::cout << "    Group Name: " << optionalFileGroup.name << ", Type: " << optionalFileGroup.type << std::endl;
-//                    for (const Plugin& plugin : optionalFileGroup.plugins) {
-//                        std::cout << "      Plugin Name: " << plugin.name << std::endl;
-//                        std::cout << "      Description: " << plugin.description << std::endl;
-//                        std::cout << "      Type Descriptor: " << plugin.type_descriptor.type << std::endl;
-//                        std::cout << "      Condition Flags:" << std::endl;
-//                        for (const ConditionFlag& flag : plugin.condition_flags) {
-//                            std::cout << "        Flag Name: " << flag.name << ", Value: " << flag.value << std::endl;
-//                        }
-//                        std::cout << "      Files:" << std::endl;
-//                        for (const Folder& file : plugin.files) {
-//                            std::cout << "        File Source: " << file.source << ", Destination: " << file.destination << ", Priority: " << file.priority << std::endl;
-//                        }
-//                    }
-//                }
-//            }
+            // Create an instance of the Config struct to hold the parsed data
+
+
+            // Access and parse the XML elements to populate the struct
+            pugi::xml_node rootNode = doc.child("config");
+            config.moduleName = rootNode.child("moduleName").text().as_string();
+            config.moduleImage = rootNode.child("moduleImage").attribute("path").as_string();
+            config.moduleDependenciesOperator = rootNode.child("moduleDependencies").attribute("operator").as_string();
+
+            // Parse moduleDependencies
+            for (pugi::xml_node fileDependencyNode = rootNode.child("moduleDependencies").child("fileDependency"); fileDependencyNode; fileDependencyNode = fileDependencyNode.next_sibling("fileDependency")) {
+                FileDependency fileDependency;
+                fileDependency.file = fileDependencyNode.attribute("file").as_string();
+                fileDependency.state = fileDependencyNode.attribute("state").as_string();
+                config.moduleDependencies.push_back(fileDependency);
+            }
+
+            // Parse installSteps
+            for (pugi::xml_node installStepNode = rootNode.child("installSteps").child("installStep"); installStepNode; installStepNode = installStepNode.next_sibling("installStep")) {
+                InstallStep installStep;
+                installStep.name = installStepNode.attribute("name").as_string();
+
+                // Parse optionalFileGroups within installStep
+                for (pugi::xml_node optionalFileGroupNode = installStepNode.child("optionalFileGroups").child("group"); optionalFileGroupNode; optionalFileGroupNode = optionalFileGroupNode.next_sibling("group")) {
+                    OptionalFileGroup optionalFileGroup;
+                    optionalFileGroup.name = optionalFileGroupNode.attribute("name").as_string();
+                    optionalFileGroup.type = optionalFileGroupNode.attribute("type").as_string();
+
+                    // Parse plugins within optionalFileGroup
+                    for (pugi::xml_node pluginNode = optionalFileGroupNode.child("plugins").child("plugin"); pluginNode; pluginNode = pluginNode.next_sibling("plugin")) {
+                        Plugin plugin;
+                        plugin.name = pluginNode.attribute("name").as_string();
+                        plugin.description = pluginNode.child("description").text().as_string();
+                        plugin.image = pluginNode.child("image").attribute("path").as_string();
+
+                        // Parse conditionFlags within plugin
+                        for (pugi::xml_node flagNode = pluginNode.child("conditionFlags").child("flag"); flagNode; flagNode = flagNode.next_sibling("flag")) {
+                            ConditionFlag flag;
+                            flag.name = flagNode.attribute("name").as_string();
+                            flag.value = flagNode.text().as_int();
+                            plugin.conditionFlags.push_back(flag);
+                        }
+
+                        // Parse TypeDescriptor
+                        pugi::xml_node typeDescriptorNode = pluginNode.child("typeDescriptor");
+                        plugin.typeDescriptor.name = typeDescriptorNode.child("type").name();
+                        plugin.typeDescriptor.defaultType = typeDescriptorNode.child("defaultType").attribute("name").as_string();
+
+                        // Parse fileDependencies within plugin
+                        for (pugi::xml_node fileDependencyNode = pluginNode.child("fileDependencies").child("fileDependency"); fileDependencyNode; fileDependencyNode = fileDependencyNode.next_sibling("fileDependency")) {
+                            FileDependency fileDependency;
+                            fileDependency.file = fileDependencyNode.attribute("file").as_string();
+                            fileDependency.state = fileDependencyNode.attribute("state").as_string();
+                            plugin.fileDependencies.push_back(fileDependency);
+                        }
+
+                        optionalFileGroup.plugins.push_back(plugin);
+                    }
+
+                    installStep.optionalFileGroups.push_back(optionalFileGroup);
+                }
+
+                config.installSteps.push_back(installStep);
+            }
+
+            // Parse conditionalFilePatterns
+            for (pugi::xml_node patternNode = rootNode.child("conditionalFileInstalls").child("patterns").child("pattern"); patternNode; patternNode = patternNode.next_sibling("pattern")) {
+                FilePattern conditionalFilePattern;
+                conditionalFilePattern.pattern = patternNode.attribute("pattern").as_string();
+
+                // Parse dependencies within conditionalFilePattern
+                for (pugi::xml_node flagDependencyNode = patternNode.child("dependencies").child("flagDependency"); flagDependencyNode; flagDependencyNode = flagDependencyNode.next_sibling("flagDependency")) {
+                    ConditionFlag flag;
+                    flag.name = flagDependencyNode.attribute("flag").as_string();
+                    flag.value = flagDependencyNode.attribute("value").as_int();
+                    conditionalFilePattern.dependencies.push_back(flag);
+                }
+
+                conditionalFilePattern.folderSource = patternNode.child("source").text().as_string();
+                conditionalFilePattern.folderDestination = patternNode.child("destination").text().as_string();
+                conditionalFilePattern.priority = patternNode.child("priority").text().as_int();
+
+                config.conditionalFilePatterns.push_back(conditionalFilePattern);
+            }
+
+            // Print the parsed data (you can customize this part as needed)
+            std::cout << "Module Name: " << config.moduleName << std::endl;
+            std::cout << "Module Image Path: " << config.moduleImage << std::endl;
+            std::cout << "Module Dependencies Operator: " << config.moduleDependenciesOperator << std::endl;
 
 
             return config;
@@ -297,8 +231,10 @@ namespace Lamp::Core{
             if(!CurrentConfig.populated){
                 return false;
             }
-            CurrentConfig.currentStep = CurrentConfig.install_steps[1];
-            CurrentConfig.currentGroup = CurrentConfig.install_steps[1].optional_file_groups[0];
+            CurrentConfig.currentStep = CurrentConfig.installSteps[0];
+            CurrentConfig.currentGroup = CurrentConfig.installSteps[0].optionalFileGroups[0];
+            //std::cout << CurrentConfig.installSteps[0].optionalFileGroups[0].plugins[1].fileDependencies[0].file << std::endl;
+            //std::cout << CurrentConfig.installSteps[0].optionalFileGroups[0].plugins[0].fileDependencies[0].state << std::endl;
             running = true;
             return true;
 

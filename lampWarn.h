@@ -9,6 +9,7 @@
 #include <list>
 #include <iostream>
 #include "imgui/imgui.h"
+#include "lampConfig.h"
 
 namespace Lamp::Core{
     class lampWarn{
@@ -56,7 +57,9 @@ namespace Lamp::Core{
             }
             std::cout << ping << std::endl;
             if(pop){
-                poplist.push_front(ping);
+                if(!lampConfig::getInstance().ShowIntroMenu) {
+                    poplist.push_front(ping);
+                }
             }
         }
 

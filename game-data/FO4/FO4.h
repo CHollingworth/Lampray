@@ -42,7 +42,6 @@ namespace Lamp {
             void registerArchive(std::string Path) override;
 
             bool ConfigMenu() override;
-            bool createFileStructure() override;
 
             bool startDeployment() override;
 

@@ -42,33 +42,6 @@ namespace Lamp {
 
             }
 
-            /*
-             *
-             *  std::string newfolder = file_path.filename();
-            size_t dotPos = newfolder.find_last_of('.');
-            if (dotPos != std::string::npos) {
-                newfolder.erase(dotPos);
-            }
-             *
-                Lamp::Core::lampWarn::getInstance().log("Checking for subfolder packing...");
-                bool containsOnlyOneSubdirectory = false;
-                fs::directory_entry subdirectoryPath;
-                for (const auto& entry : fs::directory_iterator(Lamp::Core::lampFilesystem::getInstance().getGameSpecificStoragePath(Core::lampConfig::FO4)+"/"+newfolder)) {
-                    if (fs::is_directory(entry)) {
-                        if (!containsOnlyOneSubdirectory) {
-                            containsOnlyOneSubdirectory = true;
-                            subdirectoryPath = entry;
-                        } else {
-                            containsOnlyOneSubdirectory = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (containsOnlyOneSubdirectory) {
-    */
-
-
             ModList.push_back(newArchive);
             Lamp::Core::lampFilesystem::getInstance().saveModList(Core::lampConfig::FO4,ModList);
         }

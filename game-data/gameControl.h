@@ -24,12 +24,6 @@ namespace Lamp {
             virtual bool ConfigMenu() = 0;
 
             /**
-             * @brief Create the file structure for the game.
-             * @return If the creation succeeded.
-             */
-            virtual bool createFileStructure() = 0;
-
-            /**
              * @brief Start deployment.
              * @return If the deployment succeeded.
              */

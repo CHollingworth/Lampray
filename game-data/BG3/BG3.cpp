@@ -47,7 +47,8 @@ namespace Lamp {
                 ModList,
                 std::vector<std::string>{"Engine Injection", "Standard Mod", "Bin Overwrite","Data Overwrite","ModFixer/ScriptExtender Mod", "Select Type"},
                 Lamp::Core::lampConfig::BG3,
-                std::list<std::pair<std::string,std::function<void>&>>{}).createImguiMenu();
+                std::list<std::pair<std::string, bool *>>{}
+                ).createImguiMenu();
     }
 
     bool Game::BG3::ConfigMenu() {

@@ -25,7 +25,7 @@ namespace Lamp::Core{
             std::list<Lamp::Core::lampMod::Mod *>& ModList;
             std::vector<std::string> typeNames;
             lampConfig::Game gameRefrence;
-            std::list<std::pair<std::string,std::function<void>&>> ExtraOptions;
+            std::list<std::pair<std::string,bool *>> ExtraOptions;
             std::string temp{"0"};
 
 
@@ -68,7 +68,7 @@ namespace Lamp::Core{
         public:
             lampArchiveListBuilder(std::list<std::string> ExtraColumnNames, std::list<Lamp::Core::lampMod::Mod *> &modList,
                                   std::vector<std::string> typeNames, lampConfig::Game gameRefrence,
-                                   std::list<std::pair<std::string, std::function<void> &>> extraOptions)
+                                   std::list<std::pair<std::string, bool * >> extraOptions)
                     : ModList(modList), typeNames(typeNames), gameRefrence(gameRefrence),
                       ExtraOptions(extraOptions) {
                 columnNames.insert(columnNames.end(), ExtraColumnNames.begin(), ExtraColumnNames.end());
@@ -165,6 +165,12 @@ namespace Lamp::Core{
                         }
 
                         ImGui::TableNextRow();
+
+                        for (auto ittt = ExtraOptions.begin(); ittt != ExtraOptions.end(); ++ittt) {
+                            if (ImGui::Button(ittt->first.c_str()))
+                                ittt->second = reinterpret_cast<bool *>(!ittt->second);
+                        }
+
                         i++;
                     }
 
