@@ -32,11 +32,21 @@ namespace Lamp::Core{
 
         enum errorCode{
             LMP_UNK = 0,
-            LMP_NO_WINDOW,
+            LMP_NODIRCREATION,
+            LMP_NO7ZP,
+            LMP_NOFILEDROP,
             LMP_CLEANUPFAILED,
             LMP_PREDEPLOYFAILED,
             LMP_DEOPLYMENTFAILED,
             LMP_POSTTASKFAILED,
+            LMP_CONFIGSAVEFAILED,
+            LMP_CONFIGLOADFAILED,
+            LMP_MODLISTSAVEFAILED,
+            LMP_MODLISTLOADFAILED,
+            LMP_KEYSAVEFAILED,
+            LMP_KEYLOADFAILED,
+            LMP_EXTRACTIONFALED,
+            LMP_COPYFAILED
 
         };
 

@@ -70,7 +70,9 @@ namespace Lamp {
              * @note The extracted file will be stored in the local directory specified by 'localExtractionPath'.
              * @note If multiple files match the specified extension, all of them will be extracted.
              */
-            std::vector<std::string> extractSpecificFileType(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod, std::string localExtractionPath, std::string extension);
+            std::vector<std::string> extractSpecificFileType(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod, std::string localExtractionPath, std::string extension, bool cleanup = false);
+
+            void extractSpecificFolder(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod, std::string localExtractionPath);
 
 
             /**
@@ -177,6 +179,9 @@ namespace Lamp {
 
 
             bool downloadFile(const std::string &url, const std::string &output_filename);
+
+            bool
+            findFirstMatchingDirectory(const fs::path &currentDir, const std::string &targetName, fs::path &resultPath);
         };
 
 

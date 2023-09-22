@@ -21,10 +21,6 @@
 #include "game-data/FO4/FO4.h"
 #include "lampFoMod.h"
 #include <stdio.h>          // printf, fprintf
-#include <stdlib.h>         // abort
-
-#include <iostream>
-#include <fstream>
 #include <cstdlib>
 #include <filesystem>
 #define GLFW_INCLUDE_NONE
@@ -33,9 +29,6 @@
 #include <vulkan/vulkan.h>
 //#include <vulkan/vulkan_beta.h>
 
-// [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
-// To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
-// Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
 #if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
@@ -497,7 +490,7 @@ int main(int, char**)
 
 
     Lamp::Game::BG3::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::BG3);
-    Lamp::Game::FO4::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::FO4);
+    //Lamp::Game::FO4::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::FO4);
      //Reference to our menu Functions
     Lamp::Core::lampMenus * Menus = new Lamp::Core::lampMenus();
 

@@ -290,46 +290,46 @@ namespace Lamp {
                 switch ((*it)->modType) {
                     case ModType::BG3_ENGINE_INJECTION:
                         if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(zip)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(Lamp::Core::lampConfig::BG3,
                                                                               bit7z::BitFormat::Zip, (*it),
-                                                                              "/bin/NativeMods");
+                                                                              "/bin/NativeMods","dll", true);
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(rar)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(Lamp::Core::lampConfig::BG3,
                                                                               bit7z::BitFormat::Rar, (*it),
-                                                                              "/bin/NativeMods");
+                                                                              "/bin/NativeMods","dll", true);
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(7z)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(Lamp::Core::lampConfig::BG3,
                                                                               bit7z::BitFormat::SevenZip, (*it),
-                                                                              "/bin/NativeMods");
+                                                                              "/bin/NativeMods","dll", true);
                         } else {
                             break;
                         }
                         break;
                     case ModType::BG3_BIN_OVERRIDE:
                         if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(zip)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
-                                                                              bit7z::BitFormat::Zip, (*it), "/");
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFolder(Lamp::Core::lampConfig::BG3,
+                                                                              bit7z::BitFormat::Zip, (*it), "bin");
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(rar)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
-                                                                              bit7z::BitFormat::Rar, (*it), "/");
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFolder(Lamp::Core::lampConfig::BG3,
+                                                                              bit7z::BitFormat::Rar, (*it), "bin");
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(7z)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
-                                                                              bit7z::BitFormat::SevenZip, (*it), "/");
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFolder(Lamp::Core::lampConfig::BG3,
+                                                                              bit7z::BitFormat::SevenZip, (*it), "bin");
                         } else {
                             break;
                         }
                         break;
                     case ModType::BG3_DATA_OVERRIDE:
                         if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(zip)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
-                                                                              bit7z::BitFormat::Zip, (*it), "/Data");
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFolder(Lamp::Core::lampConfig::BG3,
+                                                                              bit7z::BitFormat::Zip, (*it), "Data");
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(rar)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
-                                                                              bit7z::BitFormat::Rar, (*it), "/Data");
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFolder(Lamp::Core::lampConfig::BG3,
+                                                                              bit7z::BitFormat::Rar, (*it), "Data");
                         } else if (std::regex_match((*it)->ArchivePath, std::regex("^.*\\.(7z)$"))) {
-                            Lamp::Core::lampFilesystem::getInstance().extract(Lamp::Core::lampConfig::BG3,
+                            Lamp::Core::lampFilesystem::getInstance().extractSpecificFolder(Lamp::Core::lampConfig::BG3,
                                                                               bit7z::BitFormat::SevenZip, (*it),
-                                                                              "/Data");
+                                                                              "Data");
                         } else {
                             break;
                         }
@@ -626,34 +626,7 @@ namespace Lamp {
     }
 
     void Game::BG3::postDeploymentTasks() {
-        std::string workingDir = Lamp::Core::lampFilesystem::getInstance().getGameSpecificStoragePath(
-                Lamp::Core::lampConfig::BG3);
 
-        try {
-            for (const auto& entry : fs::directory_iterator(workingDir)) {
-                if (entry.is_regular_file()) {
-                    std::string fileName = entry.path().filename().string();
-                    if (fileName.find('\\') != std::string::npos) {
-
-                        std::string inputString = fileName;
-
-                        // Replace all instances of backslash with forward slash
-                        size_t found = inputString.find('\\');
-                        while (found != std::string::npos) {
-                            inputString.replace(found, 1, "/");
-                            found = inputString.find('\\', found + 1);
-                        }
-
-
-
-                        std::filesystem::rename(entry.path(), workingDir+"/"+inputString);
-                        std::cout << "File with backslash in name: " << fileName << std::endl;
-                    }
-                }
-            }
-        } catch (const std::exception& e) {
-            Lamp::Core::lampWarn::getInstance().log("Json Extraction Failed", Core::lampWarn::ERROR, true);
-        }
     }
 
 
