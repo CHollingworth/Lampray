@@ -4,7 +4,7 @@ A Mod Manager for games, made for Linux! As an alternative to Vortex and MO2.
 This tool is in its early days please see the contributing section to help add more to it, 
 For now i am just one person working on this tool updates will be slow.
 
-### Contrubtors discussion / Early Peaks
+### Contrubtors discussion / Early Peeks
 If you want early information about lamp, and how things are progressing join me on my very basic development discord.
 [discord](https://discord.gg/5macMedevy)
 
