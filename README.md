@@ -104,7 +104,7 @@ If you encounter any issues, bugs, or have ideas for new features, please open a
 Thank you for your contributions and support in making this tool better!
 
 ### Credits
-Creator: Charles Hollingworth 
+Creator: CHollingworth 
 
 Pugixml: zeux
 
