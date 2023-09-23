@@ -54,7 +54,6 @@ namespace Lamp {
             Lamp::Core::lampWarn::getInstance().log("Fatal. Cannot locate 7z.so", lampWarn::ERROR, true, lampWarn::LMP_NO7ZP);
         }
 
-
 //        Lamp::Core::lampWarn::getInstance().log("Downloading QuickBMS");
 //        const std::string url = "http://aluigi.altervista.org/papers/quickbms_linux.zip";
 //        if(!fs::exists("quickbms_4gb_files") && !fs::is_regular_file("quickbms_4gb_files")) {
@@ -200,20 +199,20 @@ namespace Lamp {
 
     void Core::lampFilesystem::extract(Lamp::Core::lampConfig::Game Game,const bit7z::BitInFormat & Type, Lamp::Core::lampMod::Mod * mod,
                                        std::string localExtractionPath) {
-        std::string workingDir = getGameSpecificStoragePath(Game);
-        std::filesystem::create_directories(workingDir+localExtractionPath);
-        try {
-            bit7z::Bit7zLibrary lib{bit7zLibaryLocation};
-            bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
-            reader.test();
-            reader.extract(workingDir+localExtractionPath);
-        } catch (const bit7z::BitException &ex) {
-            Lamp::Core::lampWarn::getInstance().log("Could not extract file: " +mod->ArchivePath, lampWarn::ERROR, true, lampWarn::LMP_EXTRACTIONFALED);
+        std::thread([&] {
+            std::string workingDir = getGameSpecificStoragePath(Game);
+            std::filesystem::create_directories(workingDir + localExtractionPath);
+            try {
+                bit7z::Bit7zLibrary lib{bit7zLibaryLocation};
+                bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
+                reader.test();
+                reader.extract(workingDir + localExtractionPath);
+            } catch (const bit7z::BitException &ex) {
+                Lamp::Core::lampWarn::getInstance().log("Could not extract file: " + mod->ArchivePath, lampWarn::ERROR,
+                                                        true, lampWarn::LMP_EXTRACTIONFALED);
 
-        }
-
-
-
+            }
+        }).detach();
     }
 
     std::vector<std::string>
@@ -224,10 +223,10 @@ namespace Lamp {
         std::vector<std::string> xx;
 
         std::string workingDir = getGameSpecificStoragePath(Game);
-
+        std::filesystem::create_directories(workingDir+"/ext/"+fs::path(mod->ArchivePath).stem().string()+"/");
         Lamp::Core::lampWarn::getInstance().log("Extracting: " +mod->ArchivePath );
         Lamp::Core::lampWarn::getInstance().log("Extension: ." +extension );
-        for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext")) {
+        for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext/"+fs::path(mod->ArchivePath).stem().string()+"/")) {
             std::filesystem::remove_all(entry.path());
         }
 
@@ -235,13 +234,13 @@ namespace Lamp {
             bit7z::Bit7zLibrary lib{bit7zLibaryLocation};
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
             reader.test();
-            reader.extract(workingDir+"/ext");
+            reader.extract(workingDir+"/ext/"+fs::path(mod->ArchivePath).stem().string()+"/");
         } catch (const bit7z::BitException &ex) {
             Lamp::Core::lampWarn::getInstance().log("Could not extract file: " +mod->ArchivePath, lampWarn::ERROR, true, lampWarn::LMP_EXTRACTIONFALED);
         }
 
 
-        for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext")) {
+        for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext/"+fs::path(mod->ArchivePath).stem().string()+"/")) {
             if(entry.is_directory()){
                 for (const auto& subentry : std::filesystem::directory_iterator(entry)){
                     if(std::regex_match (subentry.path().filename().string(), std::regex("^.*\\.("+extension+")$") )){
@@ -297,6 +296,72 @@ namespace Lamp {
         return xx;
     }
 
+    void Core::lampFilesystem::extractSpecificFolder(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat &Type,
+                                                     Lamp::Core::lampMod::Mod *mod, std::string localExtractionPath) {
+        std::string workingDir = getGameSpecificStoragePath(Game);
+
+
+        Lamp::Core::lampWarn::getInstance().log("Extracting: " +mod->ArchivePath );
+        Lamp::Core::lampWarn::getInstance().log("Folder: ." +localExtractionPath );
+
+        std::filesystem::create_directories(workingDir+"/ext/"+fs::path(mod->ArchivePath).stem().string()+"/");
+
+        for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext/"+fs::path(mod->ArchivePath).stem().string()+"/")) {
+            std::filesystem::remove_all(entry.path());
+        }
+
+        try {
+            bit7z::Bit7zLibrary lib{bit7zLibaryLocation};
+            bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
+            reader.test();
+            reader.extract(workingDir+"/ext/"+fs::path(mod->ArchivePath).stem().string()+"/");
+        } catch (const bit7z::BitException &ex) {
+            Lamp::Core::lampWarn::getInstance().log("Could not extract file: " +mod->ArchivePath, lampWarn::ERROR, true, lampWarn::LMP_EXTRACTIONFALED);
+        }
+
+        fs::path dirit(workingDir + "/ext/"+fs::path(mod->ArchivePath).stem().string()+"/");
+        try {
+            for (const auto& entry : fs::directory_iterator(dirit)) {
+                if (entry.is_regular_file()) {
+                    std::string fileName = entry.path().filename().string();
+                    if (fileName.find('\\') != std::string::npos) {
+
+                        std::string inputString = fileName;
+
+                        // Replace all instances of backslash with forward slash
+                        size_t found = inputString.find('\\');
+                        while (found != std::string::npos) {
+                            inputString.replace(found, 1, "/");
+                            found = inputString.find('\\', found + 1);
+                        }
+
+
+                        std::filesystem::path inputPath(workingDir+"/ext/"+fs::path(mod->ArchivePath).stem().string()+"/"+inputString);
+                        std::filesystem::create_directories(inputPath.parent_path());
+                        std::filesystem::rename(entry.path(), inputPath);
+                        std::cout << "File with backslash in name: " << fileName << std::endl;
+                    }
+                }
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+
+        fs::path resultPath;
+        if (findFirstMatchingDirectory(workingDir+"/ext/"+fs::path(mod->ArchivePath).stem().string()+"/", localExtractionPath, resultPath)) {
+            std::cout << "Found matching directory: " << resultPath << std::endl;
+            fs::copy(resultPath, workingDir +"/" +localExtractionPath, fs::copy_options::recursive);
+
+        } else {
+            std::cout << "Directory not found." << std::endl;
+        }
+
+
+
+
+
+    }
+
     std::list<Lamp::Core::lampMod::Mod *>
     Core::lampFilesystem::loadModList(Lamp::Core::lampConfig::Game Game) {
         std::string xmlPath=saveDataPath+lampConfig::getInstance().GameShorthandMap[Game]+".mdf";
@@ -313,6 +378,35 @@ namespace Lamp {
                 bool enabled = modNode.attribute("enabled").as_bool();
 
                 lampMod::Mod * temp = new lampMod::Mod{archivePath, modType, enabled};
+
+                if(modNode.attribute("timeOfUpdate")){
+                   temp->timeOfUpdate = modNode.attribute("timeOfUpdate").as_string();
+                    if( temp->timeOfUpdate == "Unknown"){
+                        std::time_t unixTimestamp = std::time(nullptr);
+                        std::tm timeInfo;
+                        localtime_r(&unixTimestamp, &timeInfo);
+                        std::ostringstream oss;
+                        oss << std::setfill('0');
+                        oss << std::setw(2) << timeInfo.tm_mday << '/' << std::setw(2) << (timeInfo.tm_mon + 1) << '/' << (timeInfo.tm_year + 1900) << ' ';
+                        oss << std::setw(2) << timeInfo.tm_hour << ':' << std::setw(2) << timeInfo.tm_min;
+                        std::string formattedTime = oss.str();
+
+                        temp->timeOfUpdate = formattedTime;
+                    }
+
+                }else{
+                        std::time_t unixTimestamp = std::time(nullptr);
+                        std::tm timeInfo;
+                        localtime_r(&unixTimestamp, &timeInfo);
+                        std::ostringstream oss;
+                        oss << std::setfill('0');
+                        oss << std::setw(2) << timeInfo.tm_mday << '/' << std::setw(2) << (timeInfo.tm_mon + 1) << '/' << (timeInfo.tm_year + 1900) << ' ';
+                        oss << std::setw(2) << timeInfo.tm_hour << ':' << std::setw(2) << timeInfo.tm_min;
+                        std::string formattedTime = oss.str();
+
+                        temp->timeOfUpdate = formattedTime;
+                }
+
 
                 newList.emplace_back(temp);
             }
@@ -459,68 +553,6 @@ namespace Lamp {
         return DeploymentDataPath + Core::lampConfig::getInstance().GameStringMap[Game];
     }
 
-    void Core::lampFilesystem::extractSpecificFolder(Lamp::Core::lampConfig::Game Game, const bit7z::BitInFormat &Type,
-                                                     Lamp::Core::lampMod::Mod *mod, std::string localExtractionPath) {
-        std::string workingDir = getGameSpecificStoragePath(Game);
-
-
-        Lamp::Core::lampWarn::getInstance().log("Extracting: " +mod->ArchivePath );
-        Lamp::Core::lampWarn::getInstance().log("Folder: ." +localExtractionPath );
-        for (const auto& entry : std::filesystem::directory_iterator(workingDir+"/ext")) {
-            std::filesystem::remove_all(entry.path());
-        }
-
-        try {
-            bit7z::Bit7zLibrary lib{bit7zLibaryLocation};
-            bit7z::BitArchiveReader reader{lib, mod->ArchivePath, Type};
-            reader.test();
-            reader.extract(workingDir+"/ext");
-        } catch (const bit7z::BitException &ex) {
-            Lamp::Core::lampWarn::getInstance().log("Could not extract file: " +mod->ArchivePath, lampWarn::ERROR, true, lampWarn::LMP_EXTRACTIONFALED);
-        }
-
-        fs::path dirit(workingDir + "/ext/");
-        try {
-            for (const auto& entry : fs::directory_iterator(dirit)) {
-                if (entry.is_regular_file()) {
-                    std::string fileName = entry.path().filename().string();
-                    if (fileName.find('\\') != std::string::npos) {
-
-                        std::string inputString = fileName;
-
-                        // Replace all instances of backslash with forward slash
-                        size_t found = inputString.find('\\');
-                        while (found != std::string::npos) {
-                            inputString.replace(found, 1, "/");
-                            found = inputString.find('\\', found + 1);
-                        }
-
-
-                        std::filesystem::path inputPath(workingDir+"/ext/"+inputString);
-                        std::filesystem::create_directories(inputPath.parent_path());
-                        std::filesystem::rename(entry.path(), inputPath);
-                        std::cout << "File with backslash in name: " << fileName << std::endl;
-                    }
-                }
-            }
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-        }
-
-        fs::path resultPath;
-        if (findFirstMatchingDirectory(workingDir+"/ext", localExtractionPath, resultPath)) {
-            std::cout << "Found matching directory: " << resultPath << std::endl;
-            fs::copy(resultPath, workingDir +"/" +localExtractionPath, fs::copy_options::recursive);
-
-        } else {
-            std::cout << "Directory not found." << std::endl;
-        }
-
-
-
-
-
-    }
 
     bool Core::lampFilesystem::findFirstMatchingDirectory(const fs::path& currentDir, const std::string& targetName, fs::path& resultPath) {
         try {
@@ -547,4 +579,5 @@ namespace Lamp {
         }
         return false;
     }
+
 } // Lamp

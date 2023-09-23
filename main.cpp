@@ -498,7 +498,6 @@ int main(int, char**)
 
 
     //std::string fomodFolderPath = "Lamp_Data/Deployment/Fallout 4/";
-
    // Lamp::Core::lampFoMod::getInstance().runInstaller(fomodFolderPath);
 
     /*

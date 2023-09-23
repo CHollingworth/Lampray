@@ -28,7 +28,7 @@ namespace Lamp::Core{
             return total_size;
         }
 
-        std::string versionNumber = "1.0.6";
+        std::string versionNumber = "1.0.7";
         void checkForUpdates(){
             CURL* curl = curl_easy_init();
             if (curl) {
@@ -45,7 +45,7 @@ namespace Lamp::Core{
                     if (pos != std::string::npos) {
                         std::string first_line = response_data.substr(0, pos);
                         if(versionNumber != first_line){
-                            versionNumber = "Update Available!";
+                            //versionNumber = "Update Available!";
                         }
                     }
                 }

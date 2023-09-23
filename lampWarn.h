@@ -76,7 +76,6 @@ namespace Lamp::Core{
 
 
         bool showWarns(){
-
             for (auto it = poplist.begin(); it != poplist.end();) {
                 if (!poplist.empty()) {
                     std::string x = *it;

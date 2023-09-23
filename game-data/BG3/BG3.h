@@ -10,7 +10,8 @@
 #include <iostream>
 #include <regex>
 #include <fstream>
-
+#include <thread>
+#include <future>
 #include "../../json/json.hpp"
 #include "../../lampWarn.h"
 #include "../../lampArchiveDisplayHelper.h"
@@ -61,7 +62,7 @@
             void postDeploymentTasks() override;
 
 
-            bool collectJsonData();
+            bool collectJsonData(Lamp::Core::lampMod::Mod * mod);
 
             void listArchives() override;
         private:
@@ -69,6 +70,8 @@
                 installDirPath = Lamp::Core::lampFilesystem::getInstance().loadKeyData(Core::lampConfig::BG3, "installDirPath");
                 appDataPath = Lamp::Core::lampFilesystem::getInstance().loadKeyData(Core::lampConfig::BG3, "appDataPath");
             };
+
+            std::vector<std::thread> modEditQueue;
 
             bool findJsonData(std::vector<std::string> xx);
         };

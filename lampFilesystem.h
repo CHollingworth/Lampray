@@ -168,6 +168,19 @@ namespace Lamp {
             static void fileDrop(GLFWwindow* window, int count, const char** paths);
 
 
+
+
+
+
+
+
+
+
+            int min = 0;
+            int max = 0;
+            std::string stage = "unknown";
+            bool deploying = false;
+
         private:
             lampFilesystem() {}
 

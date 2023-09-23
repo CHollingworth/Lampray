@@ -152,6 +152,20 @@ void Lamp::Core::lampMenus::ModMenu() {
         ImGui::End();
     }
 
+    if(Lamp::Core::lampFilesystem::getInstance().deploying){
+
+        ImGuiIO &io = ImGui::GetIO();
+        ImGui::SetNextWindowSize(io.DisplaySize, 0);
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+
+        ImGui::Begin("Checks", NULL, DefaultFlags());
+        ImGui::Text("Deploying");
+        ImGui::Text(("Current Stage: "+Lamp::Core::lampFilesystem::getInstance().stage).c_str());
+        ImGui::Text((std::to_string(Lamp::Core::lampFilesystem::getInstance().min) +" / "+ std::to_string(Lamp::Core::lampFilesystem::getInstance().max)).c_str());
+
+        ImGui::End();
+    }
+
     ImGui::Separator();
     switch (lampConfig::getInstance().CurrentGame) {
         case lampConfig::UNK:

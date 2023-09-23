@@ -21,12 +21,70 @@ namespace Lamp::Core{
 
         struct lampArchiveListBuilder{
         private:
-            std::list<std::string> columnNames{"Enabled","Mod Name", "Mod Type", "Load Order", "Remove Mod"};
+            std::list<std::string> columnNames{"Enabled","Mod Name", "Mod Type", "Load Order","Last Updated" ,"Remove Mod"};
             std::list<Lamp::Core::lampMod::Mod *>& ModList;
             std::vector<std::string> typeNames;
             lampConfig::Game gameRefrence;
             std::list<std::pair<std::string,bool *>> ExtraOptions;
             std::string temp{"0"};
+            char searchBuffer[250]{};
+
+
+            int calculateLevenshteinDistance(const std::string& s1, const std::string& s2) {
+                int len1 = s1.length();
+                int len2 = s2.length();
+
+                std::vector<std::vector<int>> dp(len1 + 1, std::vector<int>(len2 + 1, 0));
+
+                for (int i = 1; i <= len1; ++i) {
+                    dp[i][0] = i;
+                }
+
+                for (int j = 1; j <= len2; ++j) {
+                    dp[0][j] = j;
+                }
+
+                for (int i = 1; i <= len1; ++i) {
+                    for (int j = 1; j <= len2; ++j) {
+                        int cost = (s1[i - 1] == s2[j - 1]) ? 0 : 1;
+                        dp[i][j] = std::min({ dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost });
+                    }
+                }
+
+                return dp[len1][len2];
+            }
+
+
+            int findClosestMatchPosition() {
+
+                if(std::strlen(searchBuffer) == 0){
+                    return -1;
+                }
+
+                int closestMatchPosition = -1;
+                int minDistance = std::numeric_limits<int>::max();
+
+                for (auto it = ModList.begin(); it != ModList.end(); ++it) {
+                    std::filesystem::path path((*it)->ArchivePath);
+                    std::string cutname = path.filename().c_str();
+
+                    if (gameRefrence == Lamp::Core::lampConfig::BG3) {
+                        size_t pos = cutname.find('-');
+                        if (pos != std::string::npos) {
+                            cutname.erase(pos);
+                        }
+                    }
+
+                    int distance = calculateLevenshteinDistance(cutname, searchBuffer);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestMatchPosition = std::distance(ModList.begin(), it);
+                    }
+                }
+
+                return closestMatchPosition;
+            }
 
 
             void moveUp(std::list<Lamp::Core::lampMod::Mod *>::iterator& it) {
@@ -66,6 +124,9 @@ namespace Lamp::Core{
             }
 
         public:
+
+
+
             lampArchiveListBuilder(std::list<std::string> ExtraColumnNames, std::list<Lamp::Core::lampMod::Mod *> &modList,
                                   std::vector<std::string> typeNames, lampConfig::Game gameRefrence,
                                    std::list<std::pair<std::string, bool * >> extraOptions)
@@ -77,6 +138,11 @@ namespace Lamp::Core{
             }
 
             void createImguiMenu(){
+                ImGui::Text("Search for Name: ");
+                ImGui::SameLine();
+                if(ImGui::InputText("##searcher", searchBuffer, 250)){
+                    lampConfig::getInstance().listHighlight = findClosestMatchPosition();
+                }
                 if(ImGui::BeginTable(lampConfig::getInstance().GameShorthandMap[gameRefrence].c_str(), columnNames.size()+1,  ImGuiTableFlags_SizingStretchProp)) {
                     for (auto it = columnNames.begin(); it != columnNames.end(); ++it) {
                         ImGui::TableNextColumn();
@@ -88,7 +154,9 @@ namespace Lamp::Core{
                     for (auto it = ModList.begin(); it != ModList.end(); ++it) {
 
                         ImGui::TableNextColumn();
-
+                        if(lampConfig::getInstance().listHighlight == i) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                        }
 
 
                         if((*it)->enabled) {
@@ -103,7 +171,9 @@ namespace Lamp::Core{
                             }
                         }
                         ImGui::TableNextColumn();
-
+                        if(lampConfig::getInstance().listHighlight == i) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                        }
 
                         std::filesystem::path path((*it)->ArchivePath);
                         std::string cutname = path.filename().c_str();
@@ -122,7 +192,9 @@ namespace Lamp::Core{
 
 
                         ImGui::TableNextColumn();
-
+                        if(lampConfig::getInstance().listHighlight == i) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                        }
 
                         if (ImGui::BeginMenu((typeNames[(*it)->modType] + "##" + std::to_string(i)).c_str())) {
                             int y = 0;
@@ -141,6 +213,10 @@ namespace Lamp::Core{
 
 
                         ImGui::TableNextColumn();
+                        if(lampConfig::getInstance().listHighlight == i) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                        }
+
 
                         if(ImGui::Button(("Up##"+std::to_string(i)).c_str())){
                             moveUp(it);
@@ -155,6 +231,18 @@ namespace Lamp::Core{
                         }
 
                         ImGui::TableNextColumn();
+                        if(lampConfig::getInstance().listHighlight == i) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                        }
+
+
+                        ImGui::Text((*it)->timeOfUpdate.c_str());
+
+                        ImGui::TableNextColumn();
+                        if(lampConfig::getInstance().listHighlight == i) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                        }
+
 
                         if (ImGui::Button(("Delete Mod##" + std::to_string(i)).c_str())) {
                             //std::remove(absolute(path).c_str());
@@ -164,12 +252,16 @@ namespace Lamp::Core{
                             break;
                         }
 
-                        ImGui::TableNextRow();
 
                         for (auto ittt = ExtraOptions.begin(); ittt != ExtraOptions.end(); ++ittt) {
+                            ImGui::TableNextColumn();
                             if (ImGui::Button(ittt->first.c_str()))
                                 ittt->second = reinterpret_cast<bool *>(!ittt->second);
                         }
+
+                        ImGui::TableNextRow();
+
+
 
                         i++;
                     }

@@ -33,6 +33,12 @@ namespace Lamp {
                 * @brief Indicates whether the mod is enabled.
                 */
                bool enabled;
+
+               /**
+                * @brief Stores a string of the last time the file updated
+                */
+               std::string timeOfUpdate = "Unknown";
+
                 /**
                 * @brief Serialize the Mod struct to an XML node.
                 *
@@ -45,6 +51,7 @@ namespace Lamp {
                     modNode.append_attribute("ArchivePath").set_value(ArchivePath.c_str());
                     modNode.append_attribute("modType").set_value(modType);
                     modNode.append_attribute("enabled").set_value(enabled);
+                    modNode.append_attribute("timeOfUpdate").set_value(timeOfUpdate.c_str());
 
                     return modNode;
                 }

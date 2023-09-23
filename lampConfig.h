@@ -68,6 +68,8 @@ namespace Lamp {
              */
             bool ShowIntroMenu = true;
 
+
+            int listHighlight = -1;
         private:
             lampConfig() {}
 
