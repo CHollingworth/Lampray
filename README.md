@@ -42,12 +42,13 @@ If you want early information about lamp, and how things are progressing join me
 
 ## Current Goals
 - [ ] Add FoMod Support.
-- [ ] Nexus Api inclusion
-- [ ] Support for Profiles.
-- [ ] Drag and Drop Reordering
-- [X] Update Checking and replacement for newer file.
-- [X] Genericize ListArchives
 - [ ] MasterList AutoTyping for mods
+
+### Road to 1.1.0
+- [ ] Profile Support
+- [ ] Persistant Data Path
+- [ ] Drag and Drop Reordering
+- [ ] Loot Lib Intigration
 
 ## Running Requirements
 - Vulkan Support
