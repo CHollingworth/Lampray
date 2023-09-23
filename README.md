@@ -45,8 +45,7 @@ If you want early information about lamp, and how things are progressing join me
 - [ ] Nexus Api inclusion
 - [ ] Support for Profiles.
 - [ ] Drag and Drop Reordering
-- [X] Update Checking and replacement for newer files
-- [ ] Move Data & Configs to a persistant path
+- [X] Update Checking and replacement for newer file.
 - [X] Genericize ListArchives
 - [ ] MasterList AutoTyping for mods
 
