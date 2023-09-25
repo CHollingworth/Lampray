@@ -8,23 +8,6 @@ For now i am just one person working on this tool updates will be slow.
 If you want early information about lamp, and how things are progressing join me on my very basic development discord.
 [discord](https://discord.gg/5macMedevy)
 
-
-# Usage
-
-1.Download the tool and place it in an empty folder of your choice.
-
-2.Run the tool, and it will create its directory structure for you.
-
-3.Choose your game and open the game configuration to set up the necessary paths.
-
-4.Simply drag and drop your archives into the window. Arrange them as you like.
-
-5.When you're ready, hit "deploy." This will open a window; just press "start" and wait for it to finish.
-
-6.Close the tool. (Important!)
-
-7.Now, go ahead and enjoy your modded game!
-
 ## List of currently supported games
 - Baldur's Gate 3
 
