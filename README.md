@@ -1,4 +1,4 @@
-a# Lamp
+# Lamp
 A Mod Manager for games, made for Linux! As an alternative to Vortex and MO2.
 
 This tool is in its early days please see the contributing section to help add more to it, 
