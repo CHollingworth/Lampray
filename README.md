@@ -1,4 +1,4 @@
-# Lamp
+a# Lamp
 A Mod Manager for games, made for Linux! As an alternative to Vortex and MO2.
 
 This tool is in its early days please see the contributing section to help add more to it, 
@@ -120,5 +120,6 @@ Id like to take a moment to thank these lovely people for helping me fix issue i
 - StuffOfSonny
 - nick-scott
 - Unhall0w3d
+- Jinxtaposition
 
   Thank you all for your time, input, and help. May this list continue to grow! 
