@@ -28,16 +28,8 @@ namespace Lamp {
 
 
             if(NewFilePathCut == TestingAgainstPathCut){
-                std::time_t unixTimestamp = std::time(nullptr);
-                std::tm timeInfo;
-                localtime_r(&unixTimestamp, &timeInfo);
-                std::ostringstream oss;
-                oss << std::setfill('0');
-                oss << std::setw(2) << timeInfo.tm_mday << '/' << std::setw(2) << (timeInfo.tm_mon + 1) << '/' << (timeInfo.tm_year + 1900) << ' ';
-                oss << std::setw(2) << timeInfo.tm_hour << ':' << std::setw(2) << timeInfo.tm_min;
-                std::string formattedTime = oss.str();
 
-                (*it)->timeOfUpdate = formattedTime;
+                (*it)->timeOfUpdate = Lamp::Core::lampFilesystem::getInstance().getFormattedTimeAndDate();
                 (*it)->ArchivePath = Path;
                 Lamp::Core::lampFilesystem::getInstance().saveModList(Core::lampConfig::BG3,ModList);
                 return;
@@ -46,23 +38,13 @@ namespace Lamp {
 
         }
 
-        std::time_t unixTimestamp = std::time(nullptr);
-        std::tm timeInfo;
-        localtime_r(&unixTimestamp, &timeInfo);
-        std::ostringstream oss;
-        oss << std::setfill('0');
-        oss << std::setw(2) << timeInfo.tm_mday << '/' << std::setw(2) << (timeInfo.tm_mon + 1) << '/' << (timeInfo.tm_year + 1900) << ' ';
-        oss << std::setw(2) << timeInfo.tm_hour << ':' << std::setw(2) << timeInfo.tm_min;
-        std::string formattedTime = oss.str();
-
         Lamp::Core::lampMod::Mod  * newArchive = new Lamp::Core::lampMod::Mod{Path,ModType::NaN, false};
-        newArchive->timeOfUpdate = oss.str();
+        newArchive->timeOfUpdate = Lamp::Core::lampFilesystem::getInstance().getFormattedTimeAndDate();
         ModList.push_back(newArchive);
         Lamp::Core::lampFilesystem::getInstance().saveModList(Core::lampConfig::BG3,ModList);
     }
 
     void Game::BG3::listArchives() {
-
         Core::lampArchiveDisplayHelper::lampArchiveListBuilder(
                 std::list<std::string>{},
                 ModList,
@@ -84,7 +66,7 @@ namespace Lamp {
         windowFlags += ImGuiWindowFlags_NoTitleBar;
         windowFlags += ImGuiWindowFlags_MenuBar;
 
-        ImGui::Begin("BG3 Steam Path Setup", NULL,windowFlags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        ImGui::Begin("BG3 Steam Path Setup", NULL,windowFlags);
 
         ImGui::Text("BG3 Steam Directory");
         ImGui::Text("This is usually (steampath)/steamapps/common/Baldurs Gate 3");
@@ -169,7 +151,6 @@ namespace Lamp {
         return false;
     }
 
-
     bool Game::BG3::startDeployment() {
         if(appDataPath == "" || appDataPath == " "){
             return false;
@@ -240,8 +221,6 @@ namespace Lamp {
         }).detach();
         return true;
     }
-
-
 
     bool Game::BG3::preCleanUp() {
         try {

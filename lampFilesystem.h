@@ -168,17 +168,48 @@ namespace Lamp {
             static void fileDrop(GLFWwindow* window, int count, const char** paths);
 
 
+            /**
+             * @brief Get the formatted time and date as a string.
+             *
+             * This function returns a string containing the current time and date in a
+             * human-readable format.
+             *
+             * @return A string containing the formatted time and date.
+             */
+            std::string getFormattedTimeAndDate();
 
 
+            /**
+             * @brief Recursively copy files and folders from a source directory to a
+             * destination directory with specified folders to ignore.
+             *
+             * This function recursively copies files and folders from the source directory to
+             * the destination directory, excluding any folders specified in the `ignoreFolders`
+             * vector.
+             *
+             * @param source The source directory path.
+             * @param destination The destination directory path.
+             * @param ignoreFolders A vector of folder names to ignore during the copy.
+             */
             void recursiveCopyWithIgnore(const fs::path& source, const fs::path& destination, const std::vector<std::string>& ignoreFolders);
+
+
+            /**
+             * @brief Copy dynamic link library (DLL) files from a source directory to a
+             * destination directory while respecting a configuration of files to ignore.
+             *
+             * This function copies dynamic link library (DLL) files from the source directory
+             * to the destination directory, excluding any folders specified in the configuration.
+             *
+             * @param sourceDir The source directory path containing DLL files.
+             * @param destDir The destination directory path where DLL files will be copied.
+             */
             void copyDllWithConfigIgnore(const fs::path& sourceDir, const fs::path& destDir);
-            void copyFileWithStrategy(const fs::path& source, const fs::path& destination);
 
 
 
 
-
-                int min = 0;
+            int min = 0;
             int max = 0;
             std::string stage = "unknown";
             bool deploying = false;
@@ -192,7 +223,7 @@ namespace Lamp {
             const std::string ConfigDataPath = baseDataPath+"Config/";
             const std::string DeploymentDataPath = baseDataPath+"Deployment/";
 
-
+            void copyFileWithDLLStrategy(const fs::path& source, const fs::path& destination);
             bool downloadFile(const std::string &url, const std::string &output_filename);
 
             bool
