@@ -256,6 +256,16 @@ namespace Lamp {
                 std::filesystem::remove_all(entry.path());
             }
 
+            for (const auto &entry: std::filesystem::directory_iterator(std::filesystem::path(appDataPath+"/Mods/"))) {
+                std::filesystem::remove_all(entry.path());
+            }
+
+            for (const auto &entry: std::filesystem::directory_iterator(std::filesystem::path(installDirPath+"/bin/NativeMods"))) {
+                if(std::regex_match(entry.path().filename().string(), std::regex("^.*\\.(dll)$"))) {
+                    std::filesystem::remove_all(entry.path());
+                }
+            }
+
             std::filesystem::create_directories(workingDir + "/bin/NativeMods");
             std::filesystem::create_directories(workingDir + "/Data");
             std::filesystem::create_directories(workingDir + "/Mods");
@@ -366,16 +376,40 @@ namespace Lamp {
                                         Lamp::Core::lampConfig::BG3,
                                         bit7z::BitFormat::Zip, modPtr,
                                         "/bin/NativeMods", "dll", true);
+                                Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                                        Lamp::Core::lampConfig::BG3,
+                                        bit7z::BitFormat::Zip, modPtr,
+                                        "/bin/NativeMods", "toml", true);
+                                Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                                        Lamp::Core::lampConfig::BG3,
+                                        bit7z::BitFormat::Zip, modPtr,
+                                        "/bin/NativeMods", "ini", true);
                             } else if (std::regex_match(modPtr->ArchivePath, std::regex("^.*\\.(rar)$"))) {
                                 Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
                                         Lamp::Core::lampConfig::BG3,
                                         bit7z::BitFormat::Rar, modPtr,
                                         "/bin/NativeMods", "dll", true);
+                                Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                                        Lamp::Core::lampConfig::BG3,
+                                        bit7z::BitFormat::Rar, modPtr,
+                                        "/bin/NativeMods", "toml", true);
+                                Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                                        Lamp::Core::lampConfig::BG3,
+                                        bit7z::BitFormat::Rar, modPtr,
+                                        "/bin/NativeMods", "ini", true);
                             } else if (std::regex_match(modPtr->ArchivePath, std::regex("^.*\\.(7z)$"))) {
                                 Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
                                         Lamp::Core::lampConfig::BG3,
                                         bit7z::BitFormat::SevenZip, modPtr,
                                         "/bin/NativeMods", "dll", true);
+                                Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                                        Lamp::Core::lampConfig::BG3,
+                                        bit7z::BitFormat::SevenZip, modPtr,
+                                        "/bin/NativeMods", "toml", true);
+                                Lamp::Core::lampFilesystem::getInstance().extractSpecificFileType(
+                                        Lamp::Core::lampConfig::BG3,
+                                        bit7z::BitFormat::SevenZip, modPtr,
+                                        "/bin/NativeMods", "ini", true);
                             } else {
                                 break;
                             }
@@ -629,10 +663,6 @@ namespace Lamp {
 
                         std::string UUID = mod["UUID"];
 
-                        //std::cout << "Mod Name: " << modName << std::endl;
-                        //std::cout << "UUID: " << UUID << std::endl;
-                        //std::cout << "Folder Name: " << folderName << std::endl;
-
                         pugi::xml_node moduleNode = doc.select_node("//node[@id='ModOrder']").node();
                         pugi::xml_node childrenNode = moduleNode.child("children");
                         pugi::xml_node newNode = childrenNode.append_child("node");
@@ -702,13 +732,23 @@ namespace Lamp {
             std::filesystem::path sourceDirectory = workingDir+"/bin/";
             std::filesystem::path destinationDirectory = installDirPath+"/bin/";
             Lamp::Core::lampWarn::getInstance().log("Copying Bin");
-            std::filesystem::copy(sourceDirectory, destinationDirectory, fs::copy_options::update_existing | fs::copy_options::recursive);
+            //std::filesystem::copy(sourceDirectory, destinationDirectory, fs::copy_options::update_existing | fs::copy_options::recursive);
+            Lamp::Core::lampFilesystem::getInstance().recursiveCopyWithIgnore(sourceDirectory,destinationDirectory,std::vector<std::string>{"NativeMods"});
+
+            sourceDirectory = workingDir+"/bin/NativeMods";
+            destinationDirectory = installDirPath+"/bin/NativeMods";
+            Lamp::Core::lampWarn::getInstance().log("Copying NativeMods");
+            Lamp::Core::lampFilesystem::getInstance().copyDllWithConfigIgnore(sourceDirectory, destinationDirectory);
+
+
 
             Lamp::Core::lampFilesystem::getInstance().min = 1;
             sourceDirectory = workingDir+"/Data/";
             destinationDirectory = installDirPath+"/Data/";
             Lamp::Core::lampWarn::getInstance().log("Copying Data");
             std::filesystem::copy(sourceDirectory, destinationDirectory, fs::copy_options::update_existing | fs::copy_options::recursive);
+
+
             Lamp::Core::lampFilesystem::getInstance().min = 2;
             sourceDirectory = workingDir+"/Mods";
             destinationDirectory = appDataPath+"/Mods/";

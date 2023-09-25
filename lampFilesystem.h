@@ -170,13 +170,15 @@ namespace Lamp {
 
 
 
+            void recursiveCopyWithIgnore(const fs::path& source, const fs::path& destination, const std::vector<std::string>& ignoreFolders);
+            void copyDllWithConfigIgnore(const fs::path& sourceDir, const fs::path& destDir);
+            void copyFileWithStrategy(const fs::path& source, const fs::path& destination);
 
 
 
 
 
-
-            int min = 0;
+                int min = 0;
             int max = 0;
             std::string stage = "unknown";
             bool deploying = false;

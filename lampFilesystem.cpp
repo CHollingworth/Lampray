@@ -580,4 +580,55 @@ namespace Lamp {
         return false;
     }
 
+    void Core::lampFilesystem::recursiveCopyWithIgnore(const fs::path &source, const fs::path &destination,
+                                                       const std::vector<std::string> &ignoreFolders) {
+        for (const auto& entry : fs::directory_iterator(source)) {
+            if (entry.is_directory()) {
+                // Check if the directory should be ignored
+                if (std::find(ignoreFolders.begin(), ignoreFolders.end(), entry.path().filename()) == ignoreFolders.end()) {
+                    // Recursively copy non-ignored directory
+                    fs::create_directories(destination / entry.path().filename());
+                    recursiveCopyWithIgnore(entry.path(), destination / entry.path().filename(), ignoreFolders);
+                }
+            }
+            else if (entry.is_regular_file()) {
+                try {
+                    fs::copy_file(entry.path(), destination / entry.path().filename(), fs::copy_options::update_existing);
+                }
+                catch (const fs::filesystem_error& e) {
+                    std::cerr << "Error copying file: " << e.what() << std::endl;
+                }
+            }
+        }
+
+    }
+
+    void Core::lampFilesystem::copyDllWithConfigIgnore(const fs::path &sourceDir, const fs::path &destDir) {
+        for (const auto& entry : fs::directory_iterator(sourceDir)) {
+            const fs::path& sourcePath = entry.path();
+            const fs::path destPath = destDir / sourcePath.filename();
+
+            if (fs::is_regular_file(sourcePath)) {
+                copyFileWithStrategy(sourcePath, destPath);
+            } else if (fs::is_directory(sourcePath)) {
+                fs::create_directory(destPath);
+                copyDllWithConfigIgnore(sourcePath, destPath);
+            }
+        }
+    }
+
+    void Core::lampFilesystem::copyFileWithStrategy(const fs::path &source, const fs::path &destination) {
+        try {
+            // Check the file extension
+            std::string extension = source.extension().string();
+            if (extension == ".dll") {
+                fs::copy_file(source, destination, fs::copy_options::update_existing);
+            } else {
+                fs::copy_file(source, destination, fs::copy_options::skip_existing);
+            }
+        } catch (const fs::filesystem_error& e) {
+            std::cerr << "Error copying file: " << e.what() << std::endl;
+        }
+    }
+
 } // Lamp
