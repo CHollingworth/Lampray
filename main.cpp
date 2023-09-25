@@ -491,7 +491,7 @@ int main(int, char**)
 
     Lamp::Game::BG3::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::BG3);
     //Lamp::Game::FO4::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::FO4);
-     //Reference to our menu Functions
+
     Lamp::Core::lampMenus * Menus = new Lamp::Core::lampMenus();
 
     Lamp::Core::lampUpdate::getInstance().checkForUpdates();
@@ -500,9 +500,9 @@ int main(int, char**)
     //std::string fomodFolderPath = "Lamp_Data/Deployment/Fallout 4/";
    // Lamp::Core::lampFoMod::getInstance().runInstaller(fomodFolderPath);
 
-    /*
 
-*/
+
+
     // Main loop
     while (!glfwWindowShouldClose(window))
     {

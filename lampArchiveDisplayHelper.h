@@ -172,7 +172,7 @@ namespace Lamp::Core{
                         }
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
-                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(lampConfig::getInstance().styleSet.HexStringToImVec4(lampConfig::getInstance().styleSet.Colour_SearchHighlight)));
                         }
 
                         std::filesystem::path path((*it)->ArchivePath);

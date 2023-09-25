@@ -496,7 +496,7 @@ namespace Lamp {
                 }
             }
         }
-        Lamp::Core::lampWarn::getInstance().log("Unable to load " + game + ":" + key, lampWarn::ERROR, true,
+        Lamp::Core::lampWarn::getInstance().log("Unable to load " + game + ":" + key, lampWarn::WARNING, false,
                                                 lampWarn::LMP_KEYLOADFAILED);
         return "";
 
@@ -506,6 +506,7 @@ namespace Lamp {
     bool Core::lampFilesystem::init_config() {
         Lamp::Core::lampWarn::getInstance().log("Loading Lamp Config");
         load_conifg();
+
         return true;
     }
 
@@ -518,10 +519,89 @@ namespace Lamp {
         std::string CG = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "CurrentGame");
         if (CG != "") {
             lampConfig::getInstance().CurrentGame = (lampConfig::Game) std::stoi(CG);
+        }
 
+        std::string Colour_WindowBackground = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK,
+                                                                                                    "Colour_WindowBackground");
+
+        lampConfig::getInstance().styleSet.getColourScheme();
+
+        if (Colour_WindowBackground == "") {
+            Colour_WindowBackground = lampConfig::getInstance().styleSet.Colour_WindowBackground;
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_WindowBackground",
+                                                                  Colour_WindowBackground);
+        }
+
+        std::string Colour_MenuBar = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "Colour_MenuBar");
+        if (Colour_MenuBar == "") {
+            Colour_MenuBar = lampConfig::getInstance().styleSet.Colour_MenuBar;
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_MenuBar", Colour_MenuBar);
+        }
+
+        std::string Colour_Text = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "Colour_Text");
+        if (Colour_Text == "") {
+            Colour_Text = lampConfig::getInstance().styleSet.Colour_Text;
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_Text", Colour_Text);
+        }
+
+        std::string Colour_Button = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "Colour_Button");
+        if (Colour_Button == "") {
+            Colour_Button = lampConfig::getInstance().styleSet.Colour_Button;
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_Button", Colour_Button);
 
         }
 
+        std::string Colour_Hover = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "Colour_Hover");
+        if (Colour_Hover == "") {
+            Colour_Hover = lampConfig::getInstance().styleSet.Colour_Hover;
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_Hover", Colour_Hover);
+
+        }
+
+        std::string Colour_Pressed = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "Colour_Pressed");
+        if (Colour_Pressed == "") {
+            Colour_Pressed = lampConfig::getInstance().styleSet.Colour_Pressed;
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_Pressed", Colour_Pressed);
+
+        }
+
+        std::string Colour_InputBG = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "Colour_InputBG");
+        if (Colour_InputBG == "") {
+            Colour_InputBG = lampConfig::getInstance().styleSet.Colour_InputBG;
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_InputBG", Colour_InputBG);
+        }
+
+        std::string Colour_Separator = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "Colour_Separator");
+        if (Colour_Separator == "") {
+            Colour_Separator = lampConfig::getInstance().styleSet.Colour_Separator;
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_Separator", Colour_Separator);
+        }
+
+        std::string Colour_SearchHighlight = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "Colour_SearchHighlight");
+        if (Colour_SearchHighlight == "") {
+            Colour_SearchHighlight = lampConfig::getInstance().styleSet.ImVec4ToHexString(ImVec4(0.3f, 0.f, 0.3f, 1));
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_SearchHighlight",
+                                                                  Colour_SearchHighlight);
+        }
+
+        std::string Colour_ToolTipAndTypes = Lamp::Core::lampFilesystem::getInstance().loadKeyData(lampConfig::UNK, "Colour_ToolTipAndTypes");
+        if (Colour_ToolTipAndTypes == "") {
+            Colour_ToolTipAndTypes = lampConfig::getInstance().styleSet.Colour_ToolTipAndTypes;
+            Lamp::Core::lampFilesystem::getInstance().saveKeyData(lampConfig::UNK, "Colour_ToolTipAndTypes",
+                                                                  Colour_ToolTipAndTypes);
+        }
+
+        lampConfig::getInstance().styleSet.Colour_WindowBackground = Colour_WindowBackground;
+        lampConfig::getInstance().styleSet.Colour_MenuBar = Colour_MenuBar;
+        lampConfig::getInstance().styleSet.Colour_Text = Colour_Text;
+        lampConfig::getInstance().styleSet.Colour_Button = Colour_Button;
+        lampConfig::getInstance().styleSet.Colour_Hover = Colour_Hover;
+        lampConfig::getInstance().styleSet.Colour_Pressed = Colour_Pressed;
+        lampConfig::getInstance().styleSet.Colour_InputBG = Colour_InputBG;
+        lampConfig::getInstance().styleSet.Colour_Separator = Colour_Separator;
+        lampConfig::getInstance().styleSet.Colour_SearchHighlight = Colour_SearchHighlight;
+        lampConfig::getInstance().styleSet.Colour_ToolTipAndTypes = Colour_ToolTipAndTypes;
+        Lamp::Core::lampConfig::getInstance().styleSet.setColourScheme();
     }
 
     void Core::lampFilesystem::save_config() {

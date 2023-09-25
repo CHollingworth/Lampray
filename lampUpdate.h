@@ -45,7 +45,7 @@ namespace Lamp::Core{
                     if (pos != std::string::npos) {
                         std::string first_line = response_data.substr(0, pos);
                         if(versionNumber != first_line){
-                            //versionNumber = "Update Available!";
+                            versionNumber = "Update Available!";
                         }
                     }
                 }
