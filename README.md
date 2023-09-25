@@ -41,17 +41,8 @@ If you want early information about lamp, and how things are progressing join me
 - p7zip-full & p7zip-rar
 - Curl
 
-## Build Requirements
-- Vulkan
-- GLFW
-- PkgConfig
-- Pugixml-dev
-- libcurl4-openssl-dev
-
-- Zenity
-
-- C++ 17
-- GCC
+## Building
+See Wiki
 
 
 ## Contributing
