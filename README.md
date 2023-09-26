@@ -30,6 +30,7 @@ If you want early information about lamp, and how things are progressing join me
 - [ ] Persistant Data Paths
 - [ ] Game Intigration Guide
 - [ ] Easy Modlist Sharing
+- [ ] Full Lamp::Core Rewrite
       
 ### Unessential but nice ideas
 - [ ] Lamp Specific Colour Scheme
