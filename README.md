@@ -24,14 +24,20 @@ If you want early information about lamp, and how things are progressing join me
 - rar
 
 ## Current Goals
-- [ ] Add FoMod Support.
-- [ ] MasterList AutoTyping for mods
 
 ### Road to 1.1.0
 - [ ] Profile Support
-- [ ] Persistant Data Path
-- [ ] Drag and Drop Reordering
+- [ ] Persistant Data Paths
+- [ ] Game Intigration Guide
+- [ ] Easy Modlist Sharing
+      
+### Unessential but nice ideas
+- [ ] Lamp Specific Colour Scheme
+
+### Bethesda Support
 - [ ] Loot Lib Intigration
+- [ ] FoMod Parsing
+- [ ] BSA/ESP Archvive Metadata collection
 
 ## Running Requirements
 - Vulkan Support
