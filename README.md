@@ -29,7 +29,7 @@ If you want early information about lamp, and how things are progressing join me
 - [X] Profile Support
 - [ ] Persistant Data Paths
 - [ ] Game Intigration Guide
-- [ ] Easy Modlist Sharing
+- [X] Easy Modlist Sharing
 - [X] Full Lamp::Core Rewrite
       
 ### Unessential but nice ideas
