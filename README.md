@@ -34,6 +34,7 @@ If you want early information about lamp, and how things are progressing join me
 - [X] Easy Modlist Sharing
 - [X] Full Lamp::Core Rewrite
 - [ ] Wayland Native Builds
+- [ ] Impliment OverlayFS as a replacement for pure file duplication
       
 ### Unessential but nice ideas
 - [X] Lamp Specific Colour Scheme
