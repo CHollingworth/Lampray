@@ -296,7 +296,7 @@ Thank you! :pray:
 This project is licensed under the terms of the [Mozilla Public License v2.0](https://www.mozilla.org/en-US/MPL/2.0/).<br/>
 For more details, please check:
 
-+ The [LICENSE](./LICENSE) file.
++ The [LICENSE](LICENSE) file.
 + [Mozilla's MPL-2.0 FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/)
 
 Older versions (v3.x and earlier) of bit7z were released under the [GNU General Public License v2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).

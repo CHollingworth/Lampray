@@ -1,33 +1,47 @@
 //
-// Created by charles on 21/09/23.
+// Created by charles on 27/09/23.
 //
 
-#ifndef LAMP_LAMPARCHIVEDISPLAYHELPER_H
-#define LAMP_LAMPARCHIVEDISPLAYHELPER_H
+#ifndef LAMP_LAMPCONTROL_H
+#define LAMP_LAMPCONTROL_H
 
 #include <list>
-#include <functional>
 #include <filesystem>
-#include <iostream>
-#include "lampMod.h"
-#include "lampConfig.h"
-#include "imgui/imgui.h"
-#include "lampFilesystem.h"
+#include "../../game-data/gameControl.h"
+#include "../Base/lampBase.h"
+#include "../Filesystem/lampFS.h"
+#include "lampGames.h"
+#include "../../third-party/nfd/include/nfd.h"
 
 namespace Lamp::Core{
-    class lampArchiveDisplayHelper{
+    typedef Core::Base::lampTypes::lampString lampString;
+    typedef Core::Base::lampTypes::lampHexAlpha lampHex;
+    typedef Core::Base::lampTypes::lampReturn lampReturn;
+    class lampControl{
     public:
+        static lampControl& getInstance()
+        {
+            static lampControl instance;
+            return instance;
+        }
+
+        lampControl(lampControl const&) = delete;
+        void operator=(lampControl const&)  = delete;
 
 
-        struct lampArchiveListBuilder{
+        static lampString getFormattedTimeAndDate();
+
+
+        lampHex Colour_SearchHighlight = ImVec4(0.3f, 0.f, 0.3f, 1);
+
+        struct lampArchiveDisplayHelper{
         private:
             std::list<std::string> columnNames{"Enabled","Mod Name", "Mod Type", "Load Order","Last Updated" ,"Remove Mod"};
-            std::list<Lamp::Core::lampMod::Mod *>& ModList;
+            std::vector<Base::lampMod::Mod *>& ModList;
             std::vector<std::string> typeNames;
-            lampConfig::Game gameRefrence;
             std::list<std::pair<std::string,bool *>> ExtraOptions;
             std::string temp{"0"};
-            char searchBuffer[250]{};
+
 
 
             int calculateLevenshteinDistance(const std::string& s1, const std::string& s2) {
@@ -57,7 +71,7 @@ namespace Lamp::Core{
 
             int findClosestMatchPosition() {
 
-                if(std::strlen(searchBuffer) == 0){
+                if(std::strlen(lampConfig::getInstance().searchBuffer) <= 1 ){
                     return -1;
                 }
 
@@ -68,14 +82,14 @@ namespace Lamp::Core{
                     std::filesystem::path path((*it)->ArchivePath);
                     std::string cutname = path.filename().c_str();
 
-                    if (gameRefrence == Lamp::Core::lampConfig::BG3) {
+                    if (Lamp::Games::getInstance().currentGame->Ident().ShortHand == "BG3") {
                         size_t pos = cutname.find('-');
                         if (pos != std::string::npos) {
                             cutname.erase(pos);
                         }
                     }
 
-                    int distance = calculateLevenshteinDistance(cutname, searchBuffer);
+                    int distance = calculateLevenshteinDistance(cutname, lampConfig::getInstance().searchBuffer);
 
                     if (distance < minDistance) {
                         minDistance = distance;
@@ -87,63 +101,43 @@ namespace Lamp::Core{
             }
 
 
-            void moveUp(std::list<Lamp::Core::lampMod::Mod *>::iterator& it) {
-                if (ModList.size() <= 1) {
-                    return; // Nothing to move
+            void moveUp(std::vector<Base::lampMod::Mod*>::iterator& it) {
+                if (ModList.size() <= 1 || it == ModList.begin()) {
+                    return; // Nothing to move or already at the beginning
                 }
 
-                if (it == ModList.begin()) {
-                    // If the iterator points to the first element, wrap around to the end
-                    std::list<Lamp::Core::lampMod::Mod *>::iterator last = std::prev(ModList.end());
-                    std::swap(*it, *last);
-                    it = last;
-                } else {
-                    // Swap the element with the one before it
-                    std::list<Lamp::Core::lampMod::Mod *>::iterator prev = std::prev(it);
-                    std::swap(*it, *prev);
-                    it = prev;
-                }
+                std::swap(*it, *(it - 1));
+                --it;
             }
 
-            void moveDown(std::list<Lamp::Core::lampMod::Mod *>::iterator& it) {
-                if (ModList.size() <= 1) {
-                    return; // Nothing to move
+            void moveDown(std::vector<Base::lampMod::Mod*>::iterator& it) {
+                if (ModList.size() <= 1 || it == ModList.end() - 1) {
+                    return; // Nothing to move or already at the end
                 }
 
-                std::list<Lamp::Core::lampMod::Mod *>::iterator next = std::next(it);
-
-                if (next == ModList.end()) {
-                    // If the iterator points to the end, wrap around to the beginning
-                    std::swap(*it, *ModList.begin());
-                    it = ModList.begin();
-                } else {
-                    // Swap the element with the one after it
-                    std::swap(*it, *next);
-                    it = next;
-                }
+                std::swap(*it, *(it + 1));
+                ++it;
             }
 
         public:
 
 
 
-            lampArchiveListBuilder(std::list<std::string> ExtraColumnNames, std::list<Lamp::Core::lampMod::Mod *> &modList,
-                                  std::vector<std::string> typeNames, lampConfig::Game gameRefrence,
-                                   std::list<std::pair<std::string, bool * >> extraOptions)
-                    : ModList(modList), typeNames(typeNames), gameRefrence(gameRefrence),
-                      ExtraOptions(extraOptions) {
+            lampArchiveDisplayHelper(std::list<std::string> ExtraColumnNames, std::vector<Base::lampMod::Mod *> &modList,
+                    std::vector<std::string> typeNames,
+                    std::list<std::pair<std::string, bool * >> extraOptions)
+            : ModList(modList), typeNames(typeNames),
+            ExtraOptions(extraOptions) {
                 columnNames.insert(columnNames.end(), ExtraColumnNames.begin(), ExtraColumnNames.end());
-
-                // add assert for length here
             }
 
             void createImguiMenu(){
-                ImGui::Text("Search for Name: ");
-                ImGui::SameLine();
-                if(ImGui::InputText("##searcher", searchBuffer, 250)){
+                ImGuiIO &io = ImGui::GetIO();
+                ImGui::SetNextItemWidth(io.DisplaySize.x);
+                if (ImGui::InputText("##searcher", lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
                 }
-                if(ImGui::BeginTable(lampConfig::getInstance().GameShorthandMap[gameRefrence].c_str(), columnNames.size()+1,  ImGuiTableFlags_SizingStretchProp)) {
+                if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, ImGuiTableFlags_SizingStretchProp)) {
                     for (auto it = columnNames.begin(); it != columnNames.end(); ++it) {
                         ImGui::TableNextColumn();
 
@@ -155,45 +149,45 @@ namespace Lamp::Core{
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
-                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
 
                         if((*it)->enabled) {
                             if (ImGui::Button(("Enabled##" + std::to_string(i)).c_str())) {
                                 (*it)->enabled = false;
-                                Lamp::Core::lampFilesystem::getInstance().saveModList(gameRefrence, ModList);
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
                         }else{
                             if (ImGui::Button(("Disabled##" + std::to_string(i)).c_str())) {
                                 (*it)->enabled = true;
-                                Lamp::Core::lampFilesystem::getInstance().saveModList(gameRefrence, ModList);
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
                         }
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
-                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(lampConfig::getInstance().styleSet.HexStringToImVec4(lampConfig::getInstance().styleSet.Colour_SearchHighlight)));
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,lampControl::getInstance().Colour_SearchHighlight);
                         }
 
                         std::filesystem::path path((*it)->ArchivePath);
                         std::string cutname = path.filename().c_str();
-                        if(gameRefrence == Lamp::Core::lampConfig::BG3) {
+                        if(Lamp::Games::getInstance().currentGame->Ident().ShortHand == "BG3") {
                             size_t pos = cutname.find('-');
                             if (pos != std::string::npos) {
                                 cutname.erase(pos);
                             }
                         }
 
-                            ImGui::Text(cutname.c_str());
-                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
-                                ImGui::SetTooltip((*it)->ArchivePath.c_str());
-                            }
+                        ImGui::Text(cutname.c_str());
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
+                            ImGui::SetTooltip((*it)->ArchivePath);
+                        }
 
 
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
-                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
                         if (ImGui::BeginMenu((typeNames[(*it)->modType] + "##" + std::to_string(i)).c_str())) {
@@ -204,7 +198,7 @@ namespace Lamp::Core{
                             for (auto itt = typeNames.begin(); itt != typeNames.end(); ++itt) {
                                 if (ImGui::MenuItem((*itt).c_str())) {
                                     (*it)->modType = y;
-                                    Lamp::Core::lampFilesystem::getInstance().saveModList(gameRefrence, ModList);
+                                    Core::FS::lampIO::saveModList( Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList);
                                 }
                                 y++;
                             }
@@ -214,41 +208,41 @@ namespace Lamp::Core{
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
-                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
 
                         if(ImGui::Button(("Up##"+std::to_string(i)).c_str())){
                             moveUp(it);
-                            Lamp::Core::lampFilesystem::getInstance().saveModList(gameRefrence, ModList);
+                            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                         }
                         ImGui::SameLine();
                         ImGui::Text((std::to_string(i)).c_str());
                         ImGui::SameLine();
                         if(ImGui::Button(("Down##"+std::to_string(i)).c_str())){
                             moveDown(it);
-                            Lamp::Core::lampFilesystem::getInstance().saveModList(gameRefrence, ModList);
+                            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                         }
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
-                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
 
-                        ImGui::Text((*it)->timeOfUpdate.c_str());
+                        ImGui::Text((*it)->timeOfUpdate);
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
-                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.f, 0.3f, 1)));
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
 
                         if (ImGui::Button(("Delete Mod##" + std::to_string(i)).c_str())) {
                             //std::remove(absolute(path).c_str());
                             std::cout << absolute(path).c_str() << std::endl;
-                            ModList.remove((*it));
-                            Lamp::Core::lampFilesystem::getInstance().saveModList(gameRefrence,ModList);
+                            ModList.erase(it);
+                            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
                             break;
                         }
 
@@ -271,6 +265,48 @@ namespace Lamp::Core{
             }
 
         };
+
+        struct lampGameSettingsDisplayHelper{
+            explicit lampGameSettingsDisplayHelper(
+                    std::string displayString, std::string stringTarget, std::string toolTip, std::string keyPath);
+
+        public:
+
+            std::string  displayString;
+            std::string  stringTarget;
+            std::string  keyPath;
+            std::string  toolTip;
+            void createImGuiMenu(){
+                ImGui::Text(displayString.c_str());
+                ImGui::Text(toolTip.c_str());
+                if(ImGui::Button((stringTarget+"##"+displayString).c_str())) {
+                    nfdchar_t *outPath = NULL;
+                    nfdresult_t result = NFD_PickFolder(NULL, &outPath);
+
+                    if (result == NFD_OKAY) {
+                        puts(outPath);
+                        Lamp::Core::FS::lampIO::saveKeyData(keyPath,outPath,Lamp::Games::getInstance().currentGame->Ident().ShortHand);
+                        Lamp::Games::getInstance().currentGame->KeyInfo()[keyPath] = outPath;
+                    } else if (result == NFD_CANCEL) {
+                        puts("User pressed cancel.");
+                    } else {
+                        printf("Error: %s\n", NFD_GetError());
+                    }
+                }
+            }
+
+        };
+
+        std::pair<int, int> deplopmentTracker;
+        std::string deploymentStageTitle;
+        bool inDeployment = false;
+
+    private:
+        lampControl(){};
+
+
     };
+
+
 }
-#endif //LAMP_LAMPARCHIVEDISPLAYHELPER_H
+#endif //LAMP_LAMPCONTROL_H

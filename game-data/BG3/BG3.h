@@ -1,81 +1,78 @@
 //
-// Created by charles on 11/09/23.
+// Created by charles on 27/09/23.
 //
 
 #ifndef LAMP_BG3_H
 #define LAMP_BG3_H
-
 #include "../gameControl.h"
-#include <filesystem>
-#include <iostream>
-#include <regex>
-#include <fstream>
-#include <thread>
-#include <future>
-#include "../../json/json.hpp"
-#include "../../lampWarn.h"
-#include "../../lampArchiveDisplayHelper.h"
-#include "../../imgui/imgui.h"
-#include "../../lampFilesystem.h"
-#include "../../nfd/include/nfd.h"
+#include "../../Lamp/Filesystem/lampFS.h"
+#include "../../Lamp/Parse/lampParse.h"
+namespace Lamp::Game {
+    typedef Core::Base::lampTypes::lampString lampString;
+    typedef Core::Base::lampTypes::lampHexAlpha lampHex;
+    typedef Core::Base::lampTypes::lampReturn lampReturn;
 
-    namespace Lamp::Game {
-        class BG3: public gameControl {
-        public:
+    class BG3 : public gameControl {
+    public:
 
-            std::string installDirPath = "steam/install/path";
-            std::string appDataPath = "app/data/path";
+        lampReturn registerArchive(lampString Path) override;
+        lampReturn ConfigMenu() override;
+        lampReturn startDeployment() override;
+        lampReturn preCleanUp() override;
+        lampReturn preDeployment() override;
+        lampReturn deployment() override;
+        lampReturn postDeploymentTasks() override;
+        void listArchives() override;
 
-            enum ModType{
-                BG3_ENGINE_INJECTION = 0,
-                BG3_MOD,
-                BG3_BIN_OVERRIDE,
-                BG3_DATA_OVERRIDE,
-                BG3_MOD_FIXER,
-                NaN
-            };
+        std::vector<Core::Base::lampMod::Mod *> ModList {};
 
-
-            std::list<Lamp::Core::lampMod::Mod *> ModList;
-
-            bool checkLock = false;
-
-
-            static BG3& getInstance()
-            {
-                static BG3 instance;
-                return instance;
-            }
-
-            BG3(BG3 const&) = delete;
-            void operator=(BG3 const&)  = delete;
-
-            void registerArchive(std::string Path) override;
-
-            bool ConfigMenu() override;
-
-            bool startDeployment() override;
-
-            bool preCleanUp() override;
-            bool preDeployment() override;
-            bool deployment() override;
-            void postDeploymentTasks() override;
-
-
-            bool collectJsonData(Lamp::Core::lampMod::Mod * mod);
-
-            void listArchives() override;
-        private:
-            BG3(){
-                installDirPath = Lamp::Core::lampFilesystem::getInstance().loadKeyData(Core::lampConfig::BG3, "installDirPath");
-                appDataPath = Lamp::Core::lampFilesystem::getInstance().loadKeyData(Core::lampConfig::BG3, "appDataPath");
-            };
-
-            std::vector<std::thread> modEditQueue;
-
-            bool findJsonData(std::vector<std::string> xx);
+        std::map<std::string,std::string>& KeyInfo() override {
+            return keyInfo;
         };
-    }
-// Lamp
+
+        Core::Base::lampTypes::lampIdent Ident() override {
+            return {"Baldur's Gate 3","BG3"};
+        };
+
+        std::vector<Core::Base::lampMod::Mod *>& getModList() override;
+
+        void launch() override {
+            for (const auto& pair : keyInfo) {
+                const std::string& key = pair.first;
+                keyInfo[key] = (std::string) Lamp::Core::FS::lampIO::loadKeyData(key,Ident().ShortHand).returnReason;
+                if(key == "ProfileList"){
+                    if(pair.second == "" || pair.second == "Default") {
+                        keyInfo[key] = "Default";
+                        Lamp::Core::FS::lampIO::saveKeyData(key, keyInfo[key], Ident().ShortHand);
+                    }
+                }
+                if(key == "CurrentProfile"){
+                    if(pair.second == "" || pair.second == "Default") {
+                        keyInfo[key] = "Default";
+                        Lamp::Core::FS::lampIO::saveKeyData(key, keyInfo[key], Ident().ShortHand);
+                    }
+                }
+            }
+            ModList = Lamp::Core::FS::lampIO::loadModList(Ident().ShortHand, keyInfo["CurrentProfile"]);
+        }
+
+    private:
+        enum ModType{
+            BG3_ENGINE_INJECTION = 0,
+            BG3_MOD,
+            BG3_BIN_OVERRIDE,
+            BG3_DATA_OVERRIDE,
+            BG3_MOD_FIXER,
+            NaN
+        };
+
+        std::map<std::string,std::string> keyInfo{
+                {"installDirPath",""},
+                {"appDataPath",""},
+                {"ProfileList","Default"},
+                {"CurrentProfile", "Default"}
+        };
+    };
+}
 
 #endif //LAMP_BG3_H
