@@ -26,7 +26,7 @@ ipch
 *.VC.VC.opendb
 
 ## Getting files created in JSON/Schemas/Catalog/ from a VS2022 update
-JSON/
+third-party/json/
 
 ## Commonly used CMake directories
 build*/

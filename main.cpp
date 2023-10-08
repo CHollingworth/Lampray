@@ -1,44 +1,18 @@
-// Dear ImGui: standalone example application for Glfw + Vulkan
-// If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
-// Read online: https://github.com/ocornut/imgui/tree/master/docs
-
-// Important note to the reader who wish to integrate imgui_impl_vulkan.cpp/.h in their own engine/app.
-// - Common ImGui_ImplVulkan_XXX functions and structures are used to interface with imgui_impl_vulkan.cpp/.h.
-//   You will use those if you want to use this rendering backend in your engine/app.
-// - Helper ImGui_ImplVulkanH_XXX functions and structures are only used by this example (main.cpp) and by
-//   the backend itself (imgui_impl_vulkan.cpp), but should PROBABLY NOT be used by your own engine/app code.
-// Read comments in imgui_impl_vulkan.h.
-
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_vulkan.h"
-#include "lampMenus.h"
-#include "lampConfig.h"
-#include "lampFilesystem.h"
-#include "game-data/BG3/BG3.h"
-#include "lampWarn.h"
-#include "lampUpdate.h"
-#include "game-data/FO4/FO4.h"
-#include "lampFoMod.h"
-#include <stdio.h>          // printf, fprintf
+#include "third-party/imgui/imgui.h"
+#include "third-party/imgui/imgui_impl_glfw.h"
+#include "third-party/imgui/imgui_impl_vulkan.h"
+#include "Lamp/Control/lampControl.h"
+#include "Lamp/Menu/lampMenu.h"
+#include "Lamp/Filesystem/lampFS.h"
+#include "Lamp/Menu/lampColour.h"
+#include <stdio.h>
 #include <cstdlib>
-#include <filesystem>
-#define GLFW_INCLUDE_NONE
-#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
-//#include <vulkan/vulkan_beta.h>
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#pragma comment(lib, "legacy_stdio_definitions")
-#endif
+#define IMGUI_DISABLE_WIN32_FUNCTIONS
+#define IMGUI_UNLIMITED_FRAME_RATE
 
-//#define IMGUI_UNLIMITED_FRAME_RATE
-#ifdef _DEBUG
-#define IMGUI_VULKAN_DEBUG_REPORT
-#endif
-
-// Data
 static VkAllocationCallbacks*   g_Allocator = nullptr;
 static VkInstance               g_Instance = VK_NULL_HANDLE;
 static VkPhysicalDevice         g_PhysicalDevice = VK_NULL_HANDLE;
@@ -141,13 +115,6 @@ static void SetupVulkan(ImVector<const char*> instance_extensions)
         }
 #endif
 
-        // Enabling validation layers
-#ifdef IMGUI_VULKAN_DEBUG_REPORT
-        const char* layers[] = { "VK_LAYER_KHRONOS_validation" };
-        create_info.enabledLayerCount = 1;
-        create_info.ppEnabledLayerNames = layers;
-        instance_extensions.push_back("VK_EXT_debug_report");
-#endif
 
         // Create Vulkan Instance
         create_info.enabledExtensionCount = (uint32_t)instance_extensions.Size;
@@ -155,18 +122,6 @@ static void SetupVulkan(ImVector<const char*> instance_extensions)
         err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
         check_vk_result(err);
 
-        // Setup the debug report callback
-#ifdef IMGUI_VULKAN_DEBUG_REPORT
-        auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkCreateDebugReportCallbackEXT");
-        IM_ASSERT(vkCreateDebugReportCallbackEXT != nullptr);
-        VkDebugReportCallbackCreateInfoEXT debug_report_ci = {};
-        debug_report_ci.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-        debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
-        debug_report_ci.pfnCallback = debug_report;
-        debug_report_ci.pUserData = nullptr;
-        err = vkCreateDebugReportCallbackEXT(g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
-        check_vk_result(err);
-#endif
     }
 
     // Select Physical Device (GPU)
@@ -398,8 +353,7 @@ int main(int, char**)
         return 1;
     }
 
-    glfwSetDropCallback(window, Lamp::Core::lampFilesystem::fileDrop);
-
+    glfwSetDropCallback(window, Lamp::Core::FS::lampIO::fileDrop);
     ImVector<const char*> extensions;
     uint32_t extensions_count = 0;
     const char** glfw_extensions = glfwGetRequiredInstanceExtensions(&extensions_count);
@@ -424,10 +378,6 @@ int main(int, char**)
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForVulkan(window, true);
@@ -480,40 +430,70 @@ int main(int, char**)
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    if(!Lamp::Core::lampFilesystem::getInstance().init()){
-        return 0;
+    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_Text] = Lamp::Core::Base::lampTypes::lampHexAlpha("ffffff-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = Lamp::Core::Base::lampTypes::lampHexAlpha("0a0d12-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_PopupBg] = Lamp::Core::Base::lampTypes::lampHexAlpha("141414-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_FrameBg] = Lamp::Core::Base::lampTypes::lampHexAlpha("260101-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg] = Lamp::Core::Base::lampTypes::lampHexAlpha("071216-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_Button] = Lamp::Core::Base::lampTypes::lampHexAlpha("590202-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
+
+    ImGui::GetStyle().Colors[ImGuiCol_ButtonActive] = Lamp::Core::Base::lampTypes::lampHexAlpha("260101-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_Header] = Lamp::Core::Base::lampTypes::lampHexAlpha("4296f9-4f");
+    ImGui::GetStyle().Colors[ImGuiCol_HeaderHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha("4296f9-cc");
+    ImGui::GetStyle().Colors[ImGuiCol_HeaderActive] = Lamp::Core::Base::lampTypes::lampHexAlpha("590202-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha("4296f9-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_Separator] = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
+    ImGui::GetStyle().Colors[ImGuiCol_SeparatorHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha("1966bf-c6");
+
+    Lamp::Core::Base::lampLog::getInstance().log("Clearing log file.");
+    const std::string filename = "lamp.log";
+    std::ofstream file(filename, std::ios::trunc);
+    if (!file) {
+        file.close();
+        Lamp::Core::Base::lampLog::getInstance().log("Couldn't clear the Log.");
+    }
+    file.close();
+
+    Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampControl::getFormattedTimeAndDate()+" | | Battle Control Online, Welcome Back Commander.", Lamp::Core::Base::lampLog::LOG);
+
+    Lamp::Games::getInstance();
+    Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
+    Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"]=(std::string)Lamp::Core::FS::lampIO::loadKeyData("showIntroMenu","LAMP CONFIG").returnReason;
+    Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibaryLocation","LAMP CONFIG").returnReason;
+    Lamp::Core::lampConfig::getInstance().init();
+    Lamp::Core::FS::lampIO::saveKeyData("bit7zLibaryLocation", Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation, "LAMP CONFIG");
+
+    Lamp::Core::lampMenu Menus;
+
+    Lamp::Games::getInstance().currentProfile = Lamp::Games::getInstance().currentGame->KeyInfo()["CurrentProfile"];
+
+
+    Lamp::Core::Base::lampLog::getInstance().log("Creating Directories");
+    try {
+        std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().saveDataPath);
+        std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().archiveDataPath);
+        std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().ConfigDataPath);
+        std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().DeploymentDataPath);
+
+        for (Lamp::Game::gameControl *element: Lamp::Games::getInstance().gameList){
+            std::filesystem::create_directories(std::filesystem::path(Lamp::Core::lampConfig::getInstance().DeploymentDataPath + element->Ident().ReadableName));
+        }
+
+    } catch (std::exception ex) {
+        Lamp::Core::Base::lampLog::getInstance().log("Could not create base directories", Lamp::Core::Base::lampLog::ERROR,
+                                                     Lamp::Core::Base::lampLog::LMP_NODIRCREATION);
     }
 
-    if(!Lamp::Core::lampFilesystem::getInstance().init_config()){
-        return 0;
-    }
+    Lamp::Core::Base::lampLog::getInstance().log("Directories Created");
 
-
-    Lamp::Game::BG3::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::BG3);
-    //Lamp::Game::FO4::getInstance().ModList = Lamp::Core::lampFilesystem::getInstance().loadModList(Lamp::Core::lampConfig::FO4);
-
-    Lamp::Core::lampMenus * Menus = new Lamp::Core::lampMenus();
-
-    Lamp::Core::lampUpdate::getInstance().checkForUpdates();
-
-
-    //std::string fomodFolderPath = "Lamp_Data/Deployment/Fallout 4/";
-   // Lamp::Core::lampFoMod::getInstance().runInstaller(fomodFolderPath);
-
-
-
-
+    Lamp::Core::lampColour::getInstance().getConfigColours();
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
 
-        // Resize swap chain?
         if (g_SwapChainRebuild)
         {
             int width, height;
@@ -527,18 +507,12 @@ int main(int, char**)
             }
         }
 
-        // Start the Dear ImGui frame
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-
-        Menus->CreateMenus();
-        Lamp::Core::lampWarn::getInstance().showWarns();
-        Lamp::Core::lampFoMod::getInstance().showMenus();
-
-
-
+        Menus.RunMenus();
+        Lamp::Core::Base::lampLog::getInstance().showWarns();
         // Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();
