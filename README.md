@@ -1,4 +1,5 @@
-# Lamp
+
+# ![alt text](https://cdn.discordapp.com/attachments/1160692058017763581/1160692177781919794/LMP-64.png?ex=653595d3&is=652320d3&hm=4febcb9e9ed7f1f31f949a3db68e4b465b23922d44f891e78a788b49bd4cb093&) Lamp 
 A Mod Manager for games, made for Linux! As an alternative to Vortex and MO2.
 
 This tool is in its early days please see the contributing section to help add more to it, 
