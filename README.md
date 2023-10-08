@@ -32,6 +32,7 @@ If you want early information about lamp, and how things are progressing join me
 - [ ] Independed modsettings creation.
 - [X] Easy Modlist Sharing
 - [X] Full Lamp::Core Rewrite
+- [ ] Wayland Native Builds
       
 ### Unessential but nice ideas
 - [X] Lamp Specific Colour Scheme
