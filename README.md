@@ -26,14 +26,14 @@ If you want early information about lamp, and how things are progressing join me
 ## Current Goals
 
 ### Road to 1.1.0
-- [ ] Profile Support
+- [X] Profile Support
 - [ ] Persistant Data Paths
 - [ ] Game Intigration Guide
 - [ ] Easy Modlist Sharing
-- [ ] Full Lamp::Core Rewrite
+- [X] Full Lamp::Core Rewrite
       
 ### Unessential but nice ideas
-- [ ] Lamp Specific Colour Scheme
+- [X] Lamp Specific Colour Scheme
 
 ### Bethesda Support
 - [ ] Loot Lib Intigration
