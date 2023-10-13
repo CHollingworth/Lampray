@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/airtonix/Lamp/compare/v1.0.0...v1.1.0) (2023-10-13)
+
+
+### Features
+
+* (cicd) provide automated build system ([#4](https://github.com/airtonix/Lamp/issues/4)) ([e82decb](https://github.com/airtonix/Lamp/commit/e82decbe3ffe8b1b7f3b0943e5ef7456e35a3434))
+
 ## 1.0.0 (2023-10-13)
 
 
