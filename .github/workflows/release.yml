@@ -18,7 +18,7 @@ jobs:
         with:
           release-type: simple
           extra-files: |
-            ./VERSION
+            VERSION
 
       - name: Checkout
         if: ${{ steps.release.outputs.release_created }}
