@@ -39,7 +39,7 @@ jobs:
           cd cmake-$CMAKE_VERSION.$CMAKE_BUILD/ 
           ./bootstrap 
           make -j$(nproc) 
-          make install
+          sudo make install
           
           # install Lamp Deps
           sudo apt-get install -y \
