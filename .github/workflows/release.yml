@@ -1,0 +1,78 @@
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release-please
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: simple
+          extra-files: |
+            ./VERSION
+
+      - name: Checkout
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          CMAKE_VERSION: 3.27
+          CMAKE_BUILD: 0
+        run: |
+
+          # download, build and install cmake
+          mkdir /tmp/build
+          cd /tmp/build 
+          wget https://cmake.org/files/v$CMAKE_VERSION/cmake-$CMAKE_VERSION.$CMAKE_BUILD.tar.gz 
+          tar -xzvf cmake-$CMAKE_VERSION.$CMAKE_BUILD.tar.gz 
+          cd cmake-$CMAKE_VERSION.$CMAKE_BUILD/ 
+          ./bootstrap 
+          make -j$(nproc) 
+          make install
+          
+          # install Lamp Deps
+          sudo apt-get install -y \
+            libvulkan-dev \
+            libglfw3-dev \
+            pkg-config \
+            libpugixml-dev \
+            libcurl4-openssl-dev \
+            zenity \
+            g++ \
+            gcc \
+            ninja-build \
+            cmake
+
+      - name: Build Artifact
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+
+          # build the app
+          cmake \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_MAKE_PROGRAM=ninja \
+            -G Ninja \
+            -S ./ \
+            -B ./build
+
+          # do ninja things
+          cd ./build
+          ninja
+
+      - name: Upload Release Artifact
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run:
+          gh release upload ${{ steps.release.outputs.tag_name }} ./build/lamp#lamp-x11-${{ steps.release.outputs.tag_name }}
