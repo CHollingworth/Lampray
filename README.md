@@ -61,6 +61,12 @@ This will install asdf and other specific versions of tooling required.
 ./build.sh Debug # or ./build.sh Release
 ```
 
+Testing cicd: 
+
+```sh
+act push
+```
+
 For more information See Wiki
 
 ## Contributing
