@@ -24,17 +24,5 @@ runs:
         env:
           BUILD_TYPE: ${{inputs.BuildType}}
         run: |
-          cmake \
-            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_MAKE_PROGRAM=ninja \
-            -B ${{github.workspace}}/build \
-            -G Ninja \
-            -S ./
-
-          # do ninja things
-          cd ./build
-          ninja
-
-          echo "📦 Build complete"
-
+          ./build.sh $BUILD_TYPE
           # echo "output_name=${{inputs.OutputName}}" >> $GITHUB_OUTPUT
