@@ -128,21 +128,49 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
         return {-1, "Unable to create working directories."};
     }
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 3;
-    Core::Base::lampLog::getInstance().log("Copying modsettings.lsx", Core::Base::lampLog::warningLevel::LOG);
+    Core::Base::lampLog::getInstance().log("Creating modsettings.lsx", Core::Base::lampLog::warningLevel::LOG);
     pugi::xml_document doc;
-    if(std::filesystem::copy_file(keyInfo["appDataPath"] + "/PlayerProfiles/Public/modsettings.lsx",
-                               workingDir + "/PlayerProfiles/Public/modsettings.lsx",
-                               std::filesystem::copy_options::overwrite_existing)){
 
-        pugi::xml_parse_result result = doc.load_file((workingDir + "/PlayerProfiles/Public/modsettings.lsx").c_str());
-        if (result.status == pugi::status_ok) {
 
-        } else {
-            return {-1, "Invalid XML File."};
-        }
-    }else{
-        return {-1, "Invalid XML File."};
-    }
+
+    pugi::xml_node save = doc.append_child("save");
+
+    // Create the version node
+    pugi::xml_node version = save.append_child("version");
+    version.append_attribute("major").set_value(4);
+    version.append_attribute("minor").set_value(2);
+    version.append_attribute("revision").set_value(0);
+    version.append_attribute("build").set_value(100);
+
+    // Create the region node
+    pugi::xml_node region = save.append_child("region");
+    region.append_attribute("id").set_value("ModuleSettings");
+
+    // Create the node node
+    pugi::xml_node node = region.append_child("node");
+    node.append_attribute("id").set_value("root");
+
+    // Create the children node
+    pugi::xml_node children = node.append_child("children");
+
+    // Create the ModOrder node
+    pugi::xml_node modOrder = children.append_child("node");
+    modOrder.append_attribute("id").set_value("ModOrder");
+
+    // Create the children node for ModOrder (empty in your example)
+    pugi::xml_node modOrderChildren = modOrder.append_child("children");
+
+    // Create the Mods node
+    pugi::xml_node mods = children.append_child("node");
+    mods.append_attribute("id").set_value("Mods");
+
+    // Create the children node for Mods (empty in your example)
+    pugi::xml_node modsChildren = mods.append_child("children");
+
+
+
+
+
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 4;
     Core::Base::lampLog::getInstance().log("Cleaning modsettings.lsx", Core::Base::lampLog::warningLevel::LOG);
     pugi::xml_node modOrderNode = doc.select_node("//node[@id='ModOrder']").node();
