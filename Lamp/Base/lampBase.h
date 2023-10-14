@@ -330,6 +330,11 @@ namespace Lamp::Core::Base{
         };
 
         std::list<std::string> poplist = {};
+        // Passthrough log.
+        lampTypes::lampReturn pLog(lampTypes::lampReturn data,warningLevel warningLevel = warningLevel::LOG,bool pop = false, errorCode errorCode = errorCode::LMP_UNK){
+            log(data.returnReason,warningLevel,pop,errorCode);
+            return data;
+        }
 
         void log(lampTypes::lampString data,warningLevel warningLevel = warningLevel::LOG,bool pop = false, errorCode errorCode = errorCode::LMP_UNK){
             lampTypes::lampString ping;

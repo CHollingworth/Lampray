@@ -104,18 +104,18 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
         return {-1, "Cannot clean working directories"};
     }
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 1;
-    Core::Base::lampLog::getInstance().log("Cleaning BG3 Mods & Native Mods Folders", Core::Base::lampLog::warningLevel::LOG);
-    try {
-        if(Lamp::Core::FS::lampIO::emptyFolder(keyInfo["appDataPath"] + "/Mods/")){
-            if(!Lamp::Core::FS::lampIO::emptyFolder(keyInfo["installDirPath"] + "/bin/NativeMods", "dll")){
-                return {-1, "Unable to empty NativeMods folder."};
-            }
-        }else{
-            return {-1, "Unable to empty Mods folder."};
-        }
-    }catch(std::exception e){
-        return {-1, "Unable to empty folders."};
-    }
+//    Core::Base::lampLog::getInstance().log("Cleaning BG3 Mods & Native Mods Folders", Core::Base::lampLog::warningLevel::LOG);
+//    try {
+//        if(Lamp::Core::FS::lampIO::emptyFolder(keyInfo["appDataPath"] + "/Mods/")){
+//            if(!Lamp::Core::FS::lampIO::emptyFolder(keyInfo["installDirPath"] + "/bin/NativeMods", "dll")){
+//                return {-1, "Unable to empty NativeMods folder."};
+//            }
+//        }else{
+//            return {-1, "Unable to empty Mods folder."};
+//        }
+//    }catch(std::exception e){
+//        return {-1, "Unable to empty folders."};
+//    }
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 2;
     Core::Base::lampLog::getInstance().log("Creating Working Directories", Core::Base::lampLog::warningLevel::LOG);
     try {
@@ -267,6 +267,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preDeployment() {
                     break;
                 case BG3_BIN_OVERRIDE:
                     Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"bin","bin");
+                    Lamp::Core::FS::lampExtract::moveModSpecificFileType(item, "dll", "bin");
                     break;
                 case BG3_DATA_OVERRIDE:
                     Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"Data","Data");
@@ -292,40 +293,102 @@ Lamp::Game::lampReturn Lamp::Game::BG3::deployment() {
     Lamp::Core::lampControl::getInstance().deplopmentTracker = {0,5};
 
     try {
-        std::filesystem::path sourceDirectory = (std::string) workingDir+"/bin/";
-        std::filesystem::path destinationDirectory = (std::string) keyInfo["installDirPath"]+"/bin/";
-        Core::Base::lampLog::getInstance().log("Copying Bin");
-        Lamp::Core::FS::lampIO::recursiveCopyWithIgnore(sourceDirectory,destinationDirectory,std::vector<std::string>{"NativeMods"});
+        Lamp::Core::FS::lampTrack::handleFileDescriptor A{
+            Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFilesIgnoreExt,
+            Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
+            workingDir+"/bin/",
+            keyInfo["installDirPath"]+"/bin/",
+            "NativeMods",
+            Ident().ReadableName
+        };
+        Lamp::Core::FS::lampTrack::handleFile(A);
         Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 1;
 
 
-        sourceDirectory = (std::string) workingDir+"/bin/NativeMods";
-        destinationDirectory = (std::string) (keyInfo["installDirPath"]+"/bin/NativeMods");
+
         Core::Base::lampLog::getInstance().log("Copying NativeMods");
-        Lamp::Core::FS::lampIO::copyExtensionWithConfigIgnore(sourceDirectory, destinationDirectory, ".dll");
+
+
+        Lamp::Core::FS::lampTrack::handleFileDescriptor B{
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyOnlyExt,
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
+                workingDir+"/bin/NativeMods",
+                keyInfo["installDirPath"]+"/bin/NativeMods",
+                ".dll",
+                Ident().ReadableName
+        };
+        Lamp::Core::FS::lampTrack::handleFile(B);
+
+        Lamp::Core::FS::lampTrack::handleFileDescriptor B2{
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyOnlyExt,
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::skipExisting,
+                workingDir+"/bin/NativeMods",
+                keyInfo["installDirPath"]+"/bin/NativeMods",
+                ".toml",
+                Ident().ReadableName
+        };
+        Lamp::Core::FS::lampTrack::handleFile(B2);
+
+        Lamp::Core::FS::lampTrack::handleFileDescriptor B3{
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyOnlyExt,
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::skipExisting,
+                workingDir+"/bin/NativeMods",
+                keyInfo["installDirPath"]+"/bin/NativeMods",
+                ".ini",
+                Ident().ReadableName
+        };
+        Lamp::Core::FS::lampTrack::handleFile(B3);
+
         Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 2;
 
-
-        sourceDirectory = (std::string)workingDir+"/Data/";
-        destinationDirectory = (std::string)keyInfo["installDirPath"]+"/Data/";
         Core::Base::lampLog::getInstance().log("Copying Data");
-        std::filesystem::copy(sourceDirectory, destinationDirectory, std::filesystem::copy_options::update_existing | std::filesystem::copy_options::recursive);
+        Lamp::Core::FS::lampTrack::handleFileDescriptor C{
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFolder,
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
+                workingDir+"/Data/",
+                keyInfo["installDirPath"]+"/Data/",
+                "",
+                Ident().ReadableName
+        };
+        Lamp::Core::FS::lampTrack::handleFile(C);
+
+
         Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 3;
 
-        sourceDirectory = (std::string)workingDir+"/Mods";
-        destinationDirectory = (std::string)KeyInfo()["appDataPath"]+"/Mods/";
         Core::Base::lampLog::getInstance().log("Copying Mods");
-        std::filesystem::copy(sourceDirectory, destinationDirectory, std::filesystem::copy_options::update_existing | std::filesystem::copy_options::recursive);
+
+        Lamp::Core::FS::lampTrack::handleFileDescriptor D{
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFolder,
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
+                workingDir+"/Mods",
+                KeyInfo()["appDataPath"]+"/Mods/",
+                "",
+                Ident().ReadableName
+        };
+        Lamp::Core::FS::lampTrack::handleFile(D);
+
+
+
+
         Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 4;
 
-        sourceDirectory =  (std::string)workingDir+"/PlayerProfiles";
-        destinationDirectory = (std::string)KeyInfo()["appDataPath"]+"/PlayerProfiles/";
         Core::Base::lampLog::getInstance().log("Copying ModProfile");
-        std::filesystem::copy(sourceDirectory, destinationDirectory, std::filesystem::copy_options::update_existing | std::filesystem::copy_options::recursive);
+
+        Lamp::Core::FS::lampTrack::handleFileDescriptor E{
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFolder,
+                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
+                workingDir+"/PlayerProfiles",
+                KeyInfo()["appDataPath"]+"/PlayerProfiles/",
+                "",
+                Ident().ReadableName
+        };
+        Lamp::Core::FS::lampTrack::handleFile(E);
+
         Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 5;
 
         return {1, "Deployed"};
     } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
         return {0, "Deployment Failed."};
     }
 }

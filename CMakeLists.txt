@@ -43,6 +43,7 @@ add_executable(Lamp main.cpp
         Lamp/Control/lampGames.h
         Lamp/Filesystem/lampShare.cpp
         Lamp/Menu/lampColour.h
+        Lamp/Filesystem/lampTrack.cpp
 )
 
 

@@ -39,7 +39,7 @@ namespace Lamp::Core {
         char searchBuffer[250]{};
 
         std::map<lampString, lampString> lampFlags = {
-                {"showIntroMenu", "1"}
+                {"showIntroMenu", "1"},
         };
 
         ImGuiWindowFlags DefaultWindowFlags();

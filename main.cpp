@@ -479,6 +479,7 @@ int main(int, char**)
 
         for (Lamp::Game::gameControl *element: Lamp::Games::getInstance().gameList){
             std::filesystem::create_directories(std::filesystem::path(Lamp::Core::lampConfig::getInstance().DeploymentDataPath + element->Ident().ReadableName));
+            std::filesystem::create_directories(std::filesystem::path(Lamp::Core::lampConfig::getInstance().archiveDataPath + element->Ident().ReadableName + "/GameFiles"));
         }
 
     } catch (std::exception ex) {

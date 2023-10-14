@@ -11,8 +11,6 @@
 #include "../Base/lampBase.h"
 #include "../Control/lampConfig.h"
 
-
-
 namespace Lamp::Core::FS{
     typedef Base::lampTypes::lampString lampString;
     typedef Base::lampTypes::lampReturn lampReturn;
@@ -22,8 +20,6 @@ namespace Lamp::Core::FS{
         static lampReturn extract(const Base::lampMod::Mod * mod);
         static lampReturn moveModSpecificFileType(const Base::lampMod::Mod * mod, Lamp::Core::FS::lampString extension, lampString localExtractionPath);
         static lampReturn moveModSpecificFolder(const Base::lampMod::Mod * mod, Lamp::Core::FS::lampString extension, lampString localExtractionPath);
-
-
 
     private:
         static lampReturn copyFile(const std::filesystem::path& source, const std::filesystem::path& destination);
@@ -43,9 +39,7 @@ namespace Lamp::Core::FS{
 
         static lampReturn emptyFolder(lampString Path, lampString SpecificExtension = "");
 
-        static void recursiveCopyWithIgnore(const std::filesystem::path &source, const std::filesystem::path &destination, const std::vector<std::string> &ignoreFolders);
-        static void copyExtensionWithConfigIgnore(const std::filesystem::path &sourceDir, const std::filesystem::path &destDir, std::string nonIgnoredExtension);
-        static void fileDrop(GLFWwindow* window, int count, const char** paths);
+         static void fileDrop(GLFWwindow* window, int count, const char** paths);
 
         static lampReturn downloadFile(lampString url, lampString output_filename);
 
@@ -93,5 +87,97 @@ namespace Lamp::Core::FS{
     private:
         lampUpdate(){}
     };
+
+    class lampTrack{
+    private:
+
+        enum trackedFileType{
+            GameFile = 0,
+            ModFile
+        };
+
+        struct trackedFile{
+        public:
+            std::string game;
+            std::string gameLocation; // relative path from games root.
+            std::string fileHash;
+            trackedFileType type; // 0 - GameFile, 1 - ModFile
+        };
+
+
+
+
+        constexpr static unsigned int crc32(const char* data, size_t length) {
+            unsigned int crc = 0xFFFFFFFF;
+            for (size_t i = 0; i < length; ++i) {
+                crc ^= static_cast<unsigned int>(data[i]);
+                for (int j = 0; j < 8; ++j) {
+                    crc = (crc >> 1) ^ (0xEDB88320 & (-int(crc & 1)));
+                }
+            }
+            return ~crc;
+        }
+
+        static bool doesHashExist(const std::string& game, const std::string& hash);
+
+        static bool doesFilenameExist(const std::string& game, const std::string& filename);
+
+        static std::string getHash(std::filesystem::path FilePath);
+
+        static void loadTracker(const std::string& filename);
+        static void saveTracker(const std::string& filename, const std::vector<trackedFile>& files);
+
+        static void recursiveCopyWithIgnore(const std::filesystem::path &source, const std::filesystem::path &destination, const std::vector<std::string> &ignoreFolders,std::filesystem::copy_options options, std::string game);
+        static void copyExtensionWithFileTypeIgnore(const std::filesystem::path &sourceDir, const std::filesystem::path &destDir, std::string nonIgnoredExtension,std::filesystem::copy_options options, std::string game);
+        static void copyAndOperate(const std::filesystem::path& source, const std::filesystem::path& destination, std::string game);
+        static lampReturn trackOperation(const std::string& file, const std::string& destination, const std::string &game);
+
+        static std::vector<trackedFile>& getTrackedFiles() {
+            static std::vector<trackedFile> trackedFiles;
+            return trackedFiles;
+        }
+
+        static void replaceGameFile(const std::filesystem::path& gameFilePath, const std::filesystem::path& gameFilesFolder);
+        static void deleteModFile(const std::filesystem::path& modFilePath);
+
+        public:
+
+
+
+
+        struct handleFileDescriptor{
+        public:
+            enum operation{
+                copyFile, // directly copy filePath to target.
+                copyFolder, // copy a folder and its content recursively.
+                copyFilesIgnoreExt, // copy a folder and its content recursively ignoring a folder with the name of extName.
+                copyOnlyExt, // copy a folder and its content recursively with the extension of extName.
+            };
+
+            enum mode{
+                direct,
+                skipExisting,
+                updateExisting
+            };
+
+            operation handlerOperation;
+            mode handlerMode;
+            std::filesystem::path filePath;
+            std::filesystem::path target;
+            std::filesystem::copy_options copyOperationOptions = std::filesystem::copy_options::recursive;
+            std::string gameFullName;
+            std::string extName;
+
+            handleFileDescriptor(operation handlerOperation, mode handlerMode, std::filesystem::path filePath,
+                                 std::filesystem::path target, std::string extName, std::string gameFullName)
+                    : handlerOperation(handlerOperation), filePath(filePath), extName(extName), target(target),
+                      handlerMode(handlerMode), gameFullName(gameFullName) {}
+        };
+        static Lamp::Core::lampReturn handleFile(handleFileDescriptor descriptor);
+        //static void forcefulTrack();
+
+        static void reset(std::string gameFullReadableName);
+
+        };
 }
 #endif //LAMP_LAMPFS_H
