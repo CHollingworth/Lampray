@@ -53,8 +53,15 @@ If you want early information about lamp, and how things are progressing join me
 - Curl
 
 ## Building
-See Wiki
 
+This will install asdf and other specific versions of tooling required.
+
+```sh
+./setup.sh
+./build.sh Debug # or ./build.sh Release
+```
+
+For more information See Wiki
 
 ## Contributing
 
