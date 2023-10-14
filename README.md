@@ -19,7 +19,7 @@ If you want early information about lamp, and how things are progressing join me
 - [ ] Morrowind
 - [ ] The Sims 4
 
-## List of currently suppoted archives
+## List of currently supported archives
 - zip
 - 7z
 - rar (Not supported on arch)
@@ -28,21 +28,21 @@ If you want early information about lamp, and how things are progressing join me
 
 ### Road to 1.1.0
 - [X] Profile Support
-- [ ] Persistant Data Paths
-- [ ] Game Intigration Guide
-- [ ] Independed modsettings creation.
+- [ ] Persistent Data Paths
+- [ ] Game Integration Guide
+- [ ] Independent modsettings creation.
 - [X] Easy Modlist Sharing
 - [X] Full Lamp::Core Rewrite
 - [ ] Wayland Native Builds
-- [ ] Impliment OverlayFS as a replacement for pure file duplication
+- [ ] Implement OverlayFS as a replacement for pure file duplication
       
 ### Unessential but nice ideas
 - [X] Lamp Specific Colour Scheme
 
 ### Bethesda Support
-- [ ] Loot Lib Intigration
+- [ ] Loot Lib Integration
 - [ ] FoMod Parsing
-- [ ] BSA/ESP Archvive Metadata collection
+- [ ] BSA/ESP Archive Metadata collection
 
 ## Running Requirements
 - Vulkan Support
