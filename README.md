@@ -30,11 +30,12 @@ If you want early information about lamp, and how things are progressing join me
 - [X] Profile Support
 - [ ] Persistant Data Paths
 - [ ] Game Intigration Guide
-- [ ] Independed modsettings creation.
+- [X] Seperate modsettings creation.
 - [X] Easy Modlist Sharing
 - [X] Full Lamp::Core Rewrite
 - [ ] Wayland Native Builds
-- [ ] Impliment OverlayFS as a replacement for pure file duplication
+- [X] ~Impliment OverlayFS as a replacement for pure file duplication~ File tracking has been added instead.
+- [ ] Bethesda Support.
       
 ### Unessential but nice ideas
 - [X] Lamp Specific Colour Scheme
