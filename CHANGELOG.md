@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/airtonix/Lamp/compare/v1.1.2...v1.1.3) (2023-10-15)
+
+
+### Bug Fixes
+
+* 2-use-correct-release-tag-output ([#11](https://github.com/airtonix/Lamp/issues/11)) ([ffac327](https://github.com/airtonix/Lamp/commit/ffac327c6b450c9c61e6e657cb794e96cdb8d959))
+
 ## [1.1.2](https://github.com/airtonix/Lamp/compare/v1.1.1...v1.1.2) (2023-10-15)
 
 
