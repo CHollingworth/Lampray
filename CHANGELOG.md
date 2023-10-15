@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/airtonix/Lamp/compare/v1.1.0...v1.1.1) (2023-10-15)
+
+
+### Bug Fixes
+
+* 46 provide automated build system ([#6](https://github.com/airtonix/Lamp/issues/6)) ([66d5f73](https://github.com/airtonix/Lamp/commit/66d5f73b61c07661bc1fbaa6e70fb05803113711))
+
 ## [1.1.0](https://github.com/airtonix/Lamp/compare/v1.0.0...v1.1.0) (2023-10-13)
 
 
