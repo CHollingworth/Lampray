@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/airtonix/Lamp/compare/v1.1.1...v1.1.2) (2023-10-15)
+
+
+### Bug Fixes
+
+* 1-bump-version-in-app ([#9](https://github.com/airtonix/Lamp/issues/9)) ([bf0c82c](https://github.com/airtonix/Lamp/commit/bf0c82c122bedd9b62c1b558d3cb62713987ea54))
+
 ## [1.1.1](https://github.com/airtonix/Lamp/compare/v1.1.0...v1.1.1) (2023-10-15)
 
 
