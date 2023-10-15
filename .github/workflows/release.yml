@@ -81,6 +81,6 @@ jobs:
             echo "OFFLINE: skipping upload"
             cp -r ./build/Lamp ./build/lamp-x11-${RELEASE_TAG}
           else
-            gh release upload ${RELEASE_TAG} ./build/lamp#lamp-x11-${RELEASE_TAG}
+            gh release upload ${RELEASE_TAG} ./build/Lamp#lamp-x11-${RELEASE_TAG}
           fi
           
