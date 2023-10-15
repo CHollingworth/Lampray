@@ -10,7 +10,7 @@ permissions:
 name: Release Management
 
 jobs:
-  release-please:
+  ReleaseAutomation:
     
     runs-on: ubuntu-22.04
 

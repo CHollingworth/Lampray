@@ -9,7 +9,7 @@ on:
       - synchronize
 
 jobs:
-  lint:
+  LintPrTitle:
     runs-on: ubuntu-latest
     permissions:
       statuses: write
