@@ -32,7 +32,7 @@ jobs:
       - name: Declare Release Created
         id: release
         env:
-            RELEASE_PLEASE_TAG: ${{ steps.release-please.outputs.release_tag }}
+            RELEASE_PLEASE_TAGNAME: ${{ steps.release-please.outputs.tag_name }}
             RELEASE_PLEASE_RELEASES_CREATED: ${{ steps.release-please.outputs.releases_created }}
         run: |
           if [ "${{ env.ACT }}" = "true" ]; then
@@ -43,7 +43,7 @@ jobs:
           elif [ "${RELEASE_PLEASE_RELEASES_CREATED}" = "true" ]; then
             echo "ONLINE: release created"
             echo "releases_created=true" >> $GITHUB_OUTPUT
-            echo "release_tag=${RELEASE_PLEASE_TAG}" >> $GITHUB_OUTPUT
+            echo "release_tag=${RELEASE_PLEASE_TAGNAME}" >> $GITHUB_OUTPUT
 
           else 
             echo "ONLINE: release not created"
