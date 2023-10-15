@@ -44,6 +44,8 @@ add_executable(Lamp main.cpp
         Lamp/Filesystem/lampShare.cpp
         Lamp/Menu/lampColour.h
         Lamp/Filesystem/lampTrack.cpp
+        game-data/SSE/SSE.cpp
+        game-data/SSE/SSE.h
 )
 
 
