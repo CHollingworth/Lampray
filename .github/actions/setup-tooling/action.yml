@@ -1,0 +1,64 @@
+name: Setup Asdf
+
+description: provisions tooling
+
+inputs:
+  SetupCommand:
+    description: "Command to run"
+    required: false
+    default: ./setup.bash
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Ensure setup command available
+      shell: bash
+      env:
+        SETUP_COMMAND: ${{inputs.SetupCommand}}
+      run: |
+        if [ ! -f ${SETUP_COMMAND} ]; then
+          echo "🛑 Missing action input SetupCommand."
+          exit 1
+        fi
+
+    - uses: actions/cache@v3
+      id: online-asdf-cache
+      if: ${{ !env.ACT }}
+      with:
+        path: ~/.asdf
+        key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
+        restore-keys: |
+          ${{ runner.os }}-asdf-
+    #
+    # This step serves as an interop layer between the online and offline
+    # when online, we use github cache and this step will report if the cache was hit
+    # when offline, we use act and this step will report that the cache was not hit
+    - name: act cache interop
+      shell: bash
+      id: cache
+      run: |
+        if [ "${{ env.ACT }}" = "true" ]; then 
+          echo "OFFLINE: no cache"
+          echo "cache-hit=false" >> $GITHUB_OUTPUT
+        elif [ "${{ steps.online-asdf-cache.outputs.cache-hit }}" = "true" ]; then 
+          echo "ONLINE: cache available"
+          echo "cache-hit=${{ steps.online-asdf-cache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
+        fi
+
+    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+
+    - name: asdf install
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        SETUP_COMMAND: ${{inputs.SetupCommand}}
+      run: ${SETUP_COMMAND}
+
+    - name: set asdf path
+      shell: bash
+      run: |
+        echo "$HOME/.asdf/bin" >> $GITHUB_PATH
+        echo "$HOME/.asdf/shims" >> $GITHUB_PATH
