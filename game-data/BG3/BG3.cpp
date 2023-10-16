@@ -76,12 +76,12 @@ Lamp::Game::lampReturn Lamp::Game::BG3::startDeployment() {
         return result;
     });
 
-    Core::Base::LampSequencer::add("BG3 Deployment Queue", [this]() -> lampReturn {
-        Lamp::Core::lampControl::getInstance().deploymentStageTitle = "Deploying";
-        auto result = deployment();
-        if(!result) Core::Base::lampLog::getInstance().log("Deployment has failed.", Core::Base::lampLog::warningLevel::ERROR, true, Core::Base::lampLog::LMP_DEOPLYMENTFAILED);
-        return result;
-    });
+//    Core::Base::LampSequencer::add("BG3 Deployment Queue", [this]() -> lampReturn {
+//        Lamp::Core::lampControl::getInstance().deploymentStageTitle = "Deploying";
+//        auto result = deployment();
+//        if(!result) Core::Base::lampLog::getInstance().log("Deployment has failed.", Core::Base::lampLog::warningLevel::ERROR, true, Core::Base::lampLog::LMP_DEOPLYMENTFAILED);
+//        return result;
+//    });
 
 
     Core::Base::LampSequencer::run("BG3 Deployment Queue");
