@@ -9,11 +9,56 @@
 #include <regex>
 #include "../Control/lampConfig.h"
 #include "../../third-party/json/json.hpp"
+#include "pugixml.hpp"
 
 namespace Lamp::Core::Parse{
     class lampFoModParser{
+    public:
+        struct FileDependency {
+            std::string file;
+            std::string state;
+        };
 
-    };
+        struct ConditionFlag {
+            std::string name;
+            std::string value;
+        };
+
+        struct Plugin {
+            std::string name;
+            std::string description;
+            std::string imagePath;
+            std::vector<ConditionFlag> conditionFlags;
+            std::vector<FileDependency> fileDependencies;
+        };
+
+        struct ConditionalPattern {
+            std::vector<FileDependency> fileDependencies;
+            std::string folderSource;
+            std::string folderDestination;
+            int priority;
+        };
+
+        struct Group {
+            std::string name;
+            std::string type;
+            std::vector<Plugin> plugins;
+        };
+
+        struct InstallStep {
+            std::string name;
+            std::string description;
+            std::string imagePath;
+            std::vector<Group> groups;
+            std::vector<ConditionalPattern> conditionalPatterns;
+        };
+
+
+        static void parse(std::string pathToDocument);
+
+
+        };
+
 
     class lampBG3PakParser{
     public:

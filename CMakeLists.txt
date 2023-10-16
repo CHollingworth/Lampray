@@ -46,6 +46,7 @@ add_executable(Lamp main.cpp
         Lamp/Filesystem/lampTrack.cpp
         game-data/SSE/SSE.cpp
         game-data/SSE/SSE.h
+        Lamp/Parse/lampFoMod.cpp
 )
 
 

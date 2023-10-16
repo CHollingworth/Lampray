@@ -489,6 +489,8 @@ int main(int, char**)
 
     Lamp::Core::Base::lampLog::getInstance().log("Directories Created");
 
+    Lamp::Core::Parse::lampFoModParser::parse(Lamp::Core::lampConfig::getInstance().baseDataPath+ "ModuleConfig.xml");
+
     Lamp::Core::lampColour::getInstance().getConfigColours();
     // Main loop
     while (!glfwWindowShouldClose(window))
