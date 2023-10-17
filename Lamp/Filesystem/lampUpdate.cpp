@@ -34,7 +34,7 @@ void Lamp::Core::FS::lampUpdate::checkForUpdates() {
 
 void Lamp::Core::FS::lampUpdate::getExpression() {
     auto style = ImGui::GetStyle();
-    float buttonWidth1 = ImGui::CalcTextSize(("v"+versionNumber + ".1 CyberpunkTest - Canary").c_str()).x + style.FramePadding.x * 2.f;
+    float buttonWidth1 = ImGui::CalcTextSize(("v"+versionNumber).c_str()).x + style.FramePadding.x * 2.f;
     float widthNeeded = buttonWidth1;
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - widthNeeded);
 
@@ -46,6 +46,6 @@ void Lamp::Core::FS::lampUpdate::getExpression() {
             system(openCommand.c_str());
         }
     }else{
-        ImGui::Text(("v"+versionNumber + ".1 CyberpunkTest - Canary").c_str());
+        ImGui::Text(("v"+versionNumber).c_str());
     }
 }
