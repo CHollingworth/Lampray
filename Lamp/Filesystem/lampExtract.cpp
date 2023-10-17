@@ -93,7 +93,7 @@ Lamp::Core::lampReturn Lamp::Core::FS::lampExtract::copyDirectoryRecursively(con
         fs::path destinationEntry = destination / entry.path().filename();
 
         if (fs::is_directory(entry)) {
-            fs::create_directory(destinationEntry);
+            fs::create_directories(destinationEntry);
             lampReturn result = copyDirectoryRecursively(entry, destinationEntry);
             if (!result) {
                 return result; // Propagate the error if copying failed
