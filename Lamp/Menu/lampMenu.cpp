@@ -146,15 +146,21 @@ void Lamp::Core::lampMenu::ModMenu() {
 
         if(ImGui::Button("Start")){
             deployCheck = !deployCheck;
+
             std::thread([] {
-                Lamp::Games::getInstance().currentGame->startDeployment();
-
-                if((std::string)Lamp::Core::FS::lampIO::loadKeyData("previousDeployment", "LAMP_CONFIG").returnReason != (std::string)(Lamp::Games::getInstance().currentGame->Ident().ShortHand + "##" + Lamp::Games::getInstance().currentProfile)){
+                Lamp::Core::Base::LampSequencer::add("Deployment Start",[]() -> lampReturn {
                     Lamp::Core::FS::lampTrack::reset(Lamp::Games::getInstance().currentGame->Ident().ReadableName);
-                }
 
-                Lamp::Core::FS::lampIO::saveKeyData("previousDeployment", (std::string)(Lamp::Games::getInstance().currentGame->Ident().ShortHand + "##" + Lamp::Games::getInstance().currentProfile), "LAMP_CONFIG");
+                    return Lamp::Core::Base::lampLog::getInstance().pLog({1, "Task Complete."});
+                });
+                Lamp::Core::Base::LampSequencer::add("Deployment Start",[]() -> lampReturn {
+                    Lamp::Games::getInstance().currentGame->startDeployment();
+                    return Lamp::Core::Base::lampLog::getInstance().pLog({1, "Task Complete."});
+                });
+
+                Lamp::Core::Base::LampSequencer::run("Deployment Start");
             }).detach();
+
         }
         ImGui::SameLine();
         if(ImGui::Button("Go Back")){ deployCheck = !deployCheck; }

@@ -118,6 +118,7 @@ Lamp::Core::FS::lampTrack::handleFile(Lamp::Core::FS::lampTrack::handleFileDescr
             recursiveCopyWithIgnore(descriptor.filePath, descriptor.target,std::vector<std::string>{descriptor.extName},descriptor.copyOperationOptions,descriptor.gameFullName);
             break;
         case handleFileDescriptor::copyOnlyExt:
+            std::filesystem::create_directories(descriptor.target);
             copyExtensionWithFileTypeIgnore(descriptor.filePath, descriptor.target, descriptor.extName, descriptor.copyOperationOptions,descriptor.gameFullName);
             break;
     }
@@ -215,7 +216,9 @@ Lamp::Core::FS::lampTrack::trackOperation(const std::string &file, const std::st
 
         getTrackedFiles().push_back(newTrackedFile);
         saveTracker(lampConfig::getInstance().ConfigDataPath+"lampTrack.mdf", getTrackedFiles());
-        std::filesystem::copy(destPath, lampConfig::getInstance().archiveDataPath+game+"/GameFiles/");
+        if(!std::filesystem::exists(lampConfig::getInstance().archiveDataPath+game+"/GameFiles/"+destPath.filename().string())) {
+            std::filesystem::copy(destPath, lampConfig::getInstance().archiveDataPath + game + "/GameFiles/");
+        }
         return Base::lampLog::getInstance().pLog({1, sourcePath.filename().string() + " tracking created."});
 
     } else {
@@ -280,7 +283,9 @@ void Lamp::Core::FS::lampTrack::replaceGameFile(const std::filesystem::path &gam
         std::filesystem::path gameFilesPath = gameFilesFolder / gameFileName;
 
         if (std::filesystem::exists(gameFilesPath) && std::filesystem::is_regular_file(gameFilesPath)) {
-            std::filesystem::rename(gameFilesPath, gameFilePath);
+            //std::filesystem::rename(gameFilesPath, gameFilePath);
+            std::filesystem::copy_file(gameFilesPath,gameFilePath, std::filesystem::copy_options::overwrite_existing);
+
             std::cout << "GameFile replaced: " << gameFilePath << std::endl;
             // Remove the processed file from the trackedFiles vector
             getTrackedFiles().erase(
