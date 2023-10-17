@@ -104,18 +104,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
         return {-1, "Cannot clean working directories"};
     }
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 1;
-//    Core::Base::lampLog::getInstance().log("Cleaning BG3 Mods & Native Mods Folders", Core::Base::lampLog::warningLevel::LOG);
-//    try {
-//        if(Lamp::Core::FS::lampIO::emptyFolder(keyInfo["appDataPath"] + "/Mods/")){
-//            if(!Lamp::Core::FS::lampIO::emptyFolder(keyInfo["installDirPath"] + "/bin/NativeMods", "dll")){
-//                return {-1, "Unable to empty NativeMods folder."};
-//            }
-//        }else{
-//            return {-1, "Unable to empty Mods folder."};
-//        }
-//    }catch(std::exception e){
-//        return {-1, "Unable to empty folders."};
-//    }
+    // Phantom Step.
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 2;
     Core::Base::lampLog::getInstance().log("Creating Working Directories", Core::Base::lampLog::warningLevel::LOG);
     try {
