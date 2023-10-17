@@ -59,7 +59,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::ConfigMenu() {
 Lamp::Game::lampReturn Lamp::Game::BG3::startDeployment() {
     Lamp::Core::lampControl::getInstance().inDeployment = true;
     if(KeyInfo()["installDirPath"] == "" | KeyInfo()["appDataPath"] == "" ) {
-        Core::Base::lampLog::getInstance().log("Game Configuration not set.", Core::Base::lampLog::warningLevel::WARNING, true, Core::Base::lampLog::LMP_NOCONFIG);
+        return Core::Base::lampLog::getInstance().pLog({0, "Game Configuration not set."}, Core::Base::lampLog::warningLevel::WARNING, true, Core::Base::lampLog::LMP_NOCONFIG);
     }
 
     Core::Base::LampSequencer::add("BG3 Deployment Queue", [this]() -> lampReturn {
