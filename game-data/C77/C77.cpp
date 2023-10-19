@@ -53,7 +53,7 @@ namespace Lamp {
 
         lampReturn C77::startDeployment() {
             Lamp::Core::lampControl::getInstance().inDeployment = true;
-            if(KeyInfo()["installDirPath"] == "" ) {
+            if(KeyInfo()["installPath"] == "" ) {
                 return Core::Base::lampLog::getInstance().pLog({0, "Game Configuration not set."}, Core::Base::lampLog::warningLevel::WARNING, true, Core::Base::lampLog::LMP_NOCONFIG);
             }
 
