@@ -40,7 +40,7 @@ void Lamp::Core::FS::lampUpdate::getExpression() {
 
 
     if(versionNumber == "Update Available!") {
-        if (ImGui::Button(versionNumber.c_str())) {
+        if (ImGui::Button((versionNumber).c_str())) {
             const char* url = "https://github.com/CHollingworth/Lamp/releases/latest";
             std::string openCommand = "xdg-open " + std::string(url);
             system(openCommand.c_str());
