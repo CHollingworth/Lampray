@@ -39,7 +39,7 @@ namespace Lamp::Core::FS{
 
         static lampReturn emptyFolder(lampString Path, lampString SpecificExtension = "");
 
-         static void fileDrop(GLFWwindow* window, int count, const char** paths);
+         static void fileDrop(const char *inputPath);
 
         static lampReturn downloadFile(lampString url, lampString output_filename);
 

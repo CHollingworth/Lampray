@@ -59,9 +59,9 @@ bool Lamp::Core::FS::lampTrack::doesHashExist(const std::string &game, const std
     }
 
     if (doc.save_file(filename.c_str())) {
-        std::cout << "Tracker data saved to " << filename << std::endl;
+       Lamp::Core::Base::lampLog::getInstance().log("Tracker data saved to " + filename, Base::lampLog::LOG);
     } else {
-        std::cerr << "Error saving tracker data to " << filename << std::endl;
+        Lamp::Core::Base::lampLog::getInstance().log("Error saving tracker data to " + filename, Lamp::Core::Base::lampLog::ERROR);
     }
 }
 
@@ -81,9 +81,9 @@ void Lamp::Core::FS::lampTrack::loadTracker(const std::string& filename) {
             getTrackedFiles().push_back(file);
         }
 
-        std::cout << "Tracker data loaded from " << filename << std::endl;
+        Lamp::Core::Base::lampLog::getInstance().log("Tracker data loaded from " + filename, Base::lampLog::LOG);
     } else {
-        std::cerr << "Error loading tracker data from " << filename << std::endl;
+        Lamp::Core::Base::lampLog::getInstance().log("Error loading tracker data from " + filename, Lamp::Core::Base::lampLog::ERROR);
     }
 }
 
@@ -149,7 +149,7 @@ void Lamp::Core::FS::lampTrack::recursiveCopyWithIgnore(const std::filesystem::p
                 }
             }
             catch (const std::filesystem::filesystem_error &e) {
-                std::cerr << "Error copying file: " << e.what() << std::endl;
+                Lamp::Core::Base::lampLog::getInstance().log("Error copying file: " + (std::string)e.what(), Lamp::Core::Base::lampLog::ERROR);
             }
         }
     }
@@ -237,7 +237,7 @@ Lamp::Core::FS::lampTrack::trackOperation(const std::string &file, const std::st
 void Lamp::Core::FS::lampTrack::copyAndOperate(const std::filesystem::path &source,
                                                const std::filesystem::path &destination, std::string game) {
     if (!std::filesystem::exists(source)) {
-        std::cerr << "Source does not exist: " << source << std::endl;
+        Lamp::Core::Base::lampLog::getInstance().log("Source does not exist: " + (std::string)source, Lamp::Core::Base::lampLog::ERROR);
         return;
     }
     if (std::filesystem::is_directory(source)) {
@@ -286,7 +286,7 @@ void Lamp::Core::FS::lampTrack::replaceGameFile(const std::filesystem::path &gam
             //std::filesystem::rename(gameFilesPath, gameFilePath);
             std::filesystem::copy_file(gameFilesPath,gameFilePath, std::filesystem::copy_options::overwrite_existing);
 
-            std::cout << "GameFile replaced: " << gameFilePath << std::endl;
+            Lamp::Core::Base::lampLog::getInstance().log("GameFile replaced: " + (std::string)gameFilePath, Lamp::Core::Base::lampLog::LOG);
             // Remove the processed file from the trackedFiles vector
             getTrackedFiles().erase(
                     std::remove_if(getTrackedFiles().begin(), getTrackedFiles().end(),
@@ -297,10 +297,10 @@ void Lamp::Core::FS::lampTrack::replaceGameFile(const std::filesystem::path &gam
 
 
         } else {
-            std::cerr << "GameFile counterpart not found: " << gameFilesPath << std::endl;
+            Lamp::Core::Base::lampLog::getInstance().log("GameFile counterpart not found: " + (std::string)gameFilesPath, Lamp::Core::Base::lampLog::ERROR);
         }
     } else {
-        std::cerr << "GameFile not found or is not a regular file: " << gameFilePath << std::endl;
+        Lamp::Core::Base::lampLog::getInstance().log("GameFile not found or is not a regular file: " + (std::string)gameFilePath, Lamp::Core::Base::lampLog::ERROR);
     }
 }
 
@@ -315,9 +315,9 @@ void Lamp::Core::FS::lampTrack::deleteModFile(const std::filesystem::path &modFi
                                }),
                 getTrackedFiles().end());
 
-        std::cout << "ModFile deleted: " << modFilePath << std::endl;
+        Lamp::Core::Base::lampLog::getInstance().log("ModFile deleted: " + (std::string)modFilePath, Lamp::Core::Base::lampLog::LOG);
     } else {
-        std::cerr << "ModFile not found or is not a regular file: " << modFilePath << std::endl;
+        Lamp::Core::Base::lampLog::getInstance().log("ModFile not found or is not a regular file: " + (std::string)modFilePath, Lamp::Core::Base::lampLog::LOG);
     }
 }
 

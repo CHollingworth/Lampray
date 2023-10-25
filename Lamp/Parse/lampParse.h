@@ -71,8 +71,6 @@ namespace Lamp::Core::Parse{
                             if (match.size() > 1) {
                                 value = match[1];
                             }
-                        } else {
-                            std::cout << "No match found." << std::endl;
                         }
 
                         if(attribute.find("Folder") != std::string::npos){
@@ -273,9 +271,10 @@ namespace Lamp::Core::Parse{
                    std::vector<std::string> seenAttr;
                    extractMetadataFromLSX(std::string(ucFile.data(), ucFile.size()));
 
-                   return 1;
+
 
                }}
+            return 1;
         }
         static bool collectJsonData(std::string ArchivePath){
             std::string workingDir = Lamp::Core::lampConfig::getInstance().DeploymentDataPath + "/Baldur's Gate 3";

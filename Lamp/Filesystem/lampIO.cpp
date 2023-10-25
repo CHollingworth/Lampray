@@ -182,13 +182,11 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampIO::loadKeyData(Lamp::Core::FS::l
 }
 
 
-void Lamp::Core::FS::lampIO::fileDrop(GLFWwindow *window, int count, const char **paths) {
-    int i;
-    for (i = 0; i < count; i++) {
+void Lamp::Core::FS::lampIO::fileDrop(const char *inputPath) {
         // Thank you! Roi Danton on stackoverflow for this clean code.
-        std::string pth = paths[i];
+        std::string pth = inputPath;
         Base::lampLog::getInstance().log("File Drop Detected: " + pth);
-        std::filesystem::path path(paths[i]);
+        std::filesystem::path path(inputPath);
         std::error_code ec;
         if (std::filesystem::is_regular_file(path, ec)) {
             if (std::regex_match(path.filename().string(), std::regex("^.*\\.(zip|rar|7z)$"))) {
@@ -217,7 +215,6 @@ void Lamp::Core::FS::lampIO::fileDrop(GLFWwindow *window, int count, const char 
             Base::lampLog::getInstance().log("ec: " + ec.message(), Base::lampLog::ERROR, true,
                                              Base::lampLog::LMP_NOFILEDROP);
         }
-    }
 }
 
 

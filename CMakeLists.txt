@@ -12,15 +12,12 @@ add_executable(Lamp main.cpp
         third-party/imgui/imgui.h
         third-party/imgui/imgui_demo.cpp
         third-party/imgui/imgui_draw.cpp
-        third-party/imgui/imgui_impl_vulkan.cpp
-        third-party/imgui/imgui_impl_vulkan.h
         third-party/imgui/imgui_internal.h
         third-party/imgui/imgui_tables.cpp
         third-party/imgui/imgui_widgets.cpp
         third-party/imgui/imstb_rectpack.h
         third-party/imgui/imstb_textedit.h
         third-party/imgui/imstb_truetype.h
-        third-party/imgui/imgui_impl_glfw.cpp
         third-party/json/json.hpp
         game-data/gameControl.h
         third-party/l4z/lz4.c
@@ -46,6 +43,8 @@ add_executable(Lamp main.cpp
         Lamp/Filesystem/lampTrack.cpp
         game-data/C77/C77.cpp
         game-data/C77/C77.h
+        third-party/imgui/imgui_impl_sdl2.cpp
+        third-party/imgui/imgui_impl_sdlrenderer2.cpp
 )
 
 
@@ -60,16 +59,13 @@ target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/third-party/nfd/lib/li
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/third-party/nfd/include/include/nfd.h )
 
 
+# Find the SDL2 package
+find_package(SDL2 REQUIRED)
 
-pkg_search_module(GLFW REQUIRED glfw3)
-include_directories(${GLFW_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARIES})
+# Include SDL2 headers
+include_directories(${SDL2_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 
-
-
-find_package(Vulkan REQUIRED)
-target_include_directories(${PROJECT_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
 
 find_package(pugixml REQUIRED)
 target_link_libraries(${PROJECT_NAME} pugixml::pugixml)
