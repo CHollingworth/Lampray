@@ -14,20 +14,9 @@ namespace Lamp::Core {
     typedef Core::Base::lampTypes::lampString lampString;
     typedef Core::Base::lampTypes::lampHexAlpha lampHex;
     typedef Core::Base::lampTypes::lampReturn lampReturn;
-
-/**
- * @brief The `lampConfig` class manages configuration settings and data paths for Lamp.
- *
- * The `lampConfig` class provides access to Lamp's configuration settings, data paths, and other
- * configuration-related functionality.
- */
     class lampConfig {
     public:
-        /**
-         * @brief Gets the singleton instance of the `lampConfig` class.
-         *
-         * @return The reference to the singleton instance.
-         */
+
         static lampConfig& getInstance()
         {
             static lampConfig instance;
@@ -53,27 +42,14 @@ namespace Lamp::Core {
                 {"showIntroMenu", "1"},
         };
 
-        /**
-         * @brief Gets the default ImGui window flags for Lamp windows.
-         *
-         * @return The ImGui window flags.
-         */
         ImGuiWindowFlags DefaultWindowFlags();
 
-        /**
-         * @brief Initializes the `lampConfig` instance.
-         *
-         * @return `true` if initialization was successful; otherwise, `false`.
-         */
         bool init();
 
     private:
-        /**
-         * @brief Private constructor for the `lampConfig` class.
-         *
-         * The constructor is private to ensure that only one instance of `lampConfig` can exist.
-         */
-        lampConfig(){};
+        lampConfig(){
+        };
+
     };
 };
 #endif //LAMP_LAMPCONFIG_H
