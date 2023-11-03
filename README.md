@@ -19,7 +19,7 @@ If you want early information about lamp, and how things are progressing join me
 - [ ] Morrowind
 - [ ] The Sims 4
 
-## List of currently suppoted archives
+## List of currently supported archives
 - zip
 - 7z
 - rar (Not supported on arch)
@@ -41,9 +41,9 @@ If you want early information about lamp, and how things are progressing join me
 - [X] Lamp Specific Colour Scheme
 
 ### Bethesda Support
-- [ ] Loot Lib Intigration
+- [ ] Loot Lib Integration
 - [ ] FoMod Parsing
-- [ ] BSA/ESP Archvive Metadata collection
+- [ ] BSA/ESP Archive Metadata collection
 
 ## Running Requirements
 - Vulkan Support
@@ -52,6 +52,7 @@ If you want early information about lamp, and how things are progressing join me
 - X11
 - p7zip-full & p7zip-rar
 - Curl
+- pugixml
 
 ## Building
 See Wiki
