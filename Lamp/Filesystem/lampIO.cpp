@@ -182,58 +182,11 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampIO::loadKeyData(Lamp::Core::FS::l
 }
 
 
-void Lamp::Core::FS::lampIO::recursiveCopyWithIgnore(const std::filesystem::path &source, const std::filesystem::path &destination,
-                                                                           const std::vector<std::string> &ignoreFolders) {
-    for (const auto &entry: std::filesystem::directory_iterator(source)) {
-        if (entry.is_directory()) {
-            if (std::find(ignoreFolders.begin(), ignoreFolders.end(), entry.path().filename()) ==
-                ignoreFolders.end()) {
-                std::filesystem::create_directories(destination / entry.path().filename());
-                recursiveCopyWithIgnore(entry.path(), destination / entry.path().filename(), ignoreFolders);
-            }
-        } else if (entry.is_regular_file()) {
-            try {
-                std::filesystem::copy_file(entry.path(), destination / entry.path().filename(),
-                                           std::filesystem::copy_options::update_existing);
-            }
-            catch (const std::filesystem::filesystem_error &e) {
-                std::cerr << "Error copying file: " << e.what() << std::endl;
-            }
-        }
-    }
-
-}
-
-void Lamp::Core::FS::lampIO::copyExtensionWithConfigIgnore(const std::filesystem::path &sourceDir, const std::filesystem::path &destDir, std::string nonIgnoredExtension) {
-    for (const auto &entry: std::filesystem::directory_iterator(sourceDir)) {
-        const std::filesystem::path &sourcePath = entry.path();
-        const std::filesystem::path destPath = destDir / sourcePath.filename();
-        if (std::filesystem::is_regular_file(sourcePath)) {
-            try {
-                std::string extension = sourcePath.extension().string();
-                if (extension == nonIgnoredExtension) {
-                    std::filesystem::copy_file(sourcePath, destPath, std::filesystem::copy_options::update_existing);
-                } else {
-                    std::filesystem::copy_file(sourcePath, destPath, std::filesystem::copy_options::skip_existing);
-                }
-            } catch (const std::filesystem::filesystem_error &e) {
-            }
-
-
-        } else if (std::filesystem::is_directory(sourcePath)) {
-            std::filesystem::create_directory(destPath);
-            copyExtensionWithConfigIgnore(sourcePath, destPath, nonIgnoredExtension);
-        }
-    }
-}
-
-void Lamp::Core::FS::lampIO::fileDrop(GLFWwindow *window, int count, const char **paths) {
-    int i;
-    for (i = 0; i < count; i++) {
+void Lamp::Core::FS::lampIO::fileDrop(const char *inputPath) {
         // Thank you! Roi Danton on stackoverflow for this clean code.
-        std::string pth = paths[i];
+        std::string pth = inputPath;
         Base::lampLog::getInstance().log("File Drop Detected: " + pth);
-        std::filesystem::path path(paths[i]);
+        std::filesystem::path path(inputPath);
         std::error_code ec;
         if (std::filesystem::is_regular_file(path, ec)) {
             if (std::regex_match(path.filename().string(), std::regex("^.*\\.(zip|rar|7z)$"))) {
@@ -242,8 +195,9 @@ void Lamp::Core::FS::lampIO::fileDrop(GLFWwindow *window, int count, const char 
                 auto target = targetDIR / path.filename();
                 try {
                     std::filesystem::create_directories(targetDIR);
-                    std::filesystem::copy_file(path, target, std::filesystem::copy_options::overwrite_existing);
-
+                    if(!std::filesystem::exists(target)){
+                        std::filesystem::copy_file(path, target, std::filesystem::copy_options::overwrite_existing);
+                    }
                     Lamp::Games::getInstance().currentGame->registerArchive(target.string());
 
                 }
@@ -261,7 +215,6 @@ void Lamp::Core::FS::lampIO::fileDrop(GLFWwindow *window, int count, const char 
             Base::lampLog::getInstance().log("ec: " + ec.message(), Base::lampLog::ERROR, true,
                                              Base::lampLog::LMP_NOFILEDROP);
         }
-    }
 }
 
 
