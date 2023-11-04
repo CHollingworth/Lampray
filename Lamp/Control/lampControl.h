@@ -17,8 +17,18 @@ namespace Lamp::Core{
     typedef Core::Base::lampTypes::lampString lampString;
     typedef Core::Base::lampTypes::lampHexAlpha lampHex;
     typedef Core::Base::lampTypes::lampReturn lampReturn;
+    /**
+    * @brief The `lampControl` class manages Lamp's control and user interface.
+    *
+    * The `lampControl` class provides access to various control and user interface-related functionalities in Lamp.
+    */
     class lampControl{
     public:
+        /**
+         * @brief Gets the singleton instance of the `lampControl` class.
+         *
+         * @return The reference to the singleton instance.
+         */
         static lampControl& getInstance()
         {
             static lampControl instance;
@@ -28,12 +38,18 @@ namespace Lamp::Core{
         lampControl(lampControl const&) = delete;
         void operator=(lampControl const&)  = delete;
 
-
+        /**
+         * @brief Gets the current formatted time and date as a string.
+         *
+         * @return The formatted time and date string.
+         */
         static lampString getFormattedTimeAndDate();
 
 
         lampHex Colour_SearchHighlight = ImVec4(0.3f, 0.f, 0.3f, 1);
-
+        /**
+        * @brief The `lampArchiveDisplayHelper` struct provides helper methods for displaying archives.
+        */
         struct lampArchiveDisplayHelper{
         private:
             std::list<std::string> columnNames{"Enabled","Mod Name", "Mod Type", "Load Order","Last Updated" ,"Remove Mod"};
@@ -43,7 +59,13 @@ namespace Lamp::Core{
             std::string temp{"0"};
 
 
-
+            /**
+            * @brief Calculates the Levenshtein distance between two strings.
+            *
+            * @param s1 The first string.
+            * @param s2 The second string.
+            * @return The Levenshtein distance between the two strings.
+             */
             int calculateLevenshteinDistance(const std::string& s1, const std::string& s2) {
                 int len1 = s1.length();
                 int len2 = s2.length();
@@ -100,7 +122,11 @@ namespace Lamp::Core{
                 return closestMatchPosition;
             }
 
-
+            /**
+             * @brief Moves an item up in the mod list.
+             *
+             * @param it Iterator pointing to the item to move.
+             */
             void moveUp(std::vector<Base::lampMod::Mod*>::iterator& it) {
                 if (ModList.size() <= 1 || it == ModList.begin()) {
                     return; // Nothing to move or already at the beginning
@@ -109,7 +135,11 @@ namespace Lamp::Core{
                 std::swap(*it, *(it - 1));
                 --it;
             }
-
+            /**
+             * @brief Moves an item down in the mod list.
+             *
+             * @param it Iterator pointing to the item to move.
+             */
             void moveDown(std::vector<Base::lampMod::Mod*>::iterator& it) {
                 if (ModList.size() <= 1 || it == ModList.end() - 1) {
                     return; // Nothing to move or already at the end
@@ -122,7 +152,14 @@ namespace Lamp::Core{
         public:
 
 
-
+            /**
+             * @brief Constructs a `lampArchiveDisplayHelper` object.
+             *
+             * @param ExtraColumnNames Extra column names to be displayed.
+             * @param modList A vector of mod objects.
+             * @param typeNames A vector of mod type names.
+             * @param extraOptions A list of extra options.
+             */
             lampArchiveDisplayHelper(std::list<std::string> ExtraColumnNames, std::vector<Base::lampMod::Mod *> &modList,
                     std::vector<std::string> typeNames,
                     std::list<std::pair<std::string, bool * >> extraOptions)
@@ -130,7 +167,9 @@ namespace Lamp::Core{
             ExtraOptions(extraOptions) {
                 columnNames.insert(columnNames.end(), ExtraColumnNames.begin(), ExtraColumnNames.end());
             }
-
+            /**
+         * @brief Creates an ImGui menu for displaying mod archives.
+         */
             void createImguiMenu(){
                 ImGuiIO &io = ImGui::GetIO();
                 ImGui::SetNextItemWidth(io.DisplaySize.x);
@@ -276,6 +315,11 @@ namespace Lamp::Core{
             std::string  stringTarget;
             std::string  keyPath;
             std::string  toolTip;
+
+
+            /**
+         * @brief Creates an ImGui menu for displaying game settings.
+         */
             void createImGuiMenu(){
                 ImGui::Text(displayString.c_str());
                 ImGui::Text(toolTip.c_str());
@@ -297,11 +341,17 @@ namespace Lamp::Core{
 
         };
 
-        std::pair<int, int> deplopmentTracker;
-        std::string deploymentStageTitle;
-        bool inDeployment = false;
+        std::pair<int, int> deplopmentTracker; ///< A pair of integers representing deployment progress.
+        std::string deploymentStageTitle; ///< The title of the current deployment stage.
+        bool inDeployment = false; ///< Indicates whether Lamp is in the deployment process.
+
 
     private:
+        /**
+         * @brief Private constructor for the `lampControl` class.
+         *
+         * The constructor is private to ensure that only one instance of `lampControl` can exist.
+         */
         lampControl(){};
 
 
