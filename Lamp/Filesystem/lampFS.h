@@ -6,7 +6,6 @@
 #define LAMP_LAMPFS_H
 
 #include <string>
-#include <GLFW/glfw3.h>
 #include <filesystem>
 #include "../Base/lampBase.h"
 #include "../Control/lampConfig.h"
