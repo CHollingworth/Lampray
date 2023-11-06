@@ -126,6 +126,15 @@ void Lamp::Core::lampMenu::ModMenu() {
         deployCheck = true;
     }
 
+    size = ImGui::CalcTextSize("Reset").x + style.FramePadding.x * 2.0f;
+    avail = ImGui::GetContentRegionAvail().x;
+
+    off = (avail - size) * 0.5f;
+    if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
+    if(ImGui::Button("Reset")) {
+        Lamp::Core::FS::lampTrack::reset(Lamp::Games::getInstance().currentGame->Ident().ReadableName);
+    }
+
 
     if(deployCheck) {
         ImGuiIO &io = ImGui::GetIO();
@@ -137,9 +146,21 @@ void Lamp::Core::lampMenu::ModMenu() {
 
         if(ImGui::Button("Start")){
             deployCheck = !deployCheck;
+
             std::thread([] {
-                Lamp::Games::getInstance().currentGame->startDeployment();
+                Lamp::Core::Base::LampSequencer::add("Deployment Start",[]() -> lampReturn {
+                    Lamp::Core::FS::lampTrack::reset(Lamp::Games::getInstance().currentGame->Ident().ReadableName);
+
+                    return Lamp::Core::Base::lampLog::getInstance().pLog({1, "Task Complete."});
+                });
+                Lamp::Core::Base::LampSequencer::add("Deployment Start",[]() -> lampReturn {
+                    Lamp::Games::getInstance().currentGame->startDeployment();
+                    return Lamp::Core::Base::lampLog::getInstance().pLog({1, "Task Complete."});
+                });
+
+                Lamp::Core::Base::LampSequencer::run("Deployment Start");
             }).detach();
+
         }
         ImGui::SameLine();
         if(ImGui::Button("Go Back")){ deployCheck = !deployCheck; }

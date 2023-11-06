@@ -11,6 +11,7 @@ If you want early information about lamp, and how things are progressing join me
 
 ## List of currently supported games
 - Baldur's Gate 3
+- Cyberpunk 2077
 
 ## List of planned support
 - [ ] Skyrim (SE & AE)
@@ -30,25 +31,24 @@ If you want early information about lamp, and how things are progressing join me
 - [X] Profile Support
 - [ ] Persistent Data Paths
 - [ ] Game Integration Guide
-- [ ] Independent modsettings creation.
+- [X] Independent modsettings creation.
 - [X] Easy Modlist Sharing
 - [X] Full Lamp::Core Rewrite
-- [ ] Wayland Native Builds
+- [X] Wayland Native Builds
 - [ ] Implement OverlayFS as a replacement for pure file duplication
       
 ### Unessential but nice ideas
 - [X] Lamp Specific Colour Scheme
-
+- [X] Custom Font Support
+- 
 ### Bethesda Support
 - [ ] Loot Lib Integration
 - [ ] FoMod Parsing
 - [ ] BSA/ESP Archive Metadata collection
 
 ## Running Requirements
-- Vulkan Support
+- SDL2
 - Zenity
-- glfw
-- X11
 - p7zip-full & p7zip-rar
 - Curl
 - pugixml
