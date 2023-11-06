@@ -53,8 +53,7 @@ runs:
       shell: bash
       run: |
         sudo apt install  -y -qq \
-          libvulkan-dev \
-          libglfw3-dev \
+          libsdl2-dev \
           libcurl4-openssl-dev \
           libpugixml-dev \
           pkg-config \
