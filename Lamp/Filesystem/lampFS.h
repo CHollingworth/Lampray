@@ -265,7 +265,7 @@ namespace Lamp::Core::FS{
         /**
          * @brief The version number of the software.
          */
-        std::string versionNumber = "1.0.10"; // x-release-please-version
+        std::string versionNumber = "1.0.11"; // x-release-please-version
 
         /**
          * @brief Check for updates.

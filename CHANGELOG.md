@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.11](https://github.com/CHollingworth/Lamp/compare/v1.0.10...v1.0.11) (2023-11-06)
+
+
+### Bug Fixes
+
+* Update lampFS.h ([#68](https://github.com/CHollingworth/Lamp/issues/68)) ([e942810](https://github.com/CHollingworth/Lamp/commit/e9428107c4ad7927278f1f80491dcdaec0b713a0))
+
 ## [1.0.10](https://github.com/CHollingworth/Lamp/compare/v1.0.9...v1.0.10) (2023-11-06)
 
 
