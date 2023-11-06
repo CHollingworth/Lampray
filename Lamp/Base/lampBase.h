@@ -531,12 +531,7 @@ namespace Lamp::Core::Base{
             LMP_NOCONFIG           ///< Configuration file not found.
         };
 
-        std::list<std::string> poplist = {};
-        // Passthrough log.
-        lampTypes::lampReturn pLog(lampTypes::lampReturn data,warningLevel warningLevel = warningLevel::LOG,bool pop = false, errorCode errorCode = errorCode::LMP_UNK){
-            log(data.returnReason,warningLevel,pop,errorCode);
-            return data;
-        }
+        std::list<std::string> poplist = {}; ///< A list of pop-up messages to display.
 
         /**
          * @brief Logs a message with the specified warning level and error code.

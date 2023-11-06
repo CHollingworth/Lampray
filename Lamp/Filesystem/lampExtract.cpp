@@ -21,10 +21,11 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, bit7z::BitFormat::Zip};
             reader.test();
             reader.extract(workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string());
-            return Base::lampLog::getInstance().pLog({1, "Extraction Successful. : "+ mod->ArchivePath},  Base::lampLog::LOG);
+            return {1, "Extraction Successful."};
         } catch (const bit7z::BitException &ex) {
-            return Base::lampLog::getInstance().pLog({0, "Could not extract file : "+ mod->ArchivePath},  Base::lampLog::ERROR,
-                                                     true, Base::lampLog::LMP_EXTRACTIONFALED);
+            Base::lampLog::getInstance().log("Could not extract file: " + mod->ArchivePath, Base::lampLog::ERROR,
+                                             true, Base::lampLog::LMP_EXTRACTIONFALED);
+            return Lamp::Core::FS::lampReturn(0, "Could not extract file");
         }
     } else if (std::regex_match((std::string)mod->ArchivePath, std::regex("^.*\\.(rar)$"))) {
         try {
@@ -32,10 +33,11 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, bit7z::BitFormat::Rar};
             reader.test();
             reader.extract(workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string());
-            return Base::lampLog::getInstance().pLog({1, "Extraction Successful. : "+ mod->ArchivePath},  Base::lampLog::LOG);
+            return {1, "Extraction Successful."};
         } catch (const bit7z::BitException &ex) {
-            return Base::lampLog::getInstance().pLog({0, "Could not extract file : "+ mod->ArchivePath},  Base::lampLog::ERROR,
-                                                     true, Base::lampLog::LMP_EXTRACTIONFALED);
+            Base::lampLog::getInstance().log("Could not extract file: " + mod->ArchivePath, Base::lampLog::ERROR,
+                                             true, Base::lampLog::LMP_EXTRACTIONFALED);
+            return Lamp::Core::FS::lampReturn(0, "Could not extract file");
         }
     } else if (std::regex_match((std::string)mod->ArchivePath, std::regex("^.*\\.(7z)$"))) {
         try {
@@ -43,10 +45,11 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, bit7z::BitFormat::SevenZip};
             reader.test();
             reader.extract(workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string());
-            return Base::lampLog::getInstance().pLog({1, "Extraction Successful. : "+ mod->ArchivePath},  Base::lampLog::LOG);
+            return {1, "Extraction Successful."};
         } catch (const bit7z::BitException &ex) {
-            return Base::lampLog::getInstance().pLog({0, "Could not extract file : "+ mod->ArchivePath},  Base::lampLog::ERROR,
-                                                     true, Base::lampLog::LMP_EXTRACTIONFALED);
+            Base::lampLog::getInstance().log("Could not extract file: " + mod->ArchivePath, Base::lampLog::ERROR,
+                                             true, Base::lampLog::LMP_EXTRACTIONFALED);
+            return Lamp::Core::FS::lampReturn(0, "Could not extract file");
         }
     }
     else{
@@ -58,15 +61,8 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
 Lamp::Core::lampReturn Lamp::Core::FS::lampExtract::moveModSpecificFileType(const Lamp::Core::Base::lampMod::Mod *mod,
                                                                             Lamp::Core::FS::lampString extension,
                                                                             Lamp::Core::lampString localExtractionPath) {
-    std::string workingDir = Lamp::Core::lampConfig::getInstance().DeploymentDataPath +
-                             Lamp::Games::getInstance().currentGame->Ident().ReadableName;
-    for (const auto& entry : fs::recursive_directory_iterator(workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string())) {
-        copyFilesWithExtension(
-                workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string(),
-                workingDir + "/" + localExtractionPath, extension);
-    }
-
-    return {1, ""};
+    std::string workingDir = Lamp::Core::lampConfig::getInstance().DeploymentDataPath + Lamp::Games::getInstance().currentGame->Ident().ReadableName;
+    return copyFilesWithExtension(workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string(),workingDir+"/"+localExtractionPath, extension);
 }
 
 Lamp::Core::lampReturn Lamp::Core::FS::lampExtract::moveModSpecificFolder(const Lamp::Core::Base::lampMod::Mod *mod,
@@ -97,7 +93,7 @@ Lamp::Core::lampReturn Lamp::Core::FS::lampExtract::copyDirectoryRecursively(con
         fs::path destinationEntry = destination / entry.path().filename();
 
         if (fs::is_directory(entry)) {
-            fs::create_directories(destinationEntry);
+            fs::create_directory(destinationEntry);
             lampReturn result = copyDirectoryRecursively(entry, destinationEntry);
             if (!result) {
                 return result; // Propagate the error if copying failed
@@ -158,6 +154,10 @@ bool Lamp::Core::FS::lampExtract::caseInsensitiveStringCompare(const std::string
                           return tolower(a) == tolower(b);
                       });
 }
+
+
+
+
 
 
 

@@ -11,6 +11,8 @@
 #include "../Base/lampBase.h"
 #include "../Control/lampConfig.h"
 
+
+
 namespace Lamp::Core::FS{
     typedef Base::lampTypes::lampString lampString;
     typedef Base::lampTypes::lampReturn lampReturn;
@@ -19,9 +21,41 @@ namespace Lamp::Core::FS{
      */
     class lampExtract {
     public:
-        static lampReturn extract(const Base::lampMod::Mod * mod);
-        static lampReturn moveModSpecificFileType(const Base::lampMod::Mod * mod, Lamp::Core::FS::lampString extension, lampString localExtractionPath);
-        static lampReturn moveModSpecificFolder(const Base::lampMod::Mod * mod, Lamp::Core::FS::lampString extension, lampString localExtractionPath);
+        /**
+         * @brief Extracts the specified mod archive.
+         *
+         * This function extracts the contents of a mod archive to a specified location.
+         *
+         * @param mod The mod to extract.
+         * @return A lampReturn object indicating the extraction result.
+         */
+        static lampReturn extract(const Base::lampMod::Mod* mod);
+
+        /**
+         * @brief Moves mod files with a specific file extension.
+         *
+         * This function moves mod files with a specific file extension from the extraction directory
+         * to a local extraction path.
+         *
+         * @param mod The mod containing files to move.
+         * @param extension The file extension to filter files by.
+         * @param localExtractionPath The destination path for the moved files.
+         * @return A lampReturn object indicating the move operation result.
+         */
+        static lampReturn moveModSpecificFileType(const Base::lampMod::Mod* mod, Lamp::Core::FS::lampString extension, lampString localExtractionPath);
+
+        /**
+         * @brief Moves mod files within a specific folder.
+         *
+         * This function moves mod files within a specific folder from the extraction directory
+         * to a local extraction path.
+         *
+         * @param mod The mod containing files to move.
+         * @param extension The folder name to filter files by.
+         * @param localExtractionPath The destination path for the moved files.
+         * @return A lampReturn object indicating the move operation result.
+         */
+        static lampReturn moveModSpecificFolder(const Base::lampMod::Mod* mod, Lamp::Core::FS::lampString extension, lampString localExtractionPath);
 
     private:
         /**
@@ -134,7 +168,39 @@ namespace Lamp::Core::FS{
          */
         static lampReturn emptyFolder(lampString Path, lampString SpecificExtension = "");
 
-         static void fileDrop(const char *inputPath);
+        /**
+         * @brief Recursively copies files and folders from source to destination with optional ignore list.
+         *
+         * This function recursively copies files and folders from the source to the destination, ignoring specified folders.
+         *
+         * @param source The source directory.
+         * @param destination The destination directory.
+         * @param ignoreFolders A vector of folder names to ignore during the copy operation.
+         */
+        static void recursiveCopyWithIgnore(const std::filesystem::path& source, const std::filesystem::path& destination, const std::vector<std::string>& ignoreFolders);
+
+        /**
+         * @brief Copies files with a specific extension while ignoring others.
+         *
+         * This function copies files with a specific file extension from the source directory to the destination directory,
+         * ignoring files with different extensions.
+         *
+         * @param sourceDir The source directory.
+         * @param destDir The destination directory.
+         * @param nonIgnoredExtension The file extension to copy while ignoring others.
+         */
+        static void copyExtensionWithConfigIgnore(const std::filesystem::path& sourceDir, const std::filesystem::path& destDir, std::string nonIgnoredExtension);
+
+        /**
+         * @brief Handles file drop events.
+         *
+         * This function handles file drop events, copying supported files to the appropriate destination.
+         *
+         * @param window The GLFW window.
+         * @param count The number of dropped files.
+         * @param paths An array of dropped file paths.
+         */
+        static void fileDrop(GLFWwindow* window, int count, const char** paths);
 
         /**
          * @brief Downloads a file from a URL and saves it with a specified filename.
@@ -266,7 +332,7 @@ namespace Lamp::Core::FS{
         /**
          * @brief The version number of the software.
          */
-        std::string versionNumber = "1.0.8"; // x-release-please-version
+        std::string versionNumber = "1.0.8";
 
         /**
          * @brief Check for updates.
@@ -283,97 +349,5 @@ namespace Lamp::Core::FS{
          */
         lampUpdate(){}
     };
-
-    class lampTrack{
-    private:
-
-        enum trackedFileType{
-            GameFile = 0,
-            ModFile
-        };
-
-        struct trackedFile{
-        public:
-            std::string game;
-            std::string gameLocation; // relative path from games root.
-            std::string fileHash;
-            trackedFileType type; // 0 - GameFile, 1 - ModFile
-        };
-
-
-
-
-        constexpr static unsigned int crc32(const char* data, size_t length) {
-            unsigned int crc = 0xFFFFFFFF;
-            for (size_t i = 0; i < length; ++i) {
-                crc ^= static_cast<unsigned int>(data[i]);
-                for (int j = 0; j < 8; ++j) {
-                    crc = (crc >> 1) ^ (0xEDB88320 & (-int(crc & 1)));
-                }
-            }
-            return ~crc;
-        }
-
-        static bool doesHashExist(const std::string& game, const std::string& hash);
-
-        static bool doesFilenameExist(const std::string& game, const std::string& filename);
-
-        static std::string getHash(std::filesystem::path FilePath);
-
-        static void loadTracker(const std::string& filename);
-        static void saveTracker(const std::string& filename, const std::vector<trackedFile>& files);
-
-        static void recursiveCopyWithIgnore(const std::filesystem::path &source, const std::filesystem::path &destination, const std::vector<std::string> &ignoreFolders,std::filesystem::copy_options options, std::string game);
-        static void copyExtensionWithFileTypeIgnore(const std::filesystem::path &sourceDir, const std::filesystem::path &destDir, std::string nonIgnoredExtension,std::filesystem::copy_options options, std::string game);
-        static void copyAndOperate(const std::filesystem::path& source, const std::filesystem::path& destination, std::string game);
-        static lampReturn trackOperation(const std::string& file, const std::string& destination, const std::string &game);
-
-        static std::vector<trackedFile>& getTrackedFiles() {
-            static std::vector<trackedFile> trackedFiles;
-            return trackedFiles;
-        }
-
-        static void replaceGameFile(const std::filesystem::path& gameFilePath, const std::filesystem::path& gameFilesFolder);
-        static void deleteModFile(const std::filesystem::path& modFilePath);
-
-        public:
-
-
-
-
-        struct handleFileDescriptor{
-        public:
-            enum operation{
-                copyFile, // directly copy filePath to target.
-                copyFolder, // copy a folder and its content recursively.
-                copyFilesIgnoreExt, // copy a folder and its content recursively ignoring a folder with the name of extName.
-                copyOnlyExt, // copy a folder and its content recursively with the extension of extName.
-            };
-
-            enum mode{
-                direct,
-                skipExisting,
-                updateExisting
-            };
-
-            operation handlerOperation;
-            mode handlerMode;
-            std::filesystem::path filePath;
-            std::filesystem::path target;
-            std::filesystem::copy_options copyOperationOptions = std::filesystem::copy_options::recursive;
-            std::string gameFullName;
-            std::string extName;
-
-            handleFileDescriptor(operation handlerOperation, mode handlerMode, std::filesystem::path filePath,
-                                 std::filesystem::path target, std::string extName, std::string gameFullName)
-                    : handlerOperation(handlerOperation), filePath(filePath), extName(extName), target(target),
-                      handlerMode(handlerMode), gameFullName(gameFullName) {}
-        };
-        static Lamp::Core::lampReturn handleFile(handleFileDescriptor descriptor);
-        //static void forcefulTrack();
-
-        static void reset(std::string gameFullReadableName);
-
-        };
 }
 #endif //LAMP_LAMPFS_H

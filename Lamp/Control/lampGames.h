@@ -6,7 +6,6 @@
 #define LAMP_LAMPGAMES_H
 
 #include "../../game-data/BG3/BG3.h"
-#include "../../game-data/C77/C77.h"
 
 namespace Lamp {
     class Games {
@@ -15,8 +14,7 @@ namespace Lamp {
          * @brief Represents a list of game controls.
          */
         std::vector<Game::gameControl *> gameList{
-                new Game::BG3,
-                new Game::C77
+                new Game::BG3
         };
 
         /**
