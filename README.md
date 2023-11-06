@@ -11,6 +11,7 @@ If you want early information about lamp, and how things are progressing join me
 
 ## List of currently supported games
 - Baldur's Gate 3
+- Cyberpunk 2077
 
 ## List of planned support
 - [ ] Skyrim (SE & AE)
@@ -28,53 +29,59 @@ If you want early information about lamp, and how things are progressing join me
 
 ### Road to 1.1.0
 - [X] Profile Support
-- [ ] Persistant Data Paths
-- [ ] Game Intigration Guide
-- [X] Seperate modsettings creation.
+- [ ] Persistent Data Paths
+- [ ] Game Integration Guide
+- [X] Independent modsettings creation.
 - [X] Easy Modlist Sharing
 - [X] Full Lamp::Core Rewrite
-- [ ] Wayland Native Builds
-- [X] ~Impliment OverlayFS as a replacement for pure file duplication~ File tracking has been added instead.
-- [ ] Bethesda Support.
+- [X] Wayland Native Builds
+- [ ] Implement OverlayFS as a replacement for pure file duplication
       
 ### Unessential but nice ideas
 - [X] Lamp Specific Colour Scheme
-
+- [X] Custom Font Support
+- 
 ### Bethesda Support
 - [ ] Loot Lib Integration
 - [ ] FoMod Parsing
 - [ ] BSA/ESP Archive Metadata collection
 
 ## Running Requirements
-- Vulkan Support
+- SDL2
 - Zenity
-- glfw
-- X11
 - p7zip-full & p7zip-rar
 - Curl
+- pugixml
 
 ## Building
+See Wiki
 
-This will install asdf and other specific versions of tooling required.
-
-```sh
-./setup.sh
-./build.sh Debug # or ./build.sh Release
-```
-
-Testing cicd: 
-
-```sh
-act push
-```
-
-For more information See Wiki
 
 ## Contributing
 
 I welcome contributions from the community to make this tool even better. Whether you're a developer, designer, or a passionate user, your input is valuable.
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md)
+### How to Contribute
+
+1. **Fork the Repository**: Start by forking this repository to your GitHub account using the "Fork" button at the top right.
+
+2. **Clone the Repository**: Clone your forked repository to your local machine.
+
+3. **Create a New Branch**: Create a new branch for your work with a descriptive name.
+
+4. **Make Changes**: Make your desired changes or improvements to the codebase.
+
+5. **Test**: Ensure that your changes work as expected and that they don't introduce any new issues.
+
+6. **Commit**: Commit your changes with a clear and concise commit message.
+
+7. **Push**: Push your changes to your forked repository.
+
+8. **Create a Pull Request**: Go to the original repository and click on the "New Pull Request" button. Provide a descriptive title and detailed description of your changes in the pull request.
+
+9. **Discuss and Review**: Engage in discussions with the maintainers and the community about your pull request. Be prepared to make any necessary adjustments based on feedback.
+
+10. **Merge**: Once your pull request is reviewed and approved, it will be merged into the main branch.
 
 ### Issues and Feature Requests
 
