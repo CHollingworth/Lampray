@@ -22,14 +22,9 @@ void Lamp::Core::FS::lampUpdate::checkForUpdates() {
         } else {
             size_t pos = response_data.find('\n');
             if (pos != std::string::npos) {
-                // Find the position of the second newline character
-                size_t second_pos = response_data.find('\n', pos + 1);
-                if (second_pos != std::string::npos) {
-                    // Extract the second line of the response
-                    std::string second_line = response_data.substr(pos + 1, second_pos - pos - 1);
-                    if (versionNumber != second_line) {
-                        versionNumber = "Update Available!";
-                    }
+                std::string first_line = response_data.substr(0, pos);
+                if(versionNumber != first_line){
+                    versionNumber = "Update Available!";
                 }
             }
         }
@@ -45,7 +40,7 @@ void Lamp::Core::FS::lampUpdate::getExpression() {
 
 
     if(versionNumber == "Update Available!") {
-        if (ImGui::Button((versionNumber).c_str())) {
+        if (ImGui::Button(versionNumber.c_str())) {
             const char* url = "https://github.com/CHollingworth/Lamp/releases/latest";
             std::string openCommand = "xdg-open " + std::string(url);
             system(openCommand.c_str());
