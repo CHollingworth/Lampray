@@ -1,0 +1,86 @@
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: Release Management
+
+jobs:
+  ReleaseAutomation:
+    
+    runs-on: ubuntu-22.04
+
+    steps:
+
+      - uses: google-github-actions/release-please-action@v3
+        id: release-please
+        # skip during local actions testing
+        if: ${{ !env.ACT }}
+        with:
+          release-type: simple
+          extra-files: |
+            VERSION
+            Lamp/Filesystem/lampFS.h
+      #
+      # This step serves as an interop layer between the online and offline
+      # when online, we use release-please and further execution is gated by the releases_created output
+      # when offline, we skip release-please and set releases_created to true to test creating a release build
+      - name: Declare Release Created
+        id: release
+        env:
+            RELEASE_PLEASE_TAGNAME: ${{ steps.release-please.outputs.tag_name }}
+            RELEASE_PLEASE_RELEASES_CREATED: ${{ steps.release-please.outputs.releases_created }}
+        run: |
+          if [ "${{ env.ACT }}" = "true" ]; then
+            echo "OFFLINE: release created"
+            echo "releases_created=true" >> $GITHUB_OUTPUT
+            echo "release_tag=$(git describe --tags --abbrev=1)" >> $GITHUB_OUTPUT
+
+          elif [ "${RELEASE_PLEASE_RELEASES_CREATED}" = "true" ]; then
+            echo "ONLINE: release created"
+            echo "releases_created=true" >> $GITHUB_OUTPUT
+            echo "release_tag=${RELEASE_PLEASE_TAGNAME}" >> $GITHUB_OUTPUT
+
+          else 
+            echo "ONLINE: release not created"
+
+          fi
+
+      - name: Checkout
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        uses: actions/checkout@v3
+
+      - name: OS Deps
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        uses: ./.github/actions/setup-os
+      
+      # Just let ASDF do its thing. It's far easier and more reliable than trying to do it ourselves.
+      - name: Tooling
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        uses: ./.github/actions/setup-tooling
+        with:
+          SetupCommand: ./setup.sh
+      
+      - name: Build
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        run: |
+          ./build.sh Debug
+
+      # only upload the release artifact if we're online and not testing
+      - name: Upload Release Artifact
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ steps.release.outputs.release_tag }}
+        run: |
+          if [ "${{ env.ACT }}" = "true" ]; then
+            echo "OFFLINE: skipping upload"
+            cp -r ./build/Lamp ./build/lamp-x11-${RELEASE_TAG}
+          else
+            gh release upload ${RELEASE_TAG} ./build/Lamp#lamp-x11-${RELEASE_TAG}
+          fi
+          
