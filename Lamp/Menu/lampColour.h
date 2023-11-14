@@ -76,7 +76,7 @@ namespace Lamp {
                     {ImGuiCol_SeparatorHovered,"Colour_SeparatorHover"}
             };
 
-			const float defaultFontScale = 1.0f;
+            const float defaultFontScale = 1.0f;
 
             void getConfigColours(){
                 int x = 0;
@@ -142,11 +142,11 @@ namespace Lamp {
                 Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = ImVec4(lampColour::getInstance().floatMap[x][0],lampColour::getInstance().floatMap[x][1],lampColour::getInstance().floatMap[x][2],lampColour::getInstance().floatMap[x][3]);
 
 
-				// basically ripped from the demo, set a min/max value and adds a drag-bar thing to set/update the scale to that value
-				const float MIN_SCALE = 0.3f;
-				const float MAX_SCALE = 2.0f;
-				ImGuiIO& io = ImGui::GetIO();
-				ImGui::DragFloat("Font_Scale", &io.FontGlobalScale, 0.005f, MIN_SCALE, MAX_SCALE, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+                // basically ripped from the demo, set a min/max value and adds a drag-bar thing to set/update the scale to that value
+                const float MIN_SCALE = 0.3f;
+                const float MAX_SCALE = 2.0f;
+                ImGuiIO& io = ImGui::GetIO();
+                ImGui::DragFloat("Font_Scale", &io.FontGlobalScale, 0.005f, MIN_SCALE, MAX_SCALE, "%.2f", ImGuiSliderFlags_AlwaysClamp);
 
 
                 if(ImGui::Button("Save")){
@@ -184,7 +184,7 @@ namespace Lamp {
                     }
 
 
-					io.FontGlobalScale = lampColour::getInstance().defaultFontScale;
+                    io.FontGlobalScale = lampColour::getInstance().defaultFontScale;
                 }
 
                 ImGui::End();
