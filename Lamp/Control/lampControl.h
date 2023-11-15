@@ -178,10 +178,9 @@ namespace Lamp::Core{
                 }
                 if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, ImGuiTableFlags_SizingStretchProp)) {
                     for (auto it = columnNames.begin(); it != columnNames.end(); ++it) {
-                        ImGui::TableNextColumn();
-
-                        ImGui::Text((*it).c_str());
+                        ImGui::TableSetupColumn((*it).c_str());
                     }
+					ImGui::TableHeadersRow();
                     ImGui::TableNextRow();
                     int i = 0;
                     for (auto it = ModList.begin(); it != ModList.end(); ++it) {
