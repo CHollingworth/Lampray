@@ -176,7 +176,7 @@ namespace Lamp::Core{
                 if (ImGui::InputText("##searcher", lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
                 }
-                if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, ImGuiTableFlags_SizingStretchProp)) {
+                if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, ImGuiTableFlags_SizingStretchProp + ImGuiTableFlags_Reorderable)) {
                     for (auto it = columnNames.begin(); it != columnNames.end(); ++it) {
                         ImGui::TableSetupColumn((*it).c_str());
                     }
