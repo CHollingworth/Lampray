@@ -161,8 +161,8 @@ namespace Lamp {
 
                     Lamp::Core::FS::lampIO::saveKeyData("Colour_SearchHighlight", ((std::string)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight), "LAMP CONFIG");
 
-					// I don't feel like doing the work to get the value properly, and this seems to work fine
-					Lamp::Core::FS::lampIO::saveKeyData("Font_Scale", std::to_string(io.FontGlobalScale), "LAMP CONFIG");
+                    // I don't feel like doing the work to get the value properly, and this seems to work fine
+                    Lamp::Core::FS::lampIO::saveKeyData("Font_Scale", std::to_string(io.FontGlobalScale), "LAMP CONFIG");
 
                     return true;
                 }
