@@ -170,7 +170,7 @@ namespace Lamp::Core{
             void createImguiMenu(){
                 ImGuiIO &io = ImGui::GetIO();
                 ImGui::SetNextItemWidth(io.DisplaySize.x);
-                if (ImGui::InputText("##searcher", lampConfig::getInstance().searchBuffer, 250)) {
+                if (ImGui::InputTextWithHint("##searcher","Type here to search your mods...", lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
                 }
                 if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, ImGuiTableFlags_SizingStretchProp + ImGuiTableFlags_Reorderable)) {

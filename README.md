@@ -37,11 +37,9 @@ If you want early information about lamp, and how things are progressing join me
 - Zenity
 - p7zip-full & p7zip-rar
 - Curl
-- pugixml
 
 ## Building
 See Wiki
-
 
 ## Contributing
 
