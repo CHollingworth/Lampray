@@ -104,11 +104,8 @@ namespace Lamp::Core{
                     std::filesystem::path path((*it)->ArchivePath);
                     std::string cutname = path.filename().c_str();
 
-                    if (Lamp::Games::getInstance().currentGame->Ident().ShortHand == "BG3") {
-                        size_t pos = cutname.find('-');
-                        if (pos != std::string::npos) {
-                            cutname.erase(pos);
-                        }
+                    while (cutname.length() < 100) {
+                        cutname += '-';
                     }
 
                     int distance = calculateLevenshteinDistance(cutname, lampConfig::getInstance().searchBuffer);
