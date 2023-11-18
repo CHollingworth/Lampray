@@ -102,6 +102,11 @@ int main(int, char**)
 
     Lamp::Games::getInstance().currentProfile = Lamp::Games::getInstance().currentGame->KeyInfo()["CurrentProfile"];
 
+    // Try to load and set the global font scale. I am pretty sure this is not a good way of doing this...
+    std::string loadedFontScale = Lamp::Core::FS::lampIO::loadKeyData("Font_Scale", "LAMP CONFIG");
+    if(loadedFontScale != ""){
+        io.FontGlobalScale = std::stof(loadedFontScale);
+    }
 
     Lamp::Core::Base::lampLog::getInstance().log("Creating Directories");
     try {
