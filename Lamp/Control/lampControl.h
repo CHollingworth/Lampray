@@ -176,13 +176,14 @@ namespace Lamp::Core{
                 if (ImGui::InputText("##searcher", lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
                 }
-                if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, ImGuiTableFlags_SizingStretchProp)) {
+                if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, ImGuiTableFlags_SizingStretchProp + ImGuiTableFlags_Reorderable)) {
                     for (auto it = columnNames.begin(); it != columnNames.end(); ++it) {
-                        ImGui::TableNextColumn();
-
-                        ImGui::Text((*it).c_str());
+                        ImGui::TableSetupColumn((*it).c_str());
                     }
+					ImGui::TableHeadersRow();
                     ImGui::TableNextRow();
+
+                    int dnd_move_from = -1, dnd_move_to = -1; // initialize position tracking vars for drag and drop functionality
                     int i = 0;
                     for (auto it = ModList.begin(); it != ModList.end(); ++it) {
 
@@ -222,7 +223,51 @@ namespace Lamp::Core{
                             ImGui::SetTooltip((*it)->ArchivePath);
                         }
 
+                        // start drag and drop handling
+                        ImGuiDragDropFlags src_flags = 0;
+                        src_flags |= ImGuiDragDropFlags_SourceNoDisableHover;     // Keep the source displayed as hovered
+                        src_flags |= ImGuiDragDropFlags_SourceNoHoldToOpenOthers; // Because our dragging is local, we disable the feature of opening foreign treenodes/tabs while dragging
+                        src_flags |= ImGuiDragDropFlags_SourceAllowNullID; // apparently needed?
+                        //src_flags |= ImGuiDragDropFlags_SourceNoPreviewTooltip; // Hide the tooltip
+                        if (ImGui::BeginDragDropSource(src_flags))
+                        {
+                            if (!(src_flags & ImGuiDragDropFlags_SourceNoPreviewTooltip))
+                                ImGui::Text("Moving \"%s\"", cutname.c_str());
+                            ImGui::SetDragDropPayload("MODLIST_DND", &i, sizeof(int));
+                            ImGui::EndDragDropSource();
+                        }
 
+                        if (ImGui::BeginDragDropTarget())
+                        {
+                            ImGuiDragDropFlags target_flags = 0;
+                            //target_flags |= ImGuiDragDropFlags_AcceptNoDrawDefaultRect; // Don't display the yellow rectangle
+                            target_flags |= ImGuiDragDropFlags_SourceAllowNullID;
+                            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MODLIST_DND", target_flags))
+                            {
+                                dnd_move_from = *(const int*)payload->Data;
+                                dnd_move_to = i;
+
+                                auto* tmp = ModList[dnd_move_from];
+                                // update the ModList (this also seems to update the UI immediately)
+                                if(dnd_move_from > dnd_move_to){
+                                    // if moving a mod to a higher position, shift things down and then place the moved mod
+                                    for(int ind = dnd_move_from; ind > dnd_move_to; ind--){
+                                        ModList[ind] = ModList[ind - 1];
+                                    }
+                                } else{
+                                    // if moving a mod to a lower position, shift things up and then place the moved mod
+                                    for(int ind = dnd_move_from; ind < dnd_move_to; ind++){
+                                        ModList[ind] = ModList[ind + 1];
+                                    }
+                                }
+                                ModList[dnd_move_to] = tmp;
+
+                                // save the change to the profile's Mod_List
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
+                            }
+                            ImGui::EndDragDropTarget();
+                        }
+                        // end drag and drop handling
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
