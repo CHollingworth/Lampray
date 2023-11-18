@@ -2,8 +2,8 @@
 # ![alt text](https://cdn.discordapp.com/attachments/1160692058017763581/1175551711281168456/LMP-64.png?ex=656ba4d8&is=65592fd8&hm=ccaf321556119a09510514835ccadded74ee8bcc02fb48ec5697d5e9defcdd22&) Lampray 
 A Mod Manager for games, made for Linux! As an alternative to Vortex and MO2.
 
-This tool is in its early days please see the contributing section to help add more to it, 
-For now i am just one person working on this tool updates will be slow.
+This tool is in its early days please see the contributing section to help add more to it! 
+Big thanks to airtonix & SnazzyPanda for their amazing work on Lampray.
 
 ### Contributors discussion / Early Peeks
 If you want early information about lamp, and how things are progressing join me on my very basic development discord.
@@ -27,20 +27,6 @@ If you want early information about lamp, and how things are progressing join me
 
 ## Current Goals
 
-### Road to 1.1.0
-- [X] Profile Support
-- [ ] Persistent Data Paths
-- [ ] Game Integration Guide
-- [X] Independent modsettings creation.
-- [X] Easy Modlist Sharing
-- [X] Full Lampray::Core Rewrite
-- [X] Wayland Native Builds
-- [ ] Implement OverlayFS as a replacement for pure file duplication
-      
-### Unessential but nice ideas
-- [X] Lampray Specific Colour Scheme
-- [X] Custom Font Support
-- 
 ### Bethesda Support
 - [ ] Loot Lib Integration
 - [ ] FoMod Parsing
