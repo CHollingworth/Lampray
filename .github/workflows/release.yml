@@ -79,8 +79,8 @@ jobs:
         run: |
           if [ "${{ env.ACT }}" = "true" ]; then
             echo "OFFLINE: skipping upload"
-            cp -r ./build/Lamp ./build/lamp-x11-${RELEASE_TAG}
+            cp -r ./build/Lamp ./build/Lampray-${RELEASE_TAG}
           else
-            gh release upload ${RELEASE_TAG} ./build/Lamp#lamp-x11-${RELEASE_TAG}
+            gh release upload ${RELEASE_TAG} ./build/Lampray#lamp-${RELEASE_TAG}
           fi
           
