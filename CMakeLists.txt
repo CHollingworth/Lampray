@@ -67,10 +67,11 @@ include_directories(${SDL2_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 
 
-find_package(pugixml REQUIRED)
-target_link_libraries(${PROJECT_NAME} pugixml::pugixml)
-add_definitions(-DGLFW_INCLUDE_VULKAN)
+#find_package(pugixml REQUIRED)
+#target_link_libraries(${PROJECT_NAME} pugixml::pugixml)
 
+add_subdirectory(third-party/pugixml)
+target_link_libraries(${PROJECT_NAME} pugixml::pugixml)
 
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIRS})
