@@ -1,5 +1,5 @@
 
-# ![alt text](https://cdn.discordapp.com/attachments/1160692058017763581/1160692177781919794/LMP-64.png?ex=653595d3&is=652320d3&hm=4febcb9e9ed7f1f31f949a3db68e4b465b23922d44f891e78a788b49bd4cb093&) Lamp 
+# ![alt text](https://cdn.discordapp.com/attachments/1160692058017763581/1175551711281168456/LMP-64.png?ex=656ba4d8&is=65592fd8&hm=ccaf321556119a09510514835ccadded74ee8bcc02fb48ec5697d5e9defcdd22&) Lampray 
 A Mod Manager for games, made for Linux! As an alternative to Vortex and MO2.
 
 This tool is in its early days please see the contributing section to help add more to it, 
@@ -33,12 +33,12 @@ If you want early information about lamp, and how things are progressing join me
 - [ ] Game Integration Guide
 - [X] Independent modsettings creation.
 - [X] Easy Modlist Sharing
-- [X] Full Lamp::Core Rewrite
+- [X] Full Lampray::Core Rewrite
 - [X] Wayland Native Builds
 - [ ] Implement OverlayFS as a replacement for pure file duplication
       
 ### Unessential but nice ideas
-- [X] Lamp Specific Colour Scheme
+- [X] Lampray Specific Colour Scheme
 - [X] Custom Font Support
 - 
 ### Bethesda Support

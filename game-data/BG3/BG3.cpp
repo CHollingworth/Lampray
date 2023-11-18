@@ -300,7 +300,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preDeployment() {
         }
     };
     lampExecutor executor(lambdaFunction);
-    executor.execute(ModList);
+    executor.execute(ModList,true);
     Core::Base::LampSequencer::run("BG3 Settings Control");
     return {1,"TESTER"};
 }

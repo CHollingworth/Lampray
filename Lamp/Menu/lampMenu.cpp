@@ -56,12 +56,12 @@ void Lamp::Core::lampMenu::IntroMenu() {
     DefaultMenuBar();
     ImGui::Separator();
     ImGuiStyle& style = ImGui::GetStyle();
-    float size = ImGui::CalcTextSize("Lamp").x + style.FramePadding.x * 2.0f;
+    float size = ImGui::CalcTextSize("Lampray").x + style.FramePadding.x * 2.0f;
     float avail = ImGui::GetContentRegionAvail().x;
 
     float off = (avail - size) * 0.5f;
     if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
-    ImGui::Text("Lamp");
+    ImGui::Text("Lampray");
 
     size = ImGui::CalcTextSize("Linux Application Modding Platform").x + style.FramePadding.x * 2.0f;
     off = (avail - size) * 0.5f;
@@ -195,7 +195,7 @@ void Lamp::Core::lampMenu::GameConfigMenu() {
 void Lamp::Core::lampMenu::DefaultMenuBar() {
     if (ImGui::BeginMenuBar()) {
 
-        if(ImGui::BeginMenu("Lamp - " + Lamp::Games::getInstance().currentGame->Ident().ReadableName +" - "+Lamp::Games::getInstance().currentProfile)){
+        if(ImGui::BeginMenu("Lampray - " + Lamp::Games::getInstance().currentGame->Ident().ReadableName +" - "+Lamp::Games::getInstance().currentProfile)){
 
             if (ImGui::BeginMenu("Game Selection")) {
                 for (Game::gameControl *element: Lamp::Games::getInstance().gameList){
@@ -284,7 +284,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
 
             ImGui::MenuItem("--------");
             }
-            if (ImGui::MenuItem("Customise Lamp")) {
+            if (ImGui::MenuItem("Customise Lampray")) {
                 currentMenu = CUSTOMIZE;
             }
 

@@ -134,7 +134,7 @@ namespace Lamp {
                 }
             };
             lampExecutor executor(lambdaFunction);
-            executor.execute(ModList);
+            executor.execute(ModList, false);
             return {1,"TESTER"};
         }
 

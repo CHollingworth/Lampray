@@ -646,22 +646,26 @@ namespace Lamp::Core::Base{
          *
          * @param data The vector of mod pointers on which to execute the code.
          */
-        void execute(const std::vector<lampMod::Mod *>& data) {
+        void execute(const std::vector<lampMod::Mod *>& data, bool detach) {
             lampLog::getInstance().log("ModList Executor: Starting", lampLog::warningLevel::LOG);
             itemCount = data.size();
-            for (const lampMod::Mod * item : data) {
-                std::thread t([this, item]() {
-                    if (code_) {
-                        code_(item);
+                for (const lampMod::Mod *item: data) {
+                    std::thread t([this, item]() {
+                        if (code_) {
+                            code_(item);
+                        }
+                        {
+                            std::unique_lock<std::mutex> lock(mutex_);
+                            finishedCount++;
+                        }
+                        condition_.notify_all();
+                    });
+                    if(detach) {
+                        t.detach();
+                    }else{
+                        t.join();
                     }
-                    {
-                        std::unique_lock<std::mutex> lock(mutex_);
-                        finishedCount++;
-                    }
-                    condition_.notify_all();
-                });
-                t.detach();
-            }
+                }
             waitForCompletion();
         }
 
