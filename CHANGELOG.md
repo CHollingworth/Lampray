@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.12](https://github.com/CHollingworth/Lamp/compare/v1.0.11...v1.0.12) (2023-11-18)
+
+
+### Bug Fixes
+
+* Lamp has been renamed to Lampray! Deployment has changed resulting in slower deployment times but hiegher accuracy in load order. ([8ca573a](https://github.com/CHollingworth/Lamp/commit/8ca573ad83dd3e3f41cf326cee2b607cf735ad78))
+
 ## [1.0.11](https://github.com/CHollingworth/Lamp/compare/v1.0.10...v1.0.11) (2023-11-06)
 
 
