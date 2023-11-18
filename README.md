@@ -73,13 +73,6 @@ If you encounter any issues, bugs, or have ideas for new features, please open a
 
 Thank you for your contributions and support in making this tool better!
 
-### Credits
-Creator: CHollingworth 
-
-Pugixml: zeux
-
-bit7z: rikyoz
-
 ### Special Thanks
 Id like to take a moment to thank these lovely people for helping me fix issue i wouldnt of known existed without their input:
 - alterNERDtive
