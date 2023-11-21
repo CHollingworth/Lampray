@@ -47,6 +47,7 @@ namespace Lamp::Core{
 
 
         lampHex Colour_SearchHighlight = ImVec4(0.3f, 0.f, 0.3f, 1);
+        lampHex Colour_ButtonAlt = ImVec4(0.1f, 0.6f, 0.3f, 1);
         /**
         * @brief The `lampArchiveDisplayHelper` struct provides helper methods for displaying archives.
         */
