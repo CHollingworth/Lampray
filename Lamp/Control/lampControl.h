@@ -191,10 +191,16 @@ namespace Lamp::Core{
 
 
                         if((*it)->enabled) {
+                            // for now, manually set to a greenish color.
+                            // TODO: make these colors configurable and pull them here
+                            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(50, 170, 120));
+                            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor(50, 220, 120));
+                            ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor(50, 220, 120));
                             if (ImGui::Button(("Enabled##" + std::to_string(i)).c_str())) {
                                 (*it)->enabled = false;
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
+                            ImGui::PopStyleColor(3);
                         }else{
                             if (ImGui::Button(("Disabled##" + std::to_string(i)).c_str())) {
                                 (*it)->enabled = true;
