@@ -306,9 +306,6 @@ namespace Lamp::Core{
                         if(lampConfig::getInstance().listHighlight == i) {
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
-                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
-                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
-                        }
 
 
                         if(ImGui::Button(("Up##"+std::to_string(i)).c_str())){
@@ -365,6 +362,10 @@ namespace Lamp::Core{
                             ImGui::TableNextColumn();
                             if (ImGui::Button(ittt->first.c_str()))
                                 ittt->second = reinterpret_cast<bool *>(!ittt->second);
+
+                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                                ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                            }
                         }
 
                         ImGui::TableNextRow();
