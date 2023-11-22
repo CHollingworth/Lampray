@@ -92,7 +92,15 @@ int main(int, char**)
     Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampControl::getFormattedTimeAndDate()+" | | Battle Control Online, Welcome Back Commander.", Lamp::Core::Base::lampLog::LOG);
 
     Lamp::Games::getInstance();
-    Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
+
+    std::string loadedCheckUpdates = Lamp::Core::FS::lampIO::loadKeyData("Check_Updates_Startup", "LAMP CONFIG");
+    bool checkForUpdates = true;
+    if(loadedCheckUpdates == "0" || loadedCheckUpdates == "false"){
+        checkForUpdates = false;
+    }
+    if(checkForUpdates){
+        Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
+    }
     Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"]=(std::string)Lamp::Core::FS::lampIO::loadKeyData("showIntroMenu","LAMP CONFIG").returnReason;
     Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibaryLocation","LAMP CONFIG").returnReason;
     Lamp::Core::lampConfig::getInstance().init();
