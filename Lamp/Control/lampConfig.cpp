@@ -19,9 +19,11 @@ bool Lamp::Core::lampConfig::init() {
             } else {
                 Base::lampLog::getInstance().log("Fatal. Cannot locate 7z.so", Base::lampLog::ERROR, true,
                                                  Base::lampLog::LMP_NO7ZP);
+                return false;
             }
         }
 
+    return true;
 }
 
 ImGuiWindowFlags Lamp::Core::lampConfig::DefaultWindowFlags() {
