@@ -173,7 +173,13 @@ namespace Lamp::Core{
                 if (ImGui::InputTextWithHint("##searcher","Type here to search your mods...", lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
                 }
-                if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, ImGuiTableFlags_SizingStretchProp + ImGuiTableFlags_Reorderable)) {
+				
+                ImGuiTableFlags mod_table_flags = 0;
+                mod_table_flags |= ImGuiTableFlags_SizingStretchProp;
+                mod_table_flags |= ImGuiTableFlags_Hideable; // allow hiding coumns via context menu
+                mod_table_flags |= ImGuiTableFlags_Reorderable; // allow reordering columns
+
+                if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, mod_table_flags)) {
                     for (auto it = columnNames.begin(); it != columnNames.end(); ++it) {
                         ImGui::TableSetupColumn((*it).c_str());
                     }
