@@ -328,12 +328,19 @@ namespace Lamp::Core{
                         }
 
 
-                        if (ImGui::Button(("Delete Mod##" + std::to_string(i)).c_str())) {
-                            //std::remove(absolute(path).c_str());
-                            std::cout << absolute(path).c_str() << std::endl;
-                            ModList.erase(it);
-                            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
-                            break;
+                        if((*it)->enabled) {
+                            ImGui::Text("Disabled"); //column placeholder
+                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
+                                ImGui::SetTooltip("Only disabled mods can be deleted.");
+                            }
+                        } else{
+                            if (ImGui::Button(("Delete Mod##" + std::to_string(i)).c_str())) {
+                                //std::remove(absolute(path).c_str());
+                                std::cout << absolute(path).c_str() << std::endl;
+                                ModList.erase(it);
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+                                break;
+                            }
                         }
 
 
