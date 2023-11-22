@@ -5,6 +5,9 @@
 #include <regex>
 #include "lampFS.h"
 #include "../Control/lampControl.h"
+#include "bit7zlibrary.hpp"
+#include "bitfilecompressor.hpp"
+#include "bitarchivewriter.hpp"
 
 
 std::vector<Lamp::Core::Base::lampMod::Mod *> Lamp::Core::FS::lampIO::loadModList(Lamp::Core::FS::lampString game, Lamp::Core::FS::lampString profileNameS) {
@@ -205,6 +208,34 @@ void Lamp::Core::FS::lampIO::fileDrop(const char *inputPath) {
                     std::string ex = e.what();
                     Base::lampLog::getInstance().log("File Drop Failed: " + ex, Base::lampLog::ERROR, true,
                                                      Base::lampLog::LMP_NOFILEDROP);
+                }
+            } if(std::regex_match(path.filename().string(), std::regex("^.*\\.(pak)$"))){
+                if((std::string)Lamp::Games::getInstance().currentGame->Ident().ReadableName == "Baldur's Gate 3") {
+                    bit7z::Bit7zLibrary lib{ Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation };
+                    bit7z::BitArchiveWriter archive{ lib, bit7z::BitFormat::SevenZip };
+                    archive.addFile(path);
+                    archive.compressTo(lampConfig::getInstance().archiveDataPath+"/"+path.filename().string()+" LMP.zip" );
+
+
+
+
+                    std::filesystem::path targetDIR = Core::lampConfig::getInstance().archiveDataPath +
+                                                      Lamp::Games::getInstance().currentGame->Ident().ReadableName; // Roi Danton many thanks again!
+                    auto target = targetDIR / path.filename();
+                    try {
+                        std::filesystem::create_directories(targetDIR);
+                        if(!std::filesystem::exists(target)){
+                            std::filesystem::copy_file(lampConfig::getInstance().archiveDataPath+"/"+path.filename().string()+" LMP.zip", target, std::filesystem::copy_options::overwrite_existing);
+                        }
+
+                        Lamp::Games::getInstance().currentGame->registerArchive(target.string());
+
+                    }
+                    catch (std::exception &e) {
+                        std::string ex = e.what();
+                        Base::lampLog::getInstance().log("File Drop Failed: " + ex, Base::lampLog::ERROR, true,
+                                                         Base::lampLog::LMP_NOFILEDROP);
+                    }
                 }
             }
 
