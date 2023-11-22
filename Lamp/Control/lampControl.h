@@ -47,6 +47,7 @@ namespace Lamp::Core{
 
 
         lampHex Colour_SearchHighlight = ImVec4(0.3f, 0.f, 0.3f, 1);
+        lampHex Colour_ButtonAlt = ImVec4(0.1f, 0.6f, 0.3f, 1);
         /**
         * @brief The `lampArchiveDisplayHelper` struct provides helper methods for displaying archives.
         */
@@ -197,10 +198,12 @@ namespace Lamp::Core{
 
 
                         if((*it)->enabled) {
+                            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)lampControl::getInstance().Colour_ButtonAlt);
                             if (ImGui::Button(("Enabled##" + std::to_string(i)).c_str())) {
                                 (*it)->enabled = false;
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
+                            ImGui::PopStyleColor(1);
                         }else{
                             if (ImGui::Button(("Disabled##" + std::to_string(i)).c_str())) {
                                 (*it)->enabled = true;
