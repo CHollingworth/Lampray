@@ -39,10 +39,11 @@ namespace Lamp {
                     "590202-ff",
                     "4296f9-ff",
                     "a61103-ff",
-                    "1966bf-c6"
+                    "1966bf-c6",
+                    "179642-ff" // green-ish color for ButtonAlt
             };
 
-            float floatMap[15][4] = {
+            float floatMap[16][4] = {
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
@@ -57,7 +58,8 @@ namespace Lamp {
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
-                    { 1.0f, 0.0f, 0.0f, 0.0f }
+                    { 1.0f, 0.0f, 0.0f, 0.0f },
+                    { 0.0f, 1.0f, 0.0f, 0.0f } // ButtonAlt
             };
 
             std::map<ImGuiCol_,std::string> styleMap = {
@@ -117,6 +119,20 @@ namespace Lamp {
                 lampColour::getInstance().floatMap[x][3] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight).w;
 
 
+				x++;
+				std::string xloadedBtnAlt = Lamp::Core::FS::lampIO::loadKeyData("Colour_ButtonAlt", "LAMP CONFIG");
+                if(xloadedBtnAlt == ""){
+                    Lamp::Core::Base::lampTypes::lampHexAlpha colour(lampColour::getInstance().defaultColours[x]);
+                    Lamp::Core::FS::lampIO::saveKeyData("Colour_ButtonAlt", ((std::string)colour), "LAMP CONFIG");
+                }else{
+                    Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = Lamp::Core::Base::lampTypes::lampHexAlpha(xloadedBtnAlt);
+                }
+
+				lampColour::getInstance().floatMap[x][0] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).x;
+                lampColour::getInstance().floatMap[x][1] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).y;
+                lampColour::getInstance().floatMap[x][2] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).z;
+                lampColour::getInstance().floatMap[x][3] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).w;
+
             }
 
             void setColourTemp(ImGuiCol_ StylePoint, Lamp::Core::Base::lampTypes::lampHexAlpha colour){
@@ -141,6 +157,9 @@ namespace Lamp {
                 ImGui::ColorEdit4(("Colour_SearchHighlight##"+std::to_string(x)).c_str(),lampColour::getInstance().floatMap[x]);
                 Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = ImVec4(lampColour::getInstance().floatMap[x][0],lampColour::getInstance().floatMap[x][1],lampColour::getInstance().floatMap[x][2],lampColour::getInstance().floatMap[x][3]);
 
+				x++;
+                ImGui::ColorEdit4(("Colour_ButtonAlt##"+std::to_string(x)).c_str(),lampColour::getInstance().floatMap[x]);
+                Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = ImVec4(lampColour::getInstance().floatMap[x][0],lampColour::getInstance().floatMap[x][1],lampColour::getInstance().floatMap[x][2],lampColour::getInstance().floatMap[x][3]);
 
                 // basically ripped from the demo, set a min/max value and adds a drag-bar thing to set/update the scale to that value
                 const float MIN_SCALE = 0.3f;
@@ -160,6 +179,7 @@ namespace Lamp {
                     }
 
                     Lamp::Core::FS::lampIO::saveKeyData("Colour_SearchHighlight", ((std::string)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight), "LAMP CONFIG");
+                    Lamp::Core::FS::lampIO::saveKeyData("Colour_ButtonAlt", ((std::string)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt), "LAMP CONFIG");
 
                     // I don't feel like doing the work to get the value properly, and this seems to work fine
                     Lamp::Core::FS::lampIO::saveKeyData("Font_Scale", std::to_string(io.FontGlobalScale), "LAMP CONFIG");
@@ -174,6 +194,7 @@ namespace Lamp {
                 ImGui::SameLine();
                 if(ImGui::Button("Reset")){
                     Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
+                    Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[14]);
 
                     for (int i = 0; i < lampColour::getInstance().defaultColours.size(); ++i) {
                         ImVec4 color = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[i]);
