@@ -294,6 +294,10 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::MenuItem("Check for Updates")) {
+                Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
+            }
+
             ImGui::EndMenu();
         }
 
