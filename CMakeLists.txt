@@ -66,6 +66,8 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 
+#add_subdirectory(third-party/SDL2)
+#target_link_libraries(${PROJECT_NAME} SDL)
 
 #find_package(pugixml REQUIRED)
 #target_link_libraries(${PROJECT_NAME} pugixml::pugixml)
@@ -76,6 +78,7 @@ target_link_libraries(${PROJECT_NAME} pugixml::pugixml)
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
+
 
 target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/third-party/l4z/liblz4.so)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/third-party/l4z/)
