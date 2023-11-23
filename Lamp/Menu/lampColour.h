@@ -107,7 +107,7 @@ namespace Lamp {
 
                 std::string xloaded = Lamp::Core::FS::lampIO::loadKeyData("Colour_SearchHighlight", "LAMP CONFIG");
                 if(xloaded == ""){
-                    Lamp::Core::Base::lampTypes::lampHexAlpha colour("a61103-ff");
+                    Lamp::Core::Base::lampTypes::lampHexAlpha colour(lampColour::getInstance().defaultColours[x]);
                     Lamp::Core::FS::lampIO::saveKeyData("Colour_SearchHighlight", ((std::string)colour), "LAMP CONFIG");
                 }else{
                     Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(xloaded);
@@ -194,7 +194,7 @@ namespace Lamp {
                 }
                 ImGui::SameLine();
                 if(ImGui::Button("Reset")){
-                    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
+                    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[13]);
                     Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[14]);
 
                     for (int i = 0; i < lampColour::getInstance().defaultColours.size(); ++i) {
