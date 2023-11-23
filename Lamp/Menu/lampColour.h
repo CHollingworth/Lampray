@@ -40,8 +40,7 @@ namespace Lamp {
                     "4296f9-ff",
                     "a61103-ff",
                     "1966bf-c6", // Colour_SearchHighlight
-					//"a61103-ff",
-                    "179642-ff" // green-ish color for ButtonAlt
+                    "1a994d-ff" // green-ish color for ButtonAlt
             };
 
             float floatMap[15][4] = {
@@ -59,7 +58,6 @@ namespace Lamp {
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f }, // Colour_SearchHighlight
-                    //{ 1.0f, 0.0f, 0.0f, 0.0f },
                     { 0.0f, 1.0f, 0.0f, 0.0f } // ButtonAlt
             };
 
