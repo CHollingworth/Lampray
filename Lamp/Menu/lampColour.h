@@ -78,8 +78,7 @@ namespace Lamp {
             };
 
             const float defaultFontScale = 1.0f;
-            const bool defaultCheckForUpdateAtStart = true;
-            bool checkForUpdatesAtStartup = true;
+
 
             void getConfigColours(){
                 int x = 0;
@@ -136,7 +135,7 @@ namespace Lamp {
 
                 std::string loadedCheckUpdates = Lamp::Core::FS::lampIO::loadKeyData("Check_Updates_Startup", "LAMP CONFIG");
                 if(loadedCheckUpdates == "0" || loadedCheckUpdates == "false"){
-                    lampColour::getInstance().checkForUpdatesAtStartup = false;
+                    lampConfig::getInstance().checkForUpdatesAtStartup = false;
                 }
             }
 
@@ -172,7 +171,7 @@ namespace Lamp {
                 ImGuiIO& io = ImGui::GetIO();
                 ImGui::DragFloat("Font_Scale", &io.FontGlobalScale, 0.005f, MIN_SCALE, MAX_SCALE, "%.2f", ImGuiSliderFlags_AlwaysClamp);
 
-                ImGui::Checkbox("Check for updates at startup (Check_Updates_Startup)", &lampColour::getInstance().checkForUpdatesAtStartup);
+                ImGui::Checkbox("Check for updates at startup (Check_Updates_Startup)", &lampConfig::getInstance().checkForUpdatesAtStartup);
 
 
                 if(ImGui::Button("Save")){
@@ -190,7 +189,7 @@ namespace Lamp {
 
                     // I don't feel like doing the work to get the value properly, and this seems to work fine
                     Lamp::Core::FS::lampIO::saveKeyData("Font_Scale", std::to_string(io.FontGlobalScale), "LAMP CONFIG");
-                    Lamp::Core::FS::lampIO::saveKeyData("Check_Updates_Startup", std::to_string(lampColour::getInstance().checkForUpdatesAtStartup), "LAMP CONFIG");
+                    Lamp::Core::FS::lampIO::saveKeyData("Check_Updates_Startup", std::to_string(lampConfig::getInstance().checkForUpdatesAtStartup), "LAMP CONFIG");
 
                     return true;
                 }
@@ -214,7 +213,7 @@ namespace Lamp {
 
 
                     io.FontGlobalScale = lampColour::getInstance().defaultFontScale;
-                    lampColour::getInstance().checkForUpdatesAtStartup = lampColour::getInstance().defaultCheckForUpdateAtStart;
+                    lampConfig::getInstance().checkForUpdatesAtStartup = lampConfig::getInstance().defaultCheckForUpdateAtStart;
                 }
 
                 ImGui::End();

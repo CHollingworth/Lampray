@@ -282,8 +282,17 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                 Lamp::Core::FS::lampShare::importProfile();
             }
 
+
+
             ImGui::MenuItem("--------");
             }
+
+
+
+            if (ImGui::MenuItem("Check for Updates")) {
+                Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
+            }
+
             if (ImGui::MenuItem("Customise Lampray")) {
                 currentMenu = CUSTOMIZE;
             }
@@ -294,9 +303,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                 ImGui::EndMenu();
             }
 
-            if (ImGui::MenuItem("Check for Updates")) {
-                Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
-            }
+
 
             ImGui::EndMenu();
         }

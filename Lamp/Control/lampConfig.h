@@ -45,6 +45,8 @@ namespace Lamp::Core {
         const lampString DeploymentDataPath = baseDataPath + "Deployment/";
         lampString bit7zLibaryLocation = "";
 
+        const bool defaultCheckForUpdateAtStart = true;
+        bool checkForUpdatesAtStartup = true;
 
         int listHighlight = -1;
         char searchBuffer[250]{};
