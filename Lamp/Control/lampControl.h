@@ -346,16 +346,28 @@ namespace Lamp::Core{
                         }
 
 
-                        if (ImGui::Button(("Delete Mod##" + std::to_string(i)).c_str())) {
-                            //std::remove(absolute(path).c_str());
-                            std::cout << absolute(path).c_str() << std::endl;
-                            ModList.erase(it);
-                            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
-                            break;
-                        }
-                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
-                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
-                        }
+                            ImGui::BeginDisabled((*it)->enabled);
+
+                            if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
+                                int deleteResult = std::remove(absolute(path).c_str());
+                                if(deleteResult != 0){
+                                    std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                                }
+
+                                std::cout << absolute(path).c_str() << std::endl;
+                                ModList.erase(it);
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+                                break;
+                            }
+
+                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
+                                ImGui::SetTooltip("Only disabled mods can be removed.");
+                            }
+                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                                ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                            }
+                      
+                            ImGui::EndDisabled();
 
 
                         for (auto ittt = ExtraOptions.begin(); ittt != ExtraOptions.end(); ++ittt) {

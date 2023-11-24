@@ -39,11 +39,11 @@ namespace Lamp {
                     "590202-ff",
                     "4296f9-ff",
                     "a61103-ff",
-                    "1966bf-c6",
-                    "179642-ff" // green-ish color for ButtonAlt
+                    "1966bf-c6", // Colour_SearchHighlight
+                    "1a994d-ff" // green-ish color for ButtonAlt
             };
 
-            float floatMap[16][4] = {
+            float floatMap[15][4] = {
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
@@ -57,8 +57,7 @@ namespace Lamp {
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
-                    { 1.0f, 0.0f, 0.0f, 0.0f },
-                    { 1.0f, 0.0f, 0.0f, 0.0f },
+                    { 1.0f, 0.0f, 0.0f, 0.0f }, // Colour_SearchHighlight
                     { 0.0f, 1.0f, 0.0f, 0.0f } // ButtonAlt
             };
 
@@ -79,6 +78,7 @@ namespace Lamp {
             };
 
             const float defaultFontScale = 1.0f;
+
 
             void getConfigColours(){
                 int x = 0;
@@ -106,7 +106,7 @@ namespace Lamp {
 
                 std::string xloaded = Lamp::Core::FS::lampIO::loadKeyData("Colour_SearchHighlight", "LAMP CONFIG");
                 if(xloaded == ""){
-                    Lamp::Core::Base::lampTypes::lampHexAlpha colour("a61103-ff");
+                    Lamp::Core::Base::lampTypes::lampHexAlpha colour(lampColour::getInstance().defaultColours[x]);
                     Lamp::Core::FS::lampIO::saveKeyData("Colour_SearchHighlight", ((std::string)colour), "LAMP CONFIG");
                 }else{
                     Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(xloaded);
@@ -133,6 +133,10 @@ namespace Lamp {
                 lampColour::getInstance().floatMap[x][2] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).z;
                 lampColour::getInstance().floatMap[x][3] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).w;
 
+                std::string loadedCheckUpdates = Lamp::Core::FS::lampIO::loadKeyData("Check_Updates_Startup", "LAMP CONFIG");
+                if(loadedCheckUpdates == "0" || loadedCheckUpdates == "false"){
+                    lampConfig::getInstance().checkForUpdatesAtStartup = false;
+                }
             }
 
             void setColourTemp(ImGuiCol_ StylePoint, Lamp::Core::Base::lampTypes::lampHexAlpha colour){
@@ -167,6 +171,8 @@ namespace Lamp {
                 ImGuiIO& io = ImGui::GetIO();
                 ImGui::DragFloat("Font_Scale", &io.FontGlobalScale, 0.005f, MIN_SCALE, MAX_SCALE, "%.2f", ImGuiSliderFlags_AlwaysClamp);
 
+                ImGui::Checkbox("Check for updates at startup (Check_Updates_Startup)", &lampConfig::getInstance().checkForUpdatesAtStartup);
+
 
                 if(ImGui::Button("Save")){
                     ImGui::End();
@@ -183,6 +189,7 @@ namespace Lamp {
 
                     // I don't feel like doing the work to get the value properly, and this seems to work fine
                     Lamp::Core::FS::lampIO::saveKeyData("Font_Scale", std::to_string(io.FontGlobalScale), "LAMP CONFIG");
+                    Lamp::Core::FS::lampIO::saveKeyData("Check_Updates_Startup", std::to_string(lampConfig::getInstance().checkForUpdatesAtStartup), "LAMP CONFIG");
 
                     return true;
                 }
@@ -193,7 +200,7 @@ namespace Lamp {
                 }
                 ImGui::SameLine();
                 if(ImGui::Button("Reset")){
-                    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
+                    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[13]);
                     Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[14]);
 
                     for (int i = 0; i < lampColour::getInstance().defaultColours.size(); ++i) {
@@ -206,6 +213,7 @@ namespace Lamp {
 
 
                     io.FontGlobalScale = lampColour::getInstance().defaultFontScale;
+                    lampConfig::getInstance().checkForUpdatesAtStartup = lampConfig::getInstance().defaultCheckForUpdateAtStart;
                 }
 
                 ImGui::End();

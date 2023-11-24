@@ -63,22 +63,21 @@ int main(int, char**)
 
 
 
-    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_Text] = Lamp::Core::Base::lampTypes::lampHexAlpha("ffffff-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = Lamp::Core::Base::lampTypes::lampHexAlpha("0a0d12-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_PopupBg] = Lamp::Core::Base::lampTypes::lampHexAlpha("141414-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_FrameBg] = Lamp::Core::Base::lampTypes::lampHexAlpha("260101-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg] = Lamp::Core::Base::lampTypes::lampHexAlpha("071216-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_Button] = Lamp::Core::Base::lampTypes::lampHexAlpha("590202-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
+    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[13]);
+    ImGui::GetStyle().Colors[ImGuiCol_Text] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[0]);
+    ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[1]);
+    ImGui::GetStyle().Colors[ImGuiCol_PopupBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[2]);
+    ImGui::GetStyle().Colors[ImGuiCol_FrameBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[3]);
+    ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[4]);
+    ImGui::GetStyle().Colors[ImGuiCol_Button] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[5]);
+    ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[6]);
+    ImGui::GetStyle().Colors[ImGuiCol_ButtonActive] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[7]);
 
-    ImGui::GetStyle().Colors[ImGuiCol_ButtonActive] = Lamp::Core::Base::lampTypes::lampHexAlpha("260101-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_Header] = Lamp::Core::Base::lampTypes::lampHexAlpha("4296f9-4f");
-    ImGui::GetStyle().Colors[ImGuiCol_HeaderHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha("4296f9-cc");
-    ImGui::GetStyle().Colors[ImGuiCol_HeaderActive] = Lamp::Core::Base::lampTypes::lampHexAlpha("590202-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha("4296f9-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_Separator] = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
-    ImGui::GetStyle().Colors[ImGuiCol_SeparatorHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha("1966bf-c6");
+    ImGui::GetStyle().Colors[ImGuiCol_Header] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[8]);
+    ImGui::GetStyle().Colors[ImGuiCol_HeaderHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[9]);
+    ImGui::GetStyle().Colors[ImGuiCol_HeaderActive] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[10]);
+	ImGui::GetStyle().Colors[ImGuiCol_Separator] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[11]);
+    ImGui::GetStyle().Colors[ImGuiCol_SeparatorHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[12]);
 
     Lamp::Core::Base::lampLog::getInstance().log("Clearing log file.");
     const std::string filename = "lamp.log";
@@ -92,7 +91,15 @@ int main(int, char**)
     Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampControl::getFormattedTimeAndDate()+" | | Battle Control Online, Welcome Back Commander.", Lamp::Core::Base::lampLog::LOG);
 
     Lamp::Games::getInstance();
-    Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
+
+    std::string loadedCheckUpdates = Lamp::Core::FS::lampIO::loadKeyData("Check_Updates_Startup", "LAMP CONFIG");
+    bool checkForUpdates = true;
+    if(loadedCheckUpdates == "0" || loadedCheckUpdates == "false"){
+        checkForUpdates = false;
+    }
+    if(checkForUpdates){
+        Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
+    }
     Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"]=(std::string)Lamp::Core::FS::lampIO::loadKeyData("showIntroMenu","LAMP CONFIG").returnReason;
     Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibaryLocation","LAMP CONFIG").returnReason;
     Lamp::Core::lampConfig::getInstance().init();
