@@ -340,6 +340,7 @@ namespace Lamp::Core{
                                 std::cout << absolute(path).c_str() << std::endl;
                                 ModList.erase(it);
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+                                ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
                                 break;
                             }
 
