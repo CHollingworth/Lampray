@@ -210,6 +210,9 @@ namespace Lamp::Core{
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
                         }
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                        }
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,lampControl::getInstance().Colour_SearchHighlight);
@@ -227,6 +230,9 @@ namespace Lamp::Core{
                         ImGui::Text(cutname.c_str());
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
                             ImGui::SetTooltip((*it)->ArchivePath);
+                        }
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
                         // start drag and drop handling
@@ -306,12 +312,21 @@ namespace Lamp::Core{
                             moveUp(it);
                             Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                         }
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                        }
                         ImGui::SameLine();
                         ImGui::Text((std::to_string(i)).c_str());
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                        }
                         ImGui::SameLine();
                         if(ImGui::Button(("Down##"+std::to_string(i)).c_str())){
                             moveDown(it);
                             Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
+                        }
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
                         ImGui::TableNextColumn();
@@ -321,12 +336,14 @@ namespace Lamp::Core{
 
 
                         ImGui::Text((*it)->timeOfUpdate);
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                        }
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
-
 
 
                             ImGui::BeginDisabled((*it)->enabled);
@@ -344,19 +361,24 @@ namespace Lamp::Core{
                                 break;
                             }
 
-
                             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
                                 ImGui::SetTooltip("Only disabled mods can be removed.");
                             }
-
+                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                                ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                            }
+                      
                             ImGui::EndDisabled();
-
 
 
                         for (auto ittt = ExtraOptions.begin(); ittt != ExtraOptions.end(); ++ittt) {
                             ImGui::TableNextColumn();
                             if (ImGui::Button(ittt->first.c_str()))
                                 ittt->second = reinterpret_cast<bool *>(!ittt->second);
+
+                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                                ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                            }
                         }
 
                         ImGui::TableNextRow();
