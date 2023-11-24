@@ -39,11 +39,11 @@ namespace Lamp {
                     "590202-ff",
                     "4296f9-ff",
                     "a61103-ff",
-                    "1966bf-c6",
-                    "179642-ff" // green-ish color for ButtonAlt
+                    "1966bf-c6", // Colour_SearchHighlight
+                    "1a994d-ff" // green-ish color for ButtonAlt
             };
 
-            float floatMap[16][4] = {
+            float floatMap[15][4] = {
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
@@ -57,8 +57,7 @@ namespace Lamp {
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
                     { 1.0f, 0.0f, 0.0f, 0.0f },
-                    { 1.0f, 0.0f, 0.0f, 0.0f },
-                    { 1.0f, 0.0f, 0.0f, 0.0f },
+                    { 1.0f, 0.0f, 0.0f, 0.0f }, // Colour_SearchHighlight
                     { 0.0f, 1.0f, 0.0f, 0.0f } // ButtonAlt
             };
 
@@ -106,7 +105,7 @@ namespace Lamp {
 
                 std::string xloaded = Lamp::Core::FS::lampIO::loadKeyData("Colour_SearchHighlight", "LAMP CONFIG");
                 if(xloaded == ""){
-                    Lamp::Core::Base::lampTypes::lampHexAlpha colour("a61103-ff");
+                    Lamp::Core::Base::lampTypes::lampHexAlpha colour(lampColour::getInstance().defaultColours[x]);
                     Lamp::Core::FS::lampIO::saveKeyData("Colour_SearchHighlight", ((std::string)colour), "LAMP CONFIG");
                 }else{
                     Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(xloaded);
@@ -193,7 +192,7 @@ namespace Lamp {
                 }
                 ImGui::SameLine();
                 if(ImGui::Button("Reset")){
-                    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha("a61103-ff");
+                    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[13]);
                     Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[14]);
 
                     for (int i = 0; i < lampColour::getInstance().defaultColours.size(); ++i) {
