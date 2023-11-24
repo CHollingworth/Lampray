@@ -23,7 +23,7 @@ If you want early information about lamp, and how things are progressing join me
 ## List of currently supported archives
 - zip
 - 7z
-- rar (Not supported on arch)
+- rar (No longer supported)
 
 ## Current Goals
 

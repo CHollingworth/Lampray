@@ -328,13 +328,10 @@ namespace Lamp::Core{
                         }
 
 
-                        if((*it)->enabled) {
-                            ImGui::Text("Disabled"); //column placeholder
-                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
-                                ImGui::SetTooltip("Only disabled mods can be deleted.");
-                            }
-                        } else{
-                            if (ImGui::Button(("Delete Mod##" + std::to_string(i)).c_str())) {
+
+                            ImGui::BeginDisabled((*it)->enabled);
+
+                            if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
                                 int deleteResult = std::remove(absolute(path).c_str());
                                 if(deleteResult != 0){
                                     std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
@@ -345,7 +342,14 @@ namespace Lamp::Core{
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
                                 break;
                             }
-                        }
+
+
+                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
+                                ImGui::SetTooltip("Only disabled mods can be removed.");
+                            }
+
+                            ImGui::EndDisabled();
+
 
 
                         for (auto ittt = ExtraOptions.begin(); ittt != ExtraOptions.end(); ++ittt) {
