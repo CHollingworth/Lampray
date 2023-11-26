@@ -142,15 +142,7 @@ namespace Lamp {
             std::string workingDir = Lamp::Core::lampConfig::getInstance().DeploymentDataPath + Ident().ReadableName;
             Lamp::Core::lampControl::getInstance().deplopmentTracker = {0,1};
 
-                Lamp::Core::FS::lampTrack::handleFileDescriptor A{
-                        Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFolder,
-                        Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
-                        workingDir+"/Cyberpunk 2777",
-                        keyInfo["installPath"],
-                        "",
-                        Ident().ReadableName
-                };
-                Lamp::Core::FS::lampTrack::handleFile(A);
+
                 Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 1;
             return Lamp::Game::lampReturn();
 
