@@ -179,7 +179,7 @@ namespace Lamp::Core{
                 mod_table_flags |= ImGuiTableFlags_SizingStretchProp;
                 mod_table_flags |= ImGuiTableFlags_Hideable; // allow hiding coumns via context menu
                 mod_table_flags |= ImGuiTableFlags_Reorderable; // allow reordering columns
-
+static int selected = -1;
                 if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, mod_table_flags)) {
                     for (auto it = columnNames.begin(); it != columnNames.end(); ++it) {
                         ImGui::TableSetupColumn((*it).c_str());
@@ -389,6 +389,18 @@ namespace Lamp::Core{
                     }
 
                     ImGui::EndTable();
+if (ImGui::BeginPopupContextItem("test")) // <-- use last item id as popup id
+{
+    selected = i;
+    //ImGui::Text("Add mod separator");
+    if(ImGui::Selectable("Add mod separator")){
+        //
+        std::cout << "Add mod separator @ " << i << "\n";
+        //ImGui::EndPopup();
+    }
+    ImGui::EndPopup();
+}
+//ImGui::OpenPopupOnItemClick("test", ImGuiPopupFlags_MouseButtonRight);
                 }
             }
 
