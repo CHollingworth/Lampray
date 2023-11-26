@@ -9,34 +9,36 @@
 
 Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString Path) {
 
-//    for (Core::Base::lampMod::Mod* it : ModList) {
-//
-//        std::filesystem::path NewFilePath = Path;
-//        std::filesystem::path TestingAgainstPath = it->ArchivePath;
-//
-//
-//        std::string NewFilePathCut = NewFilePath.filename();
-//        size_t posA = NewFilePathCut.find('-');
-//        if (posA != std::string::npos) {
-//            NewFilePathCut.erase(posA);
-//        }
-//
-//        std::string TestingAgainstPathCut = TestingAgainstPath.filename();
-//        size_t posB = TestingAgainstPathCut.find('-');
-//        if (posB != std::string::npos) {
-//            TestingAgainstPathCut.erase(posB);
-//        }
-//
-//
-//        if(NewFilePathCut == TestingAgainstPathCut){
-//
-//            it->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
-//            it->ArchivePath = Path;
-//            return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
-//        }
-//
-//
-//    }
+    for (Core::Base::lampMod::Mod* it : ModList) {
+
+        std::filesystem::path NewFilePath = Path;
+        std::filesystem::path TestingAgainstPath = it->ArchivePath;
+
+
+        std::string NewFilePathCut = NewFilePath.filename();
+		/*
+        size_t posA = NewFilePathCut.find('-');
+        if (posA != std::string::npos) {
+            NewFilePathCut.erase(posA);
+        }
+		*/
+
+        std::string TestingAgainstPathCut = TestingAgainstPath.filename();
+        size_t posB = TestingAgainstPathCut.find('/');
+        if (posB != std::string::npos) {
+            TestingAgainstPathCut.erase(posB);
+        }
+
+
+        if(NewFilePathCut == TestingAgainstPathCut){
+
+            it->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
+            it->ArchivePath = Path;
+            return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
+        }
+
+
+    }
 
     Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path,ModType::NaN, false};
     newArchive->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
