@@ -395,8 +395,9 @@ if (ImGui::BeginPopupContextItem("test")) // <-- use last item id as popup id
     //ImGui::Text("Add mod separator");
     if(ImGui::Selectable("Add mod separator")){
         //
-        std::cout << "Add mod separator @ " << i << "\n";
+        //std::cout << "Add mod separator @ " << i << "\n";
         //ImGui::EndPopup();
+        Lamp::Games::getInstance().currentGame->registerArchive("--------------------------------------------------");
     }
     ImGui::EndPopup();
 }
