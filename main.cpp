@@ -61,8 +61,6 @@ int main(int, char**)
 
 
 
-
-
     Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[13]);
     ImGui::GetStyle().Colors[ImGuiCol_Text] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[0]);
     ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[1]);
@@ -106,6 +104,7 @@ int main(int, char**)
     if(checkForUpdates){
         Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
     }
+
     Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"]=(std::string)Lamp::Core::FS::lampIO::loadKeyData("showIntroMenu","LAMP CONFIG").returnReason;
     Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibaryLocation","LAMP CONFIG").returnReason;
     Lamp::Core::lampConfig::getInstance().init();
