@@ -349,9 +349,12 @@ static int selected = -1;
                             ImGui::BeginDisabled((*it)->enabled);
 
                             if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
-                                int deleteResult = std::remove(absolute(path).c_str());
-                                if(deleteResult != 0){
-                                    std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                                // I don't think I like this way of checking what the mod type is, but it works for now.
+                                if(typeNames[(*it)->modType] != "Separator"){
+                                    int deleteResult = std::remove(absolute(path).c_str());
+                                    if(deleteResult != 0){
+                                        std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                                    }
                                 }
 
                                 std::cout << absolute(path).c_str() << std::endl;
