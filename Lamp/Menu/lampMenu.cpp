@@ -198,10 +198,14 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
         if(ImGui::BeginMenu("Lampray - " + Lamp::Games::getInstance().currentGame->Ident().ReadableName +" - "+Lamp::Games::getInstance().currentProfile)){
 
             if (ImGui::BeginMenu("Game Selection")) {
+                int gameCount = 0;
                 for (Game::gameControl *element: Lamp::Games::getInstance().gameList){
                     if(ImGui::MenuItem(element->Ident().ReadableName)){
                         Lamp::Games::getInstance().currentGame = element;
+                        Lamp::Games::getInstance().currentGameInt = gameCount;
+                        Lamp::Core::FS::lampIO::saveKeyData("PreviousGame",std::to_string(gameCount), "LAMP CONFIG");
                     }
+                    gameCount++;
                 }
                 ImGui::EndMenu();
             }

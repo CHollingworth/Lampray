@@ -79,6 +79,12 @@ int main(int, char**)
 	ImGui::GetStyle().Colors[ImGuiCol_Separator] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[11]);
     ImGui::GetStyle().Colors[ImGuiCol_SeparatorHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[12]);
 
+    std::string PreviousGame = Lamp::Core::FS::lampIO::loadKeyData("PreviousGame","LAMP CONFIG");
+    if(PreviousGame != "") {
+        Lamp::Games::getInstance().currentGameInt = std::stoi(PreviousGame);
+        Lamp::Games::getInstance().currentGame = Lamp::Games::getInstance().gameList[Lamp::Games::getInstance().currentGameInt];
+    }
+
     Lamp::Core::Base::lampLog::getInstance().log("Clearing log file.");
     const std::string filename = "lamp.log";
     std::ofstream file(filename, std::ios::trunc);
@@ -106,6 +112,8 @@ int main(int, char**)
     Lamp::Core::FS::lampIO::saveKeyData("bit7zLibaryLocation", Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation, "LAMP CONFIG");
 
     Lamp::Core::lampMenu Menus;
+    // This is a very inefficent way of doing this.
+
 
     Lamp::Games::getInstance().currentProfile = Lamp::Games::getInstance().currentGame->KeyInfo()["CurrentProfile"];
 
