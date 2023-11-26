@@ -349,6 +349,10 @@ namespace Lamp::Core{
                             ImGui::BeginDisabled((*it)->enabled);
 
                             if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
+
+ImGui::OpenPopup("Delete?");
+
+/*
                                 int deleteResult = std::remove(absolute(path).c_str());
                                 if(deleteResult != 0){
                                     std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
@@ -357,9 +361,53 @@ namespace Lamp::Core{
                                 std::cout << absolute(path).c_str() << std::endl;
                                 ModList.erase(it);
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+*/
+
+
                                 ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
                                 break;
                             }
+
+// Always center this window when appearing
+ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+if(ImGui::BeginPopupModal("Delete?", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+    ImGui::Text("Confirm deleting [mod name here]?");
+    ImGui::Separator();
+
+    //static int unused_i = 0;
+    //ImGui::Combo("Combo", &unused_i, "Delete\0Delete harder\0");
+
+    //static bool dont_ask_me_next_time = false;
+    //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+    //ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
+    //ImGui::PopStyleVar();
+
+    if (ImGui::Button("Delete", ImVec2(120, 0))) {
+        std::cout << "Would delete...";
+
+
+        int deleteResult = std::remove(absolute(path).c_str());
+        if(deleteResult != 0){
+            std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+        }
+
+        std::cout << absolute(path).c_str() << std::endl;
+        ModList.erase(it);
+        Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+
+        ImGui::CloseCurrentPopup();
+    }
+    ImGui::SetItemDefaultFocus();
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+        // Do nothing
+        ImGui::CloseCurrentPopup();
+    }
+    ImGui::EndPopup();
+}
+
+
 
                             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
                                 ImGui::SetTooltip("Only disabled mods can be removed.");
