@@ -422,7 +422,7 @@ void Lamp::Game::BG3::listArchives() {
     Lamp::Core::lampControl::lampArchiveDisplayHelper(
             std::list<std::string>{},
             ModList,
-            std::vector<std::string>{"Engine Injection", "Standard Mod", "Bin Overwrite","Data Overwrite","No Json Mod", "Separator", "Select Type"},
+            std::vector<std::string>{"Engine Injection", "Standard Mod", "Bin Overwrite","Data Overwrite","No Json Mod", "Select Type", "Separator"},
             std::list<std::pair<std::string, bool *>>{}
     ).createImguiMenu();
 }

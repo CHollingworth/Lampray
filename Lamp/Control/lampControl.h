@@ -392,19 +392,15 @@ static int selected = -1;
                     }
 
                     ImGui::EndTable();
-if (ImGui::BeginPopupContextItem("test")) // <-- use last item id as popup id
+if (ImGui::BeginPopupContextItem("MODTABLE_CONTEXT")) // <-- use last item id as popup id
 {
-    selected = i;
-    //ImGui::Text("Add mod separator");
+    //selected = i;
     if(ImGui::Selectable("Add mod separator")){
-        //
-        //std::cout << "Add mod separator @ " << i << "\n";
-        //ImGui::EndPopup();
         Lamp::Games::getInstance().currentGame->registerArchive("--------------------------------------------------");
     }
     ImGui::EndPopup();
 }
-//ImGui::OpenPopupOnItemClick("test", ImGuiPopupFlags_MouseButtonRight);
+//ImGui::OpenPopupOnItemClick("MODTABLE_CONTEXT", ImGuiPopupFlags_MouseButtonRight);
                 }
             }
 
