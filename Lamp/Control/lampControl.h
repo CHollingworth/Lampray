@@ -392,11 +392,19 @@ static int selected = -1;
                     }
 
                     ImGui::EndTable();
-if (ImGui::BeginPopupContextItem("MODTABLE_CONTEXT")) // <-- use last item id as popup id
-{
+if (ImGui::BeginPopupContextItem("MODTABLE_CONTEXT")){
     //selected = i;
     if(ImGui::Selectable("Add mod separator")){
-        Lamp::Games::getInstance().currentGame->registerArchive("--------------------------------------------------");
+        // TODO: Allow renaming
+        // TODO: Allow multiple with same name
+        // TODO: Add positionally
+        // TODO: Allow right-click outside of table (specifically below, in case you don't have many mods)
+        Lamp::Games::getInstance().currentGame->registerArchive("====================================================");
+        //Lamp::Games::getInstance().currentGame.ModType.MOD_SEPARATOR;
+        //std::cout << Lamp::Games::getInstance().currentGame->ModTypes().MOD_SEPARATOR << "\n";
+// I would like to get the enum value so I can modify registerArchive to pass in the modtype
+        std::cout << Lamp::Games::getInstance().currentGame::ModType << "\n";
+        //(*it)->modType;
     }
     ImGui::EndPopup();
 }

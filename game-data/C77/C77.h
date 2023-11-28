@@ -38,6 +38,7 @@ namespace Lamp::Game {
 
             std::vector<Core::Base::lampMod::Mod *>& getModList() override{ return ModList; };
 
+//enum ModTypes() override { return ModType; };
 
 
             void launch() override {
@@ -60,12 +61,19 @@ namespace Lamp::Game {
                 ModList = Lamp::Core::FS::lampIO::loadModList(Ident().ShortHand, keyInfo["CurrentProfile"]);
             }
 
+
+            typedef enum ModType{
+                C77_MOD,
+                MOD_SEPARATOR
+            } ;
+
         private:
+        /*
             enum ModType{
                 C77_MOD,
                 MOD_SEPARATOR
             };
-
+*/
             std::map<std::string,std::string> keyInfo{
                     {"installPath",""},
                     {"ProfileList","Default"},

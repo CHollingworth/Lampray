@@ -110,6 +110,14 @@ namespace Lamp::Game {
          */
         virtual void launch() = 0;
 
+/*
+        int ModTypes(){
+            return 0;
+        }*/
+        typedef enum {
+            MOD_SEPARATOR
+        } ModType;
+
     protected:
         /**
          * @brief Protected constructor for the game control class.

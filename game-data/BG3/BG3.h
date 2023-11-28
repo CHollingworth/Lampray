@@ -36,6 +36,8 @@ namespace Lamp::Game {
 
         std::vector<Core::Base::lampMod::Mod *>& getModList() override;
 
+//enum ModTypes() override { return ModType; };
+
         void launch() override {
             for (const auto& pair : keyInfo) {
                 const std::string& key = pair.first;
@@ -56,7 +58,18 @@ namespace Lamp::Game {
             ModList = Lamp::Core::FS::lampIO::loadModList(Ident().ShortHand, keyInfo["CurrentProfile"]);
         }
 
-    private:
+        typedef enum ModType{
+            BG3_ENGINE_INJECTION = 0,
+            BG3_MOD,
+            BG3_BIN_OVERRIDE,
+            BG3_DATA_OVERRIDE,
+            BG3_MOD_FIXER,
+            NaN,
+            MOD_SEPARATOR
+        } ;
+
+	private:
+    /*
         enum ModType{
             BG3_ENGINE_INJECTION = 0,
             BG3_MOD,
@@ -66,6 +79,7 @@ namespace Lamp::Game {
             MOD_SEPARATOR,
             NaN
         };
+        */
 
         std::map<std::string,std::string> keyInfo{
                 {"installDirPath",""},
