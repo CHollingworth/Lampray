@@ -45,9 +45,11 @@ namespace Lamp::Core{
          */
         static lampString getFormattedTimeAndDate();
 
-
         lampHex Colour_SearchHighlight = ImVec4(0.3f, 0.f, 0.3f, 1);
         lampHex Colour_ButtonAlt = ImVec4(0.1f, 0.6f, 0.3f, 1);
+
+        // an index outside of the loop/object recreation that we can reference for the delete modal (otherwise modal options display for every mod in the ModList)
+        int deletePos = -1;
         /**
         * @brief The `lampArchiveDisplayHelper` struct provides helper methods for displaying archives.
         */
@@ -174,7 +176,7 @@ namespace Lamp::Core{
                 if (ImGui::InputTextWithHint("##searcher","Type here to search your mods...", lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
                 }
-				
+
                 ImGuiTableFlags mod_table_flags = 0;
                 mod_table_flags |= ImGuiTableFlags_SizingStretchProp;
                 mod_table_flags |= ImGuiTableFlags_Hideable; // allow hiding coumns via context menu
@@ -349,8 +351,10 @@ namespace Lamp::Core{
                             ImGui::BeginDisabled((*it)->enabled);
 
                             if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
+                                lampControl::getInstance().deletePos = i;
+                                ImGui::OpenPopup("DELETE_MOD_MODAL");
 
-ImGui::OpenPopup("Delete?");
+
 
 /*
                                 int deleteResult = std::remove(absolute(path).c_str());
@@ -371,39 +375,54 @@ ImGui::OpenPopup("Delete?");
 // Always center this window when appearing
 ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-if(ImGui::BeginPopupModal("Delete?", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
-    ImGui::Text("Confirm deleting [mod name here]?");
-    ImGui::Separator();
+if(ImGui::BeginPopupModal("DELETE_MOD_MODAL", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+    // prevent displaying buttons for each mod in the mod list, as this runs every iteration of for loop
+    if(lampControl::getInstance().deletePos == i){
+        auto pendingDelete = ModList.begin() + lampControl::getInstance().deletePos;
+        std::filesystem::path tmppath = (*pendingDelete)->ArchivePath;
+        std::string delname = tmppath.filename().c_str();
 
-    //static int unused_i = 0;
-    //ImGui::Combo("Combo", &unused_i, "Delete\0Delete harder\0");
-
-    //static bool dont_ask_me_next_time = false;
-    //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-    //ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
-    //ImGui::PopStyleVar();
-
-    if (ImGui::Button("Delete", ImVec2(120, 0))) {
-        std::cout << "Would delete...";
+        std::string promptMessage = "Confirm deleting ";
+        promptMessage.append(delname);
+        promptMessage.append("?");
+        ImGui::Text(promptMessage.c_str());
+        ImGui::Separator();
 
 
-        int deleteResult = std::remove(absolute(path).c_str());
-        if(deleteResult != 0){
-            std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+
+        //static int unused_i = 0;
+        //ImGui::Combo("Combo", &unused_i, "Delete\0Delete harder\0");
+
+        //static bool dont_ask_me_next_time = false;
+        //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+        //ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
+        //ImGui::PopStyleVar();
+
+        if (ImGui::Button("Delete", ImVec2(120, 0))) {
+            std::cout << "Would delete...";
+
+
+            int deleteResult = std::remove(absolute(tmppath).c_str());
+            if(deleteResult != 0){
+                std::cout << "Error deleting file: " << absolute(tmppath).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+            }
+
+            std::cout << absolute(tmppath).c_str() << std::endl;
+            ModList.erase(pendingDelete);
+            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+
+            lampControl::getInstance().deletePos = -1;
+            ImGui::CloseCurrentPopup();
         }
-
-        std::cout << absolute(path).c_str() << std::endl;
-        ModList.erase(it);
-        Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
-
-        ImGui::CloseCurrentPopup();
+        ImGui::SetItemDefaultFocus();
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+            // Do nothing
+            lampControl::getInstance().deletePos = -1;
+            ImGui::CloseCurrentPopup();
+        }
     }
-    ImGui::SetItemDefaultFocus();
-    ImGui::SameLine();
-    if (ImGui::Button("Cancel", ImVec2(120, 0))) {
-        // Do nothing
-        ImGui::CloseCurrentPopup();
-    }
+
     ImGui::EndPopup();
 }
 
