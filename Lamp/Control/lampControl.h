@@ -365,24 +365,20 @@ namespace Lamp::Core{
                         if(ImGui::BeginPopupModal("Confirm Deletion", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
                             // prevent displaying buttons for each mod in the mod list, as this runs every iteration of for loop
                             if(lampControl::getInstance().deletePos == i){
-                                auto pendingDelete = ModList.begin() + lampControl::getInstance().deletePos;
-                                std::filesystem::path tmppath = (*pendingDelete)->ArchivePath;
-                                std::string delname = tmppath.filename().c_str();
-
                                 std::string promptMessage = "Are you sure you want to delete: ";
-                                promptMessage.append(delname);
+                                promptMessage.append(cutname);
                                 promptMessage.append("?\n\nThis action cannot be undone.");
                                 ImGui::Text(promptMessage.c_str());
                                 ImGui::Separator();
 
                                 if (ImGui::Button("Delete", ImVec2(120, 0))) {
-                                    int deleteResult = std::remove(absolute(tmppath).c_str());
+                                    int deleteResult = std::remove(absolute(path).c_str());
                                     if(deleteResult != 0){
-                                        std::cout << "Error deleting file: " << absolute(tmppath).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                                        std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
                                     }
 
-                                    std::cout << absolute(tmppath).c_str() << std::endl;
-                                    ModList.erase(pendingDelete);
+                                    std::cout << absolute(path).c_str() << std::endl;
+                                    ModList.erase(it);
                                     Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
 
                                     lampControl::getInstance().deletePos = -1;
