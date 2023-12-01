@@ -348,97 +348,72 @@ namespace Lamp::Core{
                         }
 
 
-                            ImGui::BeginDisabled((*it)->enabled);
+                        ImGui::BeginDisabled((*it)->enabled);
 
-                            if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
-                                lampControl::getInstance().deletePos = i;
-                                ImGui::OpenPopup("DELETE_MOD_MODAL");
+                        if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
+                            lampControl::getInstance().deletePos = i;
+                            ImGui::OpenPopup("DELETE_MOD_MODAL");
 
+                            ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
+                            break;
+                        }
 
+                        // Setup centering for the modal window
+                        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+                        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-/*
-                                int deleteResult = std::remove(absolute(path).c_str());
-                                if(deleteResult != 0){
-                                    std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                        if(ImGui::BeginPopupModal("DELETE_MOD_MODAL", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+                            // prevent displaying buttons for each mod in the mod list, as this runs every iteration of for loop
+                            if(lampControl::getInstance().deletePos == i){
+                                auto pendingDelete = ModList.begin() + lampControl::getInstance().deletePos;
+                                std::filesystem::path tmppath = (*pendingDelete)->ArchivePath;
+                                std::string delname = tmppath.filename().c_str();
+
+                                std::string promptMessage = "Confirm deleting ";
+                                promptMessage.append(delname);
+                                promptMessage.append("?");
+                                ImGui::Text(promptMessage.c_str());
+                                ImGui::Separator();
+
+                                if (ImGui::Button("Delete", ImVec2(120, 0))) {
+                                    int deleteResult = std::remove(absolute(tmppath).c_str());
+                                    if(deleteResult != 0){
+                                        std::cout << "Error deleting file: " << absolute(tmppath).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                                    }
+
+                                    std::cout << absolute(tmppath).c_str() << std::endl;
+                                    ModList.erase(pendingDelete);
+                                    Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+
+                                    lampControl::getInstance().deletePos = -1;
+                                    ImGui::CloseCurrentPopup();
+                                    ImGui::EndPopup();
+                                    // re-end disabled. May be needed to avoid some crashes.
+                                    ImGui::EndDisabled();
+
+                                    break;
                                 }
-
-                                std::cout << absolute(path).c_str() << std::endl;
-                                ModList.erase(it);
-                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
-*/
-
-
-                                ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
-                                break;
+                                ImGui::SetItemDefaultFocus();
+                                ImGui::SameLine();
+                                if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                                    // Do nothing
+                                    lampControl::getInstance().deletePos = -1;
+                                    ImGui::CloseCurrentPopup();
+                                }
                             }
 
-// Always center this window when appearing
-ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-if(ImGui::BeginPopupModal("DELETE_MOD_MODAL", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
-    // prevent displaying buttons for each mod in the mod list, as this runs every iteration of for loop
-    if(lampControl::getInstance().deletePos == i){
-        auto pendingDelete = ModList.begin() + lampControl::getInstance().deletePos;
-        std::filesystem::path tmppath = (*pendingDelete)->ArchivePath;
-        std::string delname = tmppath.filename().c_str();
-
-        std::string promptMessage = "Confirm deleting ";
-        promptMessage.append(delname);
-        promptMessage.append("?");
-        ImGui::Text(promptMessage.c_str());
-        ImGui::Separator();
+                            ImGui::EndPopup();
+                        } // end delete confirmation modal
 
 
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
+                            ImGui::SetTooltip("Only disabled mods can be removed.");
+                        }
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                        }
 
-        //static int unused_i = 0;
-        //ImGui::Combo("Combo", &unused_i, "Delete\0Delete harder\0");
-
-        //static bool dont_ask_me_next_time = false;
-        //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-        //ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
-        //ImGui::PopStyleVar();
-
-        if (ImGui::Button("Delete", ImVec2(120, 0))) {
-            std::cout << "Would delete...";
-
-
-            int deleteResult = std::remove(absolute(tmppath).c_str());
-            if(deleteResult != 0){
-                std::cout << "Error deleting file: " << absolute(tmppath).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
-            }
-
-            std::cout << absolute(tmppath).c_str() << std::endl;
-            ModList.erase(pendingDelete);
-            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
-
-            lampControl::getInstance().deletePos = -1;
-            ImGui::CloseCurrentPopup();
-            ImGui::EndPopup();
-            ImGui::EndDisabled();
-            break;
-        }
-        ImGui::SetItemDefaultFocus();
-        ImGui::SameLine();
-        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
-            // Do nothing
-            lampControl::getInstance().deletePos = -1;
-            ImGui::CloseCurrentPopup();
-        }
-    }
-
-    ImGui::EndPopup();
-}
-
-
-
-                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
-                                ImGui::SetTooltip("Only disabled mods can be removed.");
-                            }
-                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
-                                ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
-                            }
-                      
-                            ImGui::EndDisabled();
+                        ImGui::EndDisabled();
 
 
                         for (auto ittt = ExtraOptions.begin(); ittt != ExtraOptions.end(); ++ittt) {
