@@ -352,7 +352,7 @@ namespace Lamp::Core{
 
                         if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
                             lampControl::getInstance().deletePos = i;
-                            ImGui::OpenPopup("DELETE_MOD_MODAL");
+                            ImGui::OpenPopup("Confirm Deletion");
 
                             ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
                             break;
@@ -361,17 +361,17 @@ namespace Lamp::Core{
                         // Setup centering for the modal window
                         ImVec2 center = ImGui::GetMainViewport()->GetCenter();
                         ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-                        if(ImGui::BeginPopupModal("DELETE_MOD_MODAL", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+                        ImGui::SetNextWindowBgAlpha(0.9f); // This doesn't seem to mess anything up, but if it does search for new way to make modal bg more opaque.
+                        if(ImGui::BeginPopupModal("Confirm Deletion", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
                             // prevent displaying buttons for each mod in the mod list, as this runs every iteration of for loop
                             if(lampControl::getInstance().deletePos == i){
                                 auto pendingDelete = ModList.begin() + lampControl::getInstance().deletePos;
                                 std::filesystem::path tmppath = (*pendingDelete)->ArchivePath;
                                 std::string delname = tmppath.filename().c_str();
 
-                                std::string promptMessage = "Confirm deleting ";
+                                std::string promptMessage = "Are you sure you want to delete: ";
                                 promptMessage.append(delname);
-                                promptMessage.append("?");
+                                promptMessage.append("?\n\nThis action cannot be undone.");
                                 ImGui::Text(promptMessage.c_str());
                                 ImGui::Separator();
 
