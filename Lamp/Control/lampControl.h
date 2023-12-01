@@ -413,6 +413,9 @@ if(ImGui::BeginPopupModal("DELETE_MOD_MODAL", NULL, ImGuiWindowFlags_AlwaysAutoR
 
             lampControl::getInstance().deletePos = -1;
             ImGui::CloseCurrentPopup();
+            ImGui::EndPopup();
+            ImGui::EndDisabled();
+            break;
         }
         ImGui::SetItemDefaultFocus();
         ImGui::SameLine();
