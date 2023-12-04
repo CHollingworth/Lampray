@@ -49,7 +49,7 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
     else{
         return false;
     }
-
+    return false;
 }
 
 Lamp::Core::lampReturn Lamp::Core::FS::lampExtract::moveModSpecificFileType(const Lamp::Core::Base::lampMod::Mod *mod,

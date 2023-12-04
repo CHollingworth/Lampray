@@ -413,7 +413,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::deployment() {
 }
 
 Lamp::Game::lampReturn Lamp::Game::BG3::postDeploymentTasks() {
-
+    return false;
 }
 
 void Lamp::Game::BG3::listArchives() {
