@@ -2,7 +2,7 @@
 // Created by charles on 27/09/23.
 //
 #include "lampMenu.h"
-#include "lampColour.h"
+#include "lampCustomise .h"
 
 void Lamp::Core::lampMenu::RunMenus() {
 
@@ -40,7 +40,7 @@ void Lamp::Core::lampMenu::RunMenus() {
                 windowFlags += ImGuiWindowFlags_MenuBar;
                 ImGui::Begin("Colour Menu",NULL,windowFlags);
                 DefaultMenuBar();
-                if(Lamp::Core::lampColour::displayColourMenu()){
+                if(Lamp::Core::lampCustomise::displayMenu()){
                     currentMenu = GAME_MOD_MENU;
                 }
                 break;
