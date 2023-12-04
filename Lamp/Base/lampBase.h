@@ -611,6 +611,7 @@ namespace Lamp::Core::Base{
                 }
                 break;
             }
+            return true;
         }
 
     private:
