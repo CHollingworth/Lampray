@@ -122,7 +122,7 @@ namespace Lamp {
                         std::filesystem::path dirit(workingDir + "/ext/" + std::filesystem::path(item->ArchivePath).filename().stem().string());
 
                         std::string x = item->ArchivePath;
-                        Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"archive","Cyberpunk 2777/archive/pc/mod/");
+                        Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"archive","Cyberpunk 2777/archive");
                         Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"red4ext","Cyberpunk 2777/red4ext");
                         Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"r6","Cyberpunk 2777/r6");
                         Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"bin","Cyberpunk 2777/bin");
