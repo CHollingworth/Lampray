@@ -39,7 +39,7 @@ add_executable(Lamp main.cpp
         Lamp/Filesystem/lampUpdate.cpp
         Lamp/Control/lampGames.h
         Lamp/Filesystem/lampShare.cpp
-        Lamp/Menu/lampColour.h
+        "Lamp/Menu/lampCustomise .h"
         Lamp/Filesystem/lampTrack.cpp
         game-data/C77/C77.cpp
         game-data/C77/C77.h

@@ -384,7 +384,7 @@ namespace Lamp::Core::Parse{
                 }
             }
 
-
+            return false;
         }
 
     };
