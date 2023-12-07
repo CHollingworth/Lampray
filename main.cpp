@@ -4,7 +4,7 @@
 
 #include "Lamp/Control/lampControl.h"
 #include "Lamp/Menu/lampMenu.h"
-#include "Lamp/Menu/lampColour.h"
+#include "Lamp/Menu/lampCustomise .h"
 #include <stdio.h>
 #include "SDL2/SDL.h"
 
@@ -63,21 +63,21 @@ int main(int, char**)
 
 
 
-    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[13]);
-    ImGui::GetStyle().Colors[ImGuiCol_Text] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[0]);
-    ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[1]);
-    ImGui::GetStyle().Colors[ImGuiCol_PopupBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[2]);
-    ImGui::GetStyle().Colors[ImGuiCol_FrameBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[3]);
-    ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[4]);
-    ImGui::GetStyle().Colors[ImGuiCol_Button] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[5]);
-    ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[6]);
-    ImGui::GetStyle().Colors[ImGuiCol_ButtonActive] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[7]);
+    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[13]);
+    ImGui::GetStyle().Colors[ImGuiCol_Text] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[0]);
+    ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[1]);
+    ImGui::GetStyle().Colors[ImGuiCol_PopupBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[2]);
+    ImGui::GetStyle().Colors[ImGuiCol_FrameBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[3]);
+    ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[4]);
+    ImGui::GetStyle().Colors[ImGuiCol_Button] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[5]);
+    ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[6]);
+    ImGui::GetStyle().Colors[ImGuiCol_ButtonActive] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[7]);
 
-    ImGui::GetStyle().Colors[ImGuiCol_Header] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[8]);
-    ImGui::GetStyle().Colors[ImGuiCol_HeaderHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[9]);
-    ImGui::GetStyle().Colors[ImGuiCol_HeaderActive] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[10]);
-	ImGui::GetStyle().Colors[ImGuiCol_Separator] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[11]);
-    ImGui::GetStyle().Colors[ImGuiCol_SeparatorHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampColour::getInstance().defaultColours[12]);
+    ImGui::GetStyle().Colors[ImGuiCol_Header] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[8]);
+    ImGui::GetStyle().Colors[ImGuiCol_HeaderHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[9]);
+    ImGui::GetStyle().Colors[ImGuiCol_HeaderActive] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[10]);
+	ImGui::GetStyle().Colors[ImGuiCol_Separator] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[11]);
+    ImGui::GetStyle().Colors[ImGuiCol_SeparatorHovered] = Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[12]);
 
     std::string PreviousGame = Lamp::Core::FS::lampIO::loadKeyData("PreviousGame","LAMP CONFIG");
     if(PreviousGame != "") {
@@ -142,7 +142,7 @@ int main(int, char**)
 
     Lamp::Core::Base::lampLog::getInstance().log("Directories Created");
 
-    Lamp::Core::lampColour::getInstance().getConfigColours();
+    Lamp::Core::lampCustomise::getInstance().getConfigColours();
 
     bool done = false;
     while (!done)

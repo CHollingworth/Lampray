@@ -2,8 +2,8 @@
 // Created by charles on 08/10/23.
 //
 
-#ifndef LAMP_LAMPCOLOUR_H
-#define LAMP_LAMPCOLOUR_H
+#ifndef LAMP_LAMPCUSTOMISE_H
+#define LAMP_LAMPCUSTOMISE_H
 
 #include "../../third-party/imgui/imgui.h"
 #include "../Base/lampBase.h"
@@ -13,17 +13,17 @@
 namespace Lamp {
     namespace Core {
 
-        class lampColour {
+        class lampCustomise {
         public:
 
-            static lampColour& getInstance()
+            static lampCustomise& getInstance()
             {
-                static lampColour instance;
+                static lampCustomise instance;
                 return instance;
             }
 
-            lampColour(lampColour const&) = delete;
-            void operator=(lampColour const&)  = delete;
+            lampCustomise(lampCustomise const&) = delete;
+            void operator=(lampCustomise const&)  = delete;
 
             std::vector<std::string> defaultColours = {
                     "ffffff-ff",
@@ -95,10 +95,10 @@ namespace Lamp {
                     }
 
 
-                    lampColour::getInstance().floatMap[x][0] = ImGui::GetStyle().Colors[key].x;
-                    lampColour::getInstance().floatMap[x][1] = ImGui::GetStyle().Colors[key].y;
-                    lampColour::getInstance().floatMap[x][2] = ImGui::GetStyle().Colors[key].z;
-                    lampColour::getInstance().floatMap[x][3] = ImGui::GetStyle().Colors[key].w;
+                    lampCustomise::getInstance().floatMap[x][0] = ImGui::GetStyle().Colors[key].x;
+                    lampCustomise::getInstance().floatMap[x][1] = ImGui::GetStyle().Colors[key].y;
+                    lampCustomise::getInstance().floatMap[x][2] = ImGui::GetStyle().Colors[key].z;
+                    lampCustomise::getInstance().floatMap[x][3] = ImGui::GetStyle().Colors[key].w;
 
 
                     x++;
@@ -106,32 +106,32 @@ namespace Lamp {
 
                 std::string xloaded = Lamp::Core::FS::lampIO::loadKeyData("Colour_SearchHighlight", "LAMP CONFIG");
                 if(xloaded == ""){
-                    Lamp::Core::Base::lampTypes::lampHexAlpha colour(lampColour::getInstance().defaultColours[x]);
+                    Lamp::Core::Base::lampTypes::lampHexAlpha colour(lampCustomise::getInstance().defaultColours[x]);
                     Lamp::Core::FS::lampIO::saveKeyData("Colour_SearchHighlight", ((std::string)colour), "LAMP CONFIG");
                 }else{
                     Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(xloaded);
                 }
 
 
-                lampColour::getInstance().floatMap[x][0] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight).x;
-                lampColour::getInstance().floatMap[x][1] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight).y;
-                lampColour::getInstance().floatMap[x][2] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight).z;
-                lampColour::getInstance().floatMap[x][3] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight).w;
+                lampCustomise::getInstance().floatMap[x][0] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight).x;
+                lampCustomise::getInstance().floatMap[x][1] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight).y;
+                lampCustomise::getInstance().floatMap[x][2] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight).z;
+                lampCustomise::getInstance().floatMap[x][3] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_SearchHighlight).w;
 
 
 				x++;
 				std::string xloadedBtnAlt = Lamp::Core::FS::lampIO::loadKeyData("Colour_ButtonAlt", "LAMP CONFIG");
                 if(xloadedBtnAlt == ""){
-                    Lamp::Core::Base::lampTypes::lampHexAlpha colour(lampColour::getInstance().defaultColours[x]);
+                    Lamp::Core::Base::lampTypes::lampHexAlpha colour(lampCustomise::getInstance().defaultColours[x]);
                     Lamp::Core::FS::lampIO::saveKeyData("Colour_ButtonAlt", ((std::string)colour), "LAMP CONFIG");
                 }else{
                     Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = Lamp::Core::Base::lampTypes::lampHexAlpha(xloadedBtnAlt);
                 }
 
-				lampColour::getInstance().floatMap[x][0] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).x;
-                lampColour::getInstance().floatMap[x][1] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).y;
-                lampColour::getInstance().floatMap[x][2] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).z;
-                lampColour::getInstance().floatMap[x][3] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).w;
+                lampCustomise::getInstance().floatMap[x][0] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).x;
+                lampCustomise::getInstance().floatMap[x][1] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).y;
+                lampCustomise::getInstance().floatMap[x][2] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).z;
+                lampCustomise::getInstance().floatMap[x][3] = ((ImVec4)Lamp::Core::lampControl::getInstance().Colour_ButtonAlt).w;
 
                 std::string loadedCheckUpdates = Lamp::Core::FS::lampIO::loadKeyData("Check_Updates_Startup", "LAMP CONFIG");
                 if(loadedCheckUpdates == "0" || loadedCheckUpdates == "false"){
@@ -148,39 +148,55 @@ namespace Lamp {
                 Lamp::Core::FS::lampIO::saveKeyData(styleMap[StylePoint], ((std::string)colour), "LAMP CONFIG");
             }
 
-            static bool displayColourMenu(){
+            static bool displayMenu(){
+                ImGuiIO &io = ImGui::GetIO();
+                if (ImGui::CollapsingHeader("Colours")) {
+                    int x = 0;
+                    for (const auto &pair: lampCustomise::getInstance().styleMap) {
+                        ImGuiCol_ key = pair.first;
+                        const std::string &value = pair.second;
+                        ImGui::ColorEdit4((pair.second + "##" + std::to_string(x)).c_str(),
+                                          lampCustomise::getInstance().floatMap[x]);
+                        lampCustomise::getInstance().setColourTemp(key,
+                                                                   ImVec4(lampCustomise::getInstance().floatMap[x][0],
+                                                                          lampCustomise::getInstance().floatMap[x][1],
+                                                                          lampCustomise::getInstance().floatMap[x][2],
+                                                                          lampCustomise::getInstance().floatMap[x][3]));
+                        x++;
+                    }
+                    ImGui::ColorEdit4(("Colour_SearchHighlight##" + std::to_string(x)).c_str(),
+                                      lampCustomise::getInstance().floatMap[x]);
+                    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = ImVec4(
+                            lampCustomise::getInstance().floatMap[x][0], lampCustomise::getInstance().floatMap[x][1],
+                            lampCustomise::getInstance().floatMap[x][2], lampCustomise::getInstance().floatMap[x][3]);
 
-                int x = 0;
-                for (const auto& pair : lampColour::getInstance().styleMap) {
-                    ImGuiCol_ key = pair.first;
-                    const std::string &value = pair.second;
-                    ImGui::ColorEdit4((pair.second+"##"+std::to_string(x)).c_str(),lampColour::getInstance().floatMap[x]);
-                    lampColour::getInstance().setColourTemp(key,ImVec4(lampColour::getInstance().floatMap[x][0],lampColour::getInstance().floatMap[x][1],lampColour::getInstance().floatMap[x][2],lampColour::getInstance().floatMap[x][3]));
                     x++;
-                }
-                ImGui::ColorEdit4(("Colour_SearchHighlight##"+std::to_string(x)).c_str(),lampColour::getInstance().floatMap[x]);
-                Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = ImVec4(lampColour::getInstance().floatMap[x][0],lampColour::getInstance().floatMap[x][1],lampColour::getInstance().floatMap[x][2],lampColour::getInstance().floatMap[x][3]);
+                    ImGui::ColorEdit4(("Colour_ButtonAlt##" + std::to_string(x)).c_str(),
+                                      lampCustomise::getInstance().floatMap[x]);
+                    Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = ImVec4(
+                            lampCustomise::getInstance().floatMap[x][0], lampCustomise::getInstance().floatMap[x][1],
+                            lampCustomise::getInstance().floatMap[x][2], lampCustomise::getInstance().floatMap[x][3]);
+                    }
 
-				x++;
-                ImGui::ColorEdit4(("Colour_ButtonAlt##"+std::to_string(x)).c_str(),lampColour::getInstance().floatMap[x]);
-                Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = ImVec4(lampColour::getInstance().floatMap[x][0],lampColour::getInstance().floatMap[x][1],lampColour::getInstance().floatMap[x][2],lampColour::getInstance().floatMap[x][3]);
+                    if (ImGui::CollapsingHeader("Font Size")) {
+                        const float MIN_SCALE = 0.3f;
+                        const float MAX_SCALE = 2.0f;
 
-                // basically ripped from the demo, set a min/max value and adds a drag-bar thing to set/update the scale to that value
-                const float MIN_SCALE = 0.3f;
-                const float MAX_SCALE = 2.0f;
-                ImGuiIO& io = ImGui::GetIO();
-                ImGui::DragFloat("Font_Scale", &io.FontGlobalScale, 0.005f, MIN_SCALE, MAX_SCALE, "%.2f", ImGuiSliderFlags_AlwaysClamp);
-
-                ImGui::Checkbox("Check for updates at startup (Check_Updates_Startup)", &lampConfig::getInstance().checkForUpdatesAtStartup);
-
+                        ImGui::DragFloat("Font Scale", &io.FontGlobalScale, 0.005f, MIN_SCALE, MAX_SCALE, "%.2f",
+                                         ImGuiSliderFlags_AlwaysClamp);
+                    }
+                    if (ImGui::CollapsingHeader("Update Rules")) {
+                        ImGui::Checkbox("Check for updates at startup (Check_Updates_Startup)",
+                                        &lampConfig::getInstance().checkForUpdatesAtStartup);
+                    }
 
                 if(ImGui::Button("Save")){
                     ImGui::End();
 
                     int x = 0;
-                    for (const auto& pair : lampColour::getInstance().styleMap) {
+                    for (const auto& pair : lampCustomise::getInstance().styleMap) {
                         ImGuiCol_ key = pair.first;
-                        lampColour::getInstance().setColour(key,ImVec4(lampColour::getInstance().floatMap[x][0],lampColour::getInstance().floatMap[x][1],lampColour::getInstance().floatMap[x][2],lampColour::getInstance().floatMap[x][3]));
+                        lampCustomise::getInstance().setColour(key, ImVec4(lampCustomise::getInstance().floatMap[x][0], lampCustomise::getInstance().floatMap[x][1], lampCustomise::getInstance().floatMap[x][2], lampCustomise::getInstance().floatMap[x][3]));
                         x++;
                     }
 
@@ -200,19 +216,19 @@ namespace Lamp {
                 }
                 ImGui::SameLine();
                 if(ImGui::Button("Reset")){
-                    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[13]);
-                    Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[14]);
+                    Lamp::Core::lampControl::getInstance().Colour_SearchHighlight = Lamp::Core::Base::lampTypes::lampHexAlpha(lampCustomise::getInstance().defaultColours[13]);
+                    Lamp::Core::lampControl::getInstance().Colour_ButtonAlt = Lamp::Core::Base::lampTypes::lampHexAlpha(lampCustomise::getInstance().defaultColours[14]);
 
-                    for (int i = 0; i < lampColour::getInstance().defaultColours.size(); ++i) {
-                        ImVec4 color = Lamp::Core::Base::lampTypes::lampHexAlpha(lampColour::getInstance().defaultColours[i]);
-                        lampColour::getInstance().floatMap[i][0] = color.x;
-                        lampColour::getInstance().floatMap[i][1] = color.y;
-                        lampColour::getInstance().floatMap[i][2] = color.z;
-                        lampColour::getInstance().floatMap[i][3] = color.w;
+                    for (int i = 0; i < lampCustomise::getInstance().defaultColours.size(); ++i) {
+                        ImVec4 color = Lamp::Core::Base::lampTypes::lampHexAlpha(lampCustomise::getInstance().defaultColours[i]);
+                        lampCustomise::getInstance().floatMap[i][0] = color.x;
+                        lampCustomise::getInstance().floatMap[i][1] = color.y;
+                        lampCustomise::getInstance().floatMap[i][2] = color.z;
+                        lampCustomise::getInstance().floatMap[i][3] = color.w;
                     }
 
 
-                    io.FontGlobalScale = lampColour::getInstance().defaultFontScale;
+                    io.FontGlobalScale = lampCustomise::getInstance().defaultFontScale;
                     lampConfig::getInstance().checkForUpdatesAtStartup = lampConfig::getInstance().defaultCheckForUpdateAtStart;
                 }
 
@@ -221,9 +237,9 @@ namespace Lamp {
             }
 
         private:
-            lampColour(){}
+            lampCustomise(){}
         };
     } // Lamp
 } // Core
 
-#endif //LAMP_LAMPCOLOUR_H
+#endif //LAMP_LAMPCUSTOMISE_H
