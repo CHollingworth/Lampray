@@ -206,7 +206,6 @@ namespace Lamp::Core{
 					ImGui::TableHeadersRow();
                     ImGui::TableNextRow();
 
-                    int dnd_move_from = -1, dnd_move_to = -1; // initialize position tracking vars for drag and drop functionality
                     int i = 0;
                     for (auto it = ModList.begin(); it != ModList.end(); ++it) {
 
@@ -286,24 +285,8 @@ namespace Lamp::Core{
                             target_flags |= ImGuiDragDropFlags_SourceAllowNullID;
                             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MODLIST_DND", target_flags))
                             {
-                                dnd_move_from = *(const int*)payload->Data;
-                                dnd_move_to = i;
-
-                                auto* tmp = ModList[dnd_move_from];
-                                // update the ModList (this also seems to update the UI immediately)
-                                if(dnd_move_from > dnd_move_to){
-                                    // if moving a mod to a higher position, shift things down and then place the moved mod
-                                    for(int ind = dnd_move_from; ind > dnd_move_to; ind--){
-                                        ModList[ind] = ModList[ind - 1];
-                                    }
-                                } else{
-                                    // if moving a mod to a lower position, shift things up and then place the moved mod
-                                    for(int ind = dnd_move_from; ind < dnd_move_to; ind++){
-                                        ModList[ind] = ModList[ind + 1];
-                                    }
-                                }
-                                ModList[dnd_move_to] = tmp;
-
+                                auto movingMod = ModList.begin() + *(const int*)payload->Data; // get original position from the payload data
+                                moveModTo(movingMod, i);
                                 // save the change to the profile's Mod_List
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
