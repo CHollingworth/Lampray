@@ -147,6 +147,25 @@ namespace Lamp::Core{
                 ++it;
             }
 
+            /**
+             * @brief Moves an item to specific position in the mod list.
+             *
+             * @param it Iterator pointing to the item to move.
+             * @param position Integer position to move the item to.
+             */
+            void moveModTo(std::vector<Base::lampMod::Mod*>::iterator& it, int position) {
+                int currentPos = it - ModList.begin();
+                if(currentPos > position){
+                    for(int ind = currentPos; ind > position; ind--){
+                        moveUp(it);
+                    }
+                } else if(currentPos < position){
+                    for(int ind = currentPos; ind < position; ind++){
+                        moveDown(it);
+                    }
+                }
+            }
+
         public:
 
 
@@ -174,7 +193,7 @@ namespace Lamp::Core{
                 if (ImGui::InputTextWithHint("##searcher","Type here to search your mods...", lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
                 }
-				
+
                 ImGuiTableFlags mod_table_flags = 0;
                 mod_table_flags |= ImGuiTableFlags_SizingStretchProp;
                 mod_table_flags |= ImGuiTableFlags_Hideable; // allow hiding coumns via context menu
@@ -233,6 +252,17 @@ namespace Lamp::Core{
                         }
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                        }
+
+                        auto contextId = "MOD_NAME_CONTEXT_" + std::to_string(i);
+                        if (ImGui::BeginPopupContextItem(contextId.c_str())){
+                            if(ImGui::Selectable("Move to top")){
+                                moveModTo(it, 0);
+                            }
+                            if(ImGui::Selectable("Move to bottom")){
+                                moveModTo(it, std::distance(ModList.begin(), ModList.end()));
+                            }
+                            ImGui::EndPopup();
                         }
 
                         // start drag and drop handling
@@ -367,7 +397,7 @@ namespace Lamp::Core{
                             if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
                                 ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                             }
-                      
+
                             ImGui::EndDisabled();
 
 
