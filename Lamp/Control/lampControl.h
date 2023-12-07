@@ -257,9 +257,11 @@ namespace Lamp::Core{
                         if (ImGui::BeginPopupContextItem(contextId.c_str())){
                             if(ImGui::Selectable("Move to top")){
                                 moveModTo(it, 0);
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
                             if(ImGui::Selectable("Move to bottom")){
                                 moveModTo(it, std::distance(ModList.begin(), ModList.end()));
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
                             ImGui::EndPopup();
                         }
