@@ -419,7 +419,8 @@ namespace Lamp::Core{
                         }
                         ImGui::SetItemDefaultFocus();
                         ImGui::SameLine();
-
+                        // right-align the cancel button to help avoid potential misclicks on the delete button
+                        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - 120);
                         if (ImGui::Button("Cancel", ImVec2(120, 0))) {
                             // Do nothing
                             lampControl::getInstance().deletePos = -1;
