@@ -388,55 +388,46 @@ namespace Lamp::Core{
                         i++;
                     }
 
-// Setup centering for the modal window
-ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-ImGui::SetNextWindowBgAlpha(0.9f); // This doesn't seem to mess anything up, but if it does search for new way to make modal bg more opaque.
-if(ImGui::BeginPopupModal("Confirm Deletion", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+                    // Setup centering for the modal window
+                    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+                    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+                    ImGui::SetNextWindowBgAlpha(0.9f); // This doesn't seem to mess anything up, but if it does search for new way to make modal bg more opaque.
+                    if(ImGui::BeginPopupModal("Confirm Deletion", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+                        auto pendingDelete = ModList.begin() + lampControl::getInstance().deletePos;
 
+                        std::filesystem::path path((*pendingDelete)->ArchivePath);
+                        std::string delname = path.filename().c_str();
 
-    auto pendingDelete = ModList.begin() + lampControl::getInstance().deletePos;
+                        std::string promptMessage = "Are you sure you want to delete: ";
+                        promptMessage.append(delname);
+                        promptMessage.append("?\n\nThis action cannot be undone.");
+                        ImGui::Text(promptMessage.c_str());
+                        ImGui::Separator();
 
-    std::filesystem::path path((*pendingDelete)->ArchivePath);
-    std::string delname = path.filename().c_str();
+                        if (ImGui::Button("Delete", ImVec2(120, 0))) {
+                            int deleteResult = std::remove(absolute(path).c_str());
+                            if(deleteResult != 0){
+                                std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                            }
 
-    // prevent displaying buttons for each mod in the mod list, as this runs every iteration of for loop
-    //if(lampControl::getInstance().deletePos == i){
-        std::string promptMessage = "Are you sure you want to delete: ";
-        promptMessage.append(delname);
-        promptMessage.append("?\n\nThis action cannot be undone.");
-        ImGui::Text(promptMessage.c_str());
-        ImGui::Separator();
+                            std::cout << absolute(path).c_str() << std::endl;
+                            ModList.erase(pendingDelete);
+                            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
 
-        if (ImGui::Button("Delete", ImVec2(120, 0))) {
-            int deleteResult = std::remove(absolute(path).c_str());
-            if(deleteResult != 0){
-                std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
-            }
+                            lampControl::getInstance().deletePos = -1;
+                            ImGui::CloseCurrentPopup();
+                        }
+                        ImGui::SetItemDefaultFocus();
+                        ImGui::SameLine();
 
-            std::cout << absolute(path).c_str() << std::endl;
-            ModList.erase(pendingDelete);
-            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+                        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                            // Do nothing
+                            lampControl::getInstance().deletePos = -1;
+                            ImGui::CloseCurrentPopup();
+                        }
 
-            lampControl::getInstance().deletePos = -1;
-            ImGui::CloseCurrentPopup();
-            //ImGui::EndPopup();
-            // re-end disabled. May be needed to avoid some crashes.
-            //ImGui::EndDisabled();
-
-            //break;
-        }
-        ImGui::SetItemDefaultFocus();
-        ImGui::SameLine();
-        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
-            // Do nothing
-            lampControl::getInstance().deletePos = -1;
-            ImGui::CloseCurrentPopup();
-        }
-    //}
-
-    ImGui::EndPopup();
-} // end delete confirmation modal
+                        ImGui::EndPopup();
+                    } // end delete confirmation modal
 
 
 
