@@ -116,7 +116,7 @@ namespace Lamp {
             Lamp::Core::lampControl::getInstance().deplopmentTracker = {0,0};
             Core::Base::lampLog::getInstance().log("Extracting Archives", Core::Base::lampLog::warningLevel::LOG);
             auto lambdaFunction = [](const Core::Base::lampMod::Mod* item) {
-                if(item->enabled) {
+                if(item->enabled && item->modType != MOD_SEPARATOR) {
                     Lamp::Core::lampControl::getInstance().deplopmentTracker.second++;
                     if(Lamp::Core::FS::lampExtract::extract(item)) {
 
@@ -166,7 +166,7 @@ namespace Lamp {
             Lamp::Core::lampControl::lampArchiveDisplayHelper(
                     std::list<std::string>{},
                     ModList,
-                    std::vector<std::string>{"Mod"},
+                    std::vector<std::string>{"Mod", "Separator"},
                     std::list<std::pair<std::string, bool *>>{}
             ).createImguiMenu();
         }

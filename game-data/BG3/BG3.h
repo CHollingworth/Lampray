@@ -63,6 +63,7 @@ namespace Lamp::Game {
             BG3_BIN_OVERRIDE,
             BG3_DATA_OVERRIDE,
             BG3_MOD_FIXER,
+			MOD_SEPARATOR,
             NaN
         };
 

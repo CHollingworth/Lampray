@@ -62,7 +62,8 @@ namespace Lamp::Game {
 
         private:
             enum ModType{
-                C77_MOD
+                C77_MOD,
+				MOD_SEPARATOR
             };
 
             std::map<std::string,std::string> keyInfo{

@@ -294,6 +294,8 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preDeployment() {
                 case BG3_MOD_FIXER:
                     Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"pak","Mods");
                     break;
+                case MOD_SEPARATOR:
+                    break;
                 default:
                     break;
             }
@@ -420,7 +422,7 @@ void Lamp::Game::BG3::listArchives() {
     Lamp::Core::lampControl::lampArchiveDisplayHelper(
             std::list<std::string>{},
             ModList,
-            std::vector<std::string>{"Engine Injection", "Standard Mod", "Bin Overwrite","Data Overwrite","No Json Mod", "Select Type"},
+            std::vector<std::string>{"Engine Injection", "Standard Mod", "Bin Overwrite","Data Overwrite","No Json Mod", "Separator", "Select Type"},
             std::list<std::pair<std::string, bool *>>{}
     ).createImguiMenu();
 }
