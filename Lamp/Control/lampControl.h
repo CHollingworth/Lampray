@@ -174,7 +174,7 @@ namespace Lamp::Core{
                 if (ImGui::InputTextWithHint("##searcher","Type here to search your mods...", lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
                 }
-				
+
                 ImGuiTableFlags mod_table_flags = 0;
                 mod_table_flags |= ImGuiTableFlags_SizingStretchProp;
                 mod_table_flags |= ImGuiTableFlags_Hideable; // allow hiding coumns via context menu
@@ -370,7 +370,7 @@ static int selected = -1;
                             if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
                                 ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                             }
-                      
+
                             ImGui::EndDisabled();
 
 
@@ -400,10 +400,10 @@ if (ImGui::BeginPopupContextItem("MODTABLE_CONTEXT")){
         // TODO: Add positionally
         // TODO: Allow right-click outside of table (specifically below, in case you don't have many mods)
         Lamp::Games::getInstance().currentGame->registerArchive("====================================================");
-        //Lamp::Games::getInstance().currentGame.ModType.MOD_SEPARATOR;
-        //std::cout << Lamp::Games::getInstance().currentGame->ModTypes().MOD_SEPARATOR << "\n";
+        //Lamp::Game::getInstance().currentGame.ModType.MOD_SEPARATOR;
+        //std::cout << Lamp::Game::getInstance().currentGame->ModTypes().MOD_SEPARATOR << "\n";
 // I would like to get the enum value so I can modify registerArchive to pass in the modtype
-        std::cout << Lamp::Games::getInstance().currentGame::ModType << "\n";
+        //std::cout << Lamp::Game::getInstance().currentGame::ModType << "\n";
         //(*it)->modType;
     }
     ImGui::EndPopup();

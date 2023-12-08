@@ -62,18 +62,17 @@ namespace Lamp::Game {
             }
 
 
-            typedef enum ModType{
-                C77_MOD,
-                MOD_SEPARATOR
-            } ;
+            int SeparatorModType(){
+                return MOD_SEPARATOR;
+            }
 
         private:
-        /*
+
             enum ModType{
                 C77_MOD,
-                MOD_SEPARATOR
+                MOD_SEPARATOR = 999
             };
-*/
+
             std::map<std::string,std::string> keyInfo{
                     {"installPath",""},
                     {"ProfileList","Default"},

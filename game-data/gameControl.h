@@ -110,12 +110,13 @@ namespace Lamp::Game {
          */
         virtual void launch() = 0;
 
-/*
-        int ModTypes(){
-            return 0;
-        }*/
+
+        virtual int SeparatorModType(){
+            return MOD_SEPARATOR;
+        }
+
         typedef enum {
-            MOD_SEPARATOR
+            MOD_SEPARATOR = 999
         } ModType;
 
     protected:
