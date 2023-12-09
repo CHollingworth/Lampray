@@ -33,7 +33,7 @@ namespace Lamp::Game {
          * @param ArchiveModType integer mod type to use for the added archive
          * @return A lampReturn object indicating the success or failure of the operation.
          */
-        virtual lampReturn registerArchive(lampString Path, int ArchiveModType = GENERIC_MOD) = 0;
+        virtual lampReturn registerArchive(lampString Path, int ArchiveModType = -1) = 0;
 
         /**
          * @brief Displays a configuration menu for the game.

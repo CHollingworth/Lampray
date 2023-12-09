@@ -8,6 +8,9 @@
 #include "../../third-party/json/json.hpp"
 
 Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString Path, int ArchiveModType) {
+    if(ArchiveModType < 0){
+        ArchiveModType = NaN;
+    }
 
     for (Core::Base::lampMod::Mod* it : ModList) {
 
@@ -40,7 +43,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString P
 
     }
 
-    Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path,ModType::NaN, false};
+    Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path, ArchiveModType, false};
     newArchive->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
     ModList.push_back(newArchive);
     return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);

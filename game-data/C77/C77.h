@@ -13,7 +13,7 @@ namespace Lamp::Game {
 
         class C77 : public gameControl  {
 
-             lampReturn registerArchive(lampString Path, int ArchiveModType = C77_MOD) override;
+             lampReturn registerArchive(lampString Path, int ArchiveModType = -1) override;
 
              lampReturn ConfigMenu() override;
 

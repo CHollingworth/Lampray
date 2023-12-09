@@ -15,7 +15,7 @@ namespace Lamp::Game {
     class BG3 : public gameControl {
     public:
 
-        lampReturn registerArchive(lampString Path, int ArchiveModType = NaN) override;
+        lampReturn registerArchive(lampString Path, int ArchiveModType = -1) override;
         lampReturn ConfigMenu() override;
         lampReturn startDeployment() override;
         lampReturn preCleanUp() override;

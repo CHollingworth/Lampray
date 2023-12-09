@@ -7,6 +7,9 @@
 namespace Lamp {
     namespace Game {
         lampReturn C77::registerArchive(lampString Path, int ArchiveModType) {
+            if(ArchiveModType < 0){
+                ArchiveModType = C77_MOD;
+            }
 
             for (Core::Base::lampMod::Mod* it : ModList) {
 
@@ -39,7 +42,7 @@ namespace Lamp {
 
             }
 
-            Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path,ModType::C77_MOD, false};
+            Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path, ArchiveModType, false};
             newArchive->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
             ModList.push_back(newArchive);
             return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
