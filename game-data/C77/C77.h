@@ -38,9 +38,6 @@ namespace Lamp::Game {
 
             std::vector<Core::Base::lampMod::Mod *>& getModList() override{ return ModList; };
 
-//enum ModTypes() override { return ModType; };
-
-
             void launch() override {
                 for (const auto& pair : keyInfo) {
                     const std::string& key = pair.first;
@@ -66,21 +63,8 @@ namespace Lamp::Game {
                 return MOD_SEPARATOR;
             }
 
-
             std::vector<std::map<int, std::string> >& getModTypes() override {
                 return CModType;
-            }
-
-            std::map<int, std::string> initModTypesMap() override {
-                std::map<int, std::string> returnModTypes = {};
-                for(auto it = CModType.begin(); it != CModType.end(); ++it){
-                    //
-                    auto typeMap = (*it).begin();
-                    auto key = typeMap->first;
-                    auto value = typeMap->second;
-                    returnModTypes.insert({key, value});
-                }
-                return returnModTypes;
             }
 
             std::map<int, std::string>& getModTypesMap() override{

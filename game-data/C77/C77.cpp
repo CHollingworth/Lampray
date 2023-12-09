@@ -166,7 +166,6 @@ namespace Lamp {
             Lamp::Core::lampControl::lampArchiveDisplayHelper(
                     std::list<std::string>{},
                     ModList,
-                    std::vector<std::string>{"Mod", "Separator"},
                     std::list<std::pair<std::string, bool *>>{}
             ).createImguiMenu();
         }

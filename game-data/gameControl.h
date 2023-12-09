@@ -123,9 +123,9 @@ namespace Lamp::Game {
             return CModTypeMap;
         }
 
-        virtual std::map<int, std::string> initModTypesMap() {
+        std::map<int, std::string> initModTypesMap() {
             std::map<int, std::string> returnModTypes = {};
-            for(auto it = CModType.begin(); it != CModType.end(); ++it){
+            for(auto it = getModTypes().begin(); it != getModTypes().end(); ++it){
                 //
                 auto typeMap = (*it).begin();
                 auto key = typeMap->first;

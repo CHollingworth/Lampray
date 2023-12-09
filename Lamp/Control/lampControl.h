@@ -55,7 +55,6 @@ namespace Lamp::Core{
         private:
             std::list<std::string> columnNames{"Enabled","Mod Name", "Mod Type", "Load Order","Last Updated" ,"Remove Mod"};
             std::vector<Base::lampMod::Mod *>& ModList;
-            std::vector<std::string> typeNames;
             std::list<std::pair<std::string,bool *>> ExtraOptions;
             std::string temp{"0"};
 
@@ -155,13 +154,11 @@ namespace Lamp::Core{
              *
              * @param ExtraColumnNames Extra column names to be displayed.
              * @param modList A vector of mod objects.
-             * @param typeNames A vector of mod type names.
              * @param extraOptions A list of extra options.
              */
             lampArchiveDisplayHelper(std::list<std::string> ExtraColumnNames, std::vector<Base::lampMod::Mod *> &modList,
-                    std::vector<std::string> typeNames,
                     std::list<std::pair<std::string, bool * >> extraOptions)
-            : ModList(modList), typeNames(typeNames),
+            : ModList(modList),
             ExtraOptions(extraOptions) {
                 columnNames.insert(columnNames.end(), ExtraColumnNames.begin(), ExtraColumnNames.end());
             }
@@ -351,7 +348,7 @@ static int selected = -1;
 
                             if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
                                 // I don't think I like this way of checking what the mod type is, but it works for now.
-                                if(typeNames[(*it)->modType] != "Separator"){
+                                if((*it)->modType != Lamp::Games::getInstance().currentGame->SeparatorModType()){
                                     int deleteResult = std::remove(absolute(path).c_str());
                                     if(deleteResult != 0){
                                         std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";

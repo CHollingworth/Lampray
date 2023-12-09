@@ -64,18 +64,6 @@ namespace Lamp::Game {
             return CModType;
         }
 
-        std::map<int, std::string> initModTypesMap() override {
-            std::map<int, std::string> returnModTypes = {};
-            for(auto it = CModType.begin(); it != CModType.end(); ++it){
-                //
-                auto typeMap = (*it).begin();
-                auto key = typeMap->first;
-                auto value = typeMap->second;
-                returnModTypes.insert({key, value});
-            }
-            return returnModTypes;
-        }
-
         std::map<int, std::string>& getModTypesMap() override{
             return CModTypeMap;
         }
