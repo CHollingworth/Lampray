@@ -232,6 +232,20 @@ namespace Lamp::Core{
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
+                        auto contextId = "MOD_NAME_CONTEXT_" + std::to_string(i);
+                        if (ImGui::BeginPopupContextItem(contextId.c_str())){
+                            if(ImGui::Selectable("Add mod separator")){
+
+                                // TODO: Allow renaming
+                                // TODO: Add positionally
+                                // TODO: Allow right-click outside of table (specifically below, in case you don't have many mods)
+                                // TODO: allow collapsing everything below a separator, up to the next separator (somewhat like MO2)
+                                Lamp::Games::getInstance().currentGame->registerArchive("====================================================", Lamp::Games::getInstance().currentGame->SeparatorModType());
+                            }
+                            ImGui::EndPopup();
+                        }
+                        //ImGui::OpenPopupOnItemClick("MODTABLE_CONTEXT", ImGuiPopupFlags_MouseButtonRight);
+
                         // start drag and drop handling
                         ImGuiDragDropFlags src_flags = 0;
                         src_flags |= ImGuiDragDropFlags_SourceNoDisableHover;     // Keep the source displayed as hovered
@@ -383,23 +397,11 @@ namespace Lamp::Core{
 
                         ImGui::TableNextRow();
 
-
-
                         i++;
                     }
 
                     ImGui::EndTable();
-                    if (ImGui::BeginPopupContextItem("MODTABLE_CONTEXT")){
-                        if(ImGui::Selectable("Add mod separator")){
 
-                            // TODO: Allow renaming
-                            // TODO: Add positionally
-                            // TODO: Allow right-click outside of table (specifically below, in case you don't have many mods)
-                            Lamp::Games::getInstance().currentGame->registerArchive("====================================================", Lamp::Games::getInstance().currentGame->SeparatorModType());
-                        }
-                        ImGui::EndPopup();
-                    }
-                    //ImGui::OpenPopupOnItemClick("MODTABLE_CONTEXT", ImGuiPopupFlags_MouseButtonRight);
                 }
             }
 
