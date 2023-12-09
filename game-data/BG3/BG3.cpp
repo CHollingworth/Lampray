@@ -12,35 +12,36 @@ Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString P
         ArchiveModType = NaN;
     }
 
-    for (Core::Base::lampMod::Mod* it : ModList) {
+    // skip the filename checks for mod separators
+    if(ArchiveModType != MOD_SEPARATOR){
+        for (Core::Base::lampMod::Mod* it : ModList) {
 
-        std::filesystem::path NewFilePath = Path;
-        std::filesystem::path TestingAgainstPath = it->ArchivePath;
+            std::filesystem::path NewFilePath = Path;
+            std::filesystem::path TestingAgainstPath = it->ArchivePath;
 
 
-        std::string NewFilePathCut = NewFilePath.filename();
-		/*
-        size_t posA = NewFilePathCut.find('-');
-        if (posA != std::string::npos) {
-            NewFilePathCut.erase(posA);
+            std::string NewFilePathCut = NewFilePath.filename();
+            /*
+            size_t posA = NewFilePathCut.find('-');
+            if (posA != std::string::npos) {
+                NewFilePathCut.erase(posA);
+            }
+            */
+
+            std::string TestingAgainstPathCut = TestingAgainstPath.filename();
+            size_t posB = TestingAgainstPathCut.find('/');
+            if (posB != std::string::npos) {
+                TestingAgainstPathCut.erase(posB);
+            }
+
+
+            if(NewFilePathCut == TestingAgainstPathCut){
+
+                it->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
+                it->ArchivePath = Path;
+                return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
+            }
         }
-		*/
-
-        std::string TestingAgainstPathCut = TestingAgainstPath.filename();
-        size_t posB = TestingAgainstPathCut.find('/');
-        if (posB != std::string::npos) {
-            TestingAgainstPathCut.erase(posB);
-        }
-
-
-        if(NewFilePathCut == TestingAgainstPathCut){
-
-            it->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
-            it->ArchivePath = Path;
-            return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
-        }
-
-
     }
 
     Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path, ArchiveModType, false};

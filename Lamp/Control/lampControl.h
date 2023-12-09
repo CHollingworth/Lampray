@@ -176,7 +176,7 @@ namespace Lamp::Core{
                 mod_table_flags |= ImGuiTableFlags_SizingStretchProp;
                 mod_table_flags |= ImGuiTableFlags_Hideable; // allow hiding coumns via context menu
                 mod_table_flags |= ImGuiTableFlags_Reorderable; // allow reordering columns
-static int selected = -1;
+
                 if(ImGui::BeginTable(Lamp::Games::getInstance().currentGame->Ident().ShortHand, columnNames.size() + 1, mod_table_flags)) {
                     for (auto it = columnNames.begin(); it != columnNames.end(); ++it) {
                         ImGui::TableSetupColumn((*it).c_str());
@@ -289,7 +289,6 @@ static int selected = -1;
                             ImGui::MenuItem("------------");
 
                             for (auto itt = Lamp::Games::getInstance().currentGame->getModTypes().begin(); itt != Lamp::Games::getInstance().currentGame->getModTypes().end(); ++itt){
-
                                 if (ImGui::MenuItem(((*itt).begin()->second).c_str())) {
                                     (*it)->modType = (*itt).begin()->first;
                                     Core::FS::lampIO::saveModList( Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList);
@@ -390,23 +389,17 @@ static int selected = -1;
                     }
 
                     ImGui::EndTable();
-if (ImGui::BeginPopupContextItem("MODTABLE_CONTEXT")){
-    //selected = i;
-    if(ImGui::Selectable("Add mod separator")){
-        // TODO: Allow renaming
-        // TODO: Allow multiple with same name
-        // TODO: Add positionally
-        // TODO: Allow right-click outside of table (specifically below, in case you don't have many mods)
-        Lamp::Games::getInstance().currentGame->registerArchive("====================================================");
-        //Lamp::Game::getInstance().currentGame.ModType.MOD_SEPARATOR;
-        //std::cout << Lamp::Game::getInstance().currentGame->ModTypes().MOD_SEPARATOR << "\n";
-// I would like to get the enum value so I can modify registerArchive to pass in the modtype
-        //std::cout << Lamp::Game::getInstance().currentGame::ModType << "\n";
-        //(*it)->modType;
-    }
-    ImGui::EndPopup();
-}
-//ImGui::OpenPopupOnItemClick("MODTABLE_CONTEXT", ImGuiPopupFlags_MouseButtonRight);
+                    if (ImGui::BeginPopupContextItem("MODTABLE_CONTEXT")){
+                        if(ImGui::Selectable("Add mod separator")){
+
+                            // TODO: Allow renaming
+                            // TODO: Add positionally
+                            // TODO: Allow right-click outside of table (specifically below, in case you don't have many mods)
+                            Lamp::Games::getInstance().currentGame->registerArchive("====================================================", Lamp::Games::getInstance().currentGame->SeparatorModType());
+                        }
+                        ImGui::EndPopup();
+                    }
+                    //ImGui::OpenPopupOnItemClick("MODTABLE_CONTEXT", ImGuiPopupFlags_MouseButtonRight);
                 }
             }
 
