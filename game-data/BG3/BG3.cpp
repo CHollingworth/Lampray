@@ -7,7 +7,7 @@
 #include "../../Lamp/Control/lampControl.h"
 #include "../../third-party/json/json.hpp"
 
-Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString Path) {
+Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString Path, int ArchiveModType) {
 
     for (Core::Base::lampMod::Mod* it : ModList) {
 

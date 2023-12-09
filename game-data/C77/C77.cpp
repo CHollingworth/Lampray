@@ -6,7 +6,7 @@
 #include "../../Lamp/Control/lampControl.h"
 namespace Lamp {
     namespace Game {
-        lampReturn C77::registerArchive(lampString Path) {
+        lampReturn C77::registerArchive(lampString Path, int ArchiveModType) {
 
             for (Core::Base::lampMod::Mod* it : ModList) {
 

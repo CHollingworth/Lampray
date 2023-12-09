@@ -30,9 +30,10 @@ namespace Lamp::Game {
          * @brief Registers an archive with the game control.
          * This is called during a file drop event onto lamp.
          * @param Path The path to the archive to be registered.
+         * @param ArchiveModType integer mod type to use for the added archive
          * @return A lampReturn object indicating the success or failure of the operation.
          */
-        virtual lampReturn registerArchive(lampString Path) = 0;
+        virtual lampReturn registerArchive(lampString Path, int ArchiveModType = GENERIC_MOD) = 0;
 
         /**
          * @brief Displays a configuration menu for the game.
@@ -152,10 +153,10 @@ namespace Lamp::Game {
         // we will load the mod type vector above into this so we can get display values by the mod type value
         std::map<int, std::string> CModTypeMap = {};
 
-        typedef enum {
+        enum ModType{
             GENERIC_MOD = 0,
             MOD_SEPARATOR = 999
-        } ModType;
+        };
     };
 } // Lamp
 
