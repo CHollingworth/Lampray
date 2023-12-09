@@ -61,11 +61,11 @@ namespace Lamp::Game {
         }
 
         std::vector<std::map<int, std::string> >& getModTypes() override {
-            return CModType;
+            return ModTypeList;
         }
 
         std::map<int, std::string>& getModTypesMap() override{
-            return CModTypeMap;
+            return ModTypeMap;
         }
 
 	private:
@@ -81,7 +81,7 @@ namespace Lamp::Game {
         };
 
         // use a vector to keep things organized, this allows us to output mod types in the order we define
-        std::vector<std::map<int, std::string> > CModType{
+        std::vector<std::map<int, std::string> > ModTypeList{
             {{ BG3_ENGINE_INJECTION, "Engine Injection" }},
             {{ BG3_MOD, "Standard Mod" }},
             {{ BG3_BIN_OVERRIDE, "Bin Overwrite" }},
@@ -91,7 +91,7 @@ namespace Lamp::Game {
             {{ MOD_SEPARATOR, "Separator" }},
         };
         // we will load the mod type vector above into this so we can get display values by the mod type value
-        std::map<int, std::string> CModTypeMap = initModTypesMap();
+        std::map<int, std::string> ModTypeMap = initModTypesMap();
 
 
         std::map<std::string,std::string> keyInfo{
