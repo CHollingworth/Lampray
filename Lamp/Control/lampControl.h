@@ -286,18 +286,19 @@ static int selected = -1;
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
-                        if (ImGui::BeginMenu((typeNames[(*it)->modType] + "##" + std::to_string(i)).c_str())) {
+                        if (ImGui::BeginMenu((Lamp::Games::getInstance().currentGame->getModTypesMap()[(*it)->modType] + "##" + std::to_string(i)).c_str())) {
                             int y = 0;
                             ImGui::MenuItem(cutname.c_str());
                             ImGui::MenuItem("------------");
 
-                            for (auto itt = typeNames.begin(); itt != typeNames.end(); ++itt) {
-                                if (ImGui::MenuItem((*itt).c_str())) {
-                                    (*it)->modType = y;
+                            for (auto itt = Lamp::Games::getInstance().currentGame->getModTypes().begin(); itt != Lamp::Games::getInstance().currentGame->getModTypes().end(); ++itt){
+
+                                if (ImGui::MenuItem(((*itt).begin()->second).c_str())) {
+                                    (*it)->modType = (*itt).begin()->first;
                                     Core::FS::lampIO::saveModList( Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList);
                                 }
-                                y++;
                             }
+
                             ImGui::EndMenu();
                         }
 

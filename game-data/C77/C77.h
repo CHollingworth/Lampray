@@ -66,12 +66,41 @@ namespace Lamp::Game {
                 return MOD_SEPARATOR;
             }
 
+
+            std::vector<std::map<int, std::string> >& getModTypes() override {
+                return CModType;
+            }
+
+            std::map<int, std::string> initModTypesMap() override {
+                std::map<int, std::string> returnModTypes = {};
+                for(auto it = CModType.begin(); it != CModType.end(); ++it){
+                    //
+                    auto typeMap = (*it).begin();
+                    auto key = typeMap->first;
+                    auto value = typeMap->second;
+                    returnModTypes.insert({key, value});
+                }
+                return returnModTypes;
+            }
+
+            std::map<int, std::string>& getModTypesMap() override{
+                return CModTypeMap;
+            }
+
         private:
 
             enum ModType{
                 C77_MOD,
                 MOD_SEPARATOR = 999
             };
+
+            // use a vector to keep things organized, this allows us to output mod types in the order we define
+            std::vector<std::map<int, std::string> > CModType{
+                {{ C77_MOD, "Mod" }},
+                {{ MOD_SEPARATOR, "Separator" }}
+            };
+            // we will load the mod type vector above into this so we can get display values by the mod type value
+            std::map<int, std::string> CModTypeMap = initModTypesMap();
 
             std::map<std::string,std::string> keyInfo{
                     {"installPath",""},

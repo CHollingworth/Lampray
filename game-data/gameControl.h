@@ -115,9 +115,25 @@ namespace Lamp::Game {
             return MOD_SEPARATOR;
         }
 
-        typedef enum {
-            MOD_SEPARATOR = 999
-        } ModType;
+        virtual std::vector<std::map<int, std::string> >& getModTypes() {
+            return CModType;
+        }
+
+        virtual std::map<int, std::string>& getModTypesMap(){
+            return CModTypeMap;
+        }
+
+        virtual std::map<int, std::string> initModTypesMap() {
+            std::map<int, std::string> returnModTypes = {};
+            for(auto it = CModType.begin(); it != CModType.end(); ++it){
+                //
+                auto typeMap = (*it).begin();
+                auto key = typeMap->first;
+                auto value = typeMap->second;
+                returnModTypes.insert({key, value});
+            }
+            return returnModTypes;
+        }
 
     protected:
         /**
@@ -126,6 +142,20 @@ namespace Lamp::Game {
          * This constructor is protected to ensure that only derived classes can be instantiated.
          */
         gameControl(){}
+    private:
+
+        // use a vector to keep things organized, this allows us to output mod types in the order we define
+        std::vector<std::map<int, std::string> > CModType{
+            {{ GENERIC_MOD, "Mod" }},
+            {{ MOD_SEPARATOR, "Separator" }}
+        };
+        // we will load the mod type vector above into this so we can get display values by the mod type value
+        std::map<int, std::string> CModTypeMap = {};
+
+        typedef enum {
+            GENERIC_MOD = 0,
+            MOD_SEPARATOR = 999
+        } ModType;
     };
 } // Lamp
 
