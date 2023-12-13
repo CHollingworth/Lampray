@@ -149,6 +149,25 @@ namespace Lamp::Core{
                 ++it;
             }
 
+            /**
+             * @brief Moves an item to specific position in the mod list.
+             *
+             * @param it Iterator pointing to the item to move.
+             * @param position Integer position to move the item to.
+             */
+            void moveModTo(std::vector<Base::lampMod::Mod*>::iterator& it, int position) {
+                int currentPos = it - ModList.begin();
+                if(currentPos > position){
+                    for(int ind = currentPos; ind > position; ind--){
+                        moveUp(it);
+                    }
+                } else if(currentPos < position){
+                    for(int ind = currentPos; ind < position; ind++){
+                        moveDown(it);
+                    }
+                }
+            }
+
         public:
 
 
@@ -189,7 +208,6 @@ namespace Lamp::Core{
 					ImGui::TableHeadersRow();
                     ImGui::TableNextRow();
 
-                    int dnd_move_from = -1, dnd_move_to = -1; // initialize position tracking vars for drag and drop functionality
                     int i = 0;
                     for (auto it = ModList.begin(); it != ModList.end(); ++it) {
 
@@ -237,6 +255,19 @@ namespace Lamp::Core{
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
+                        auto contextId = "MOD_NAME_CONTEXT_" + std::to_string(i);
+                        if (ImGui::BeginPopupContextItem(contextId.c_str())){
+                            if(ImGui::Selectable("Move to top")){
+                                moveModTo(it, 0);
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
+                            }
+                            if(ImGui::Selectable("Move to bottom")){
+                                moveModTo(it, std::distance(ModList.begin(), ModList.end()));
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
+                            }
+                            ImGui::EndPopup();
+                        }
+
                         // start drag and drop handling
                         ImGuiDragDropFlags src_flags = 0;
                         src_flags |= ImGuiDragDropFlags_SourceNoDisableHover;     // Keep the source displayed as hovered
@@ -258,24 +289,8 @@ namespace Lamp::Core{
                             target_flags |= ImGuiDragDropFlags_SourceAllowNullID;
                             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MODLIST_DND", target_flags))
                             {
-                                dnd_move_from = *(const int*)payload->Data;
-                                dnd_move_to = i;
-
-                                auto* tmp = ModList[dnd_move_from];
-                                // update the ModList (this also seems to update the UI immediately)
-                                if(dnd_move_from > dnd_move_to){
-                                    // if moving a mod to a higher position, shift things down and then place the moved mod
-                                    for(int ind = dnd_move_from; ind > dnd_move_to; ind--){
-                                        ModList[ind] = ModList[ind - 1];
-                                    }
-                                } else{
-                                    // if moving a mod to a lower position, shift things up and then place the moved mod
-                                    for(int ind = dnd_move_from; ind < dnd_move_to; ind++){
-                                        ModList[ind] = ModList[ind + 1];
-                                    }
-                                }
-                                ModList[dnd_move_to] = tmp;
-
+                                auto movingMod = ModList.begin() + *(const int*)payload->Data; // get original position from the payload data
+                                moveModTo(movingMod, i);
                                 // save the change to the profile's Mod_List
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
