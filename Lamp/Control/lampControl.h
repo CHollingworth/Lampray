@@ -263,10 +263,12 @@ namespace Lamp::Core{
                             }
 
                             if(ImGui::Selectable("Add mod separator")){
-                                // TODO: Add positionally
                                 // TODO: Allow right-click outside of table (specifically below, in case you don't have many mods)
                                 // TODO: allow collapsing everything below a separator, up to the next separator (somewhat like MO2)
                                 Lamp::Games::getInstance().currentGame->registerArchive("====================================================", Lamp::Games::getInstance().currentGame->SeparatorModType());
+                                // move the separator (now at the end of the ModList) to the index the user interacted at
+                                auto tmpSeparator = ModList.end() - 1;
+                                moveModTo(tmpSeparator, i);
                             }
 
                             // restsrict to only mod separators for now as we do not store a separate "name", just a file path for mods
