@@ -233,15 +233,46 @@ namespace Lamp::Core{
                         }
 
                         auto contextId = "MOD_NAME_CONTEXT_" + std::to_string(i);
+                        auto renamePopupId = "RENAME_MOD_" + std::to_string(i);
                         if (ImGui::BeginPopupContextItem(contextId.c_str())){
                             if(ImGui::Selectable("Add mod separator")){
-
-                                // TODO: Allow renaming
                                 // TODO: Add positionally
                                 // TODO: Allow right-click outside of table (specifically below, in case you don't have many mods)
                                 // TODO: allow collapsing everything below a separator, up to the next separator (somewhat like MO2)
                                 Lamp::Games::getInstance().currentGame->registerArchive("====================================================", Lamp::Games::getInstance().currentGame->SeparatorModType());
                             }
+
+                            // restsrict to only mod separators for now as we do not store a separate "name", just a file path for mods
+                            if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                                // using a button as a Selectable did not work for some reason
+                                if(ImGui::Button("Rename", ImVec2(120, 0))){
+                                    ImGui::OpenPopup(renamePopupId.c_str());
+                                }
+                            }
+
+                            if(ImGui::BeginPopupModal(renamePopupId.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+                                // 200 characters should hopefully be more than enough
+                                static char buf[200];
+                                ImGui::InputTextWithHint("##", cutname.c_str(), buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
+                                ImGui::Separator();
+
+                                if (ImGui::Button("Save")) {
+                                    (*it)->ArchivePath = buf;
+                                    Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+
+                                    ImGui::CloseCurrentPopup();
+                                }
+                                ImGui::SetItemDefaultFocus();
+                                ImGui::SameLine();
+                                // right-align the cancel button to help avoid potential misclicks
+                                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Cancel").x - ImGui::GetStyle().ItemSpacing.x);
+                                if (ImGui::Button("Cancel")) {
+                                    // Do nothing
+                                    ImGui::CloseCurrentPopup();
+                                }
+                                ImGui::EndPopup();
+                            } // end rename popup modal
+
                             ImGui::EndPopup();
                         }
                         //ImGui::OpenPopupOnItemClick("MODTABLE_CONTEXT", ImGuiPopupFlags_MouseButtonRight);
