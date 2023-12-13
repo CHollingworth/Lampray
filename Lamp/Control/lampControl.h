@@ -58,6 +58,7 @@ namespace Lamp::Core{
             std::list<std::pair<std::string,bool *>> ExtraOptions;
             std::string temp{"0"};
 
+            bool collapsUntilNextSeparator = false;
 
             /**
             * @brief Calculates the Levenshtein distance between two strings.
@@ -205,6 +206,14 @@ namespace Lamp::Core{
 
                     int i = 0;
                     for (auto it = ModList.begin(); it != ModList.end(); ++it) {
+                        if(this->collapsUntilNextSeparator){
+                            if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                                this->collapsUntilNextSeparator = false;
+                            } else{
+                                i++; // this probable messes stuff up
+                                continue;
+                            }
+                        }
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
@@ -212,15 +221,25 @@ namespace Lamp::Core{
                         }
 
 
+                        std::string enabledButtonText = "Enabled##" + std::to_string(i);
+                        std::string disabledButtonText = "Disabled##" + std::to_string(i);
+                        if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                            enabledButtonText = "Expand##" + std::to_string(i);
+                            disabledButtonText = "Collapse##" + std::to_string(i);
+                        }
                         if((*it)->enabled) {
+                            if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                                this->collapsUntilNextSeparator = true;
+                            }
+
                             ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)lampControl::getInstance().Colour_ButtonAlt);
-                            if (ImGui::Button(("Enabled##" + std::to_string(i)).c_str())) {
+                            if (ImGui::Button(enabledButtonText.c_str())) {
                                 (*it)->enabled = false;
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
                             ImGui::PopStyleColor(1);
                         }else{
-                            if (ImGui::Button(("Disabled##" + std::to_string(i)).c_str())) {
+                            if (ImGui::Button(disabledButtonText.c_str())) {
                                 (*it)->enabled = true;
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
