@@ -45,9 +45,11 @@ namespace Lamp::Core{
          */
         static lampString getFormattedTimeAndDate();
 
-
         lampHex Colour_SearchHighlight = ImVec4(0.3f, 0.f, 0.3f, 1);
         lampHex Colour_ButtonAlt = ImVec4(0.1f, 0.6f, 0.3f, 1);
+
+        // an index outside of the loop/object recreation that we can reference for the delete modal (otherwise modal options display for every mod in the ModList)
+        int deletePos = -1;
         /**
         * @brief The `lampArchiveDisplayHelper` struct provides helper methods for displaying archives.
         */
@@ -361,29 +363,27 @@ namespace Lamp::Core{
                         }
 
 
-                            ImGui::BeginDisabled((*it)->enabled);
+                        ImGui::BeginDisabled((*it)->enabled);
 
-                            if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
-                                int deleteResult = std::remove(absolute(path).c_str());
-                                if(deleteResult != 0){
-                                    std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
-                                }
+                        if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
+                            lampControl::getInstance().deletePos = i;
+                            ImGui::OpenPopup("Confirm Deletion");
 
-                                std::cout << absolute(path).c_str() << std::endl;
-                                ModList.erase(it);
-                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
-                                ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
-                                break;
-                            }
+                            ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
+                            break;
+                        }
 
-                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
-                                ImGui::SetTooltip("Only disabled mods can be removed.");
-                            }
-                            if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
-                                ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
-                            }
 
-                            ImGui::EndDisabled();
+
+
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
+                            ImGui::SetTooltip("Only disabled mods can be removed.");
+                        }
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
+                            ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
+                        }
+
+                        ImGui::EndDisabled();
 
 
                         for (auto ittt = ExtraOptions.begin(); ittt != ExtraOptions.end(); ++ittt) {
@@ -402,6 +402,50 @@ namespace Lamp::Core{
 
                         i++;
                     }
+
+                    // Setup centering for the modal window
+                    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+                    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+                    ImGui::SetNextWindowBgAlpha(0.9f); // This doesn't seem to mess anything up, but if it does search for new way to make modal bg more opaque.
+                    if(ImGui::BeginPopupModal("Confirm Deletion", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+                        auto pendingDelete = ModList.begin() + lampControl::getInstance().deletePos;
+
+                        std::filesystem::path path((*pendingDelete)->ArchivePath);
+                        std::string delname = path.filename().c_str();
+
+                        std::string promptMessage = "Are you sure you want to delete: ";
+                        promptMessage.append(delname);
+                        promptMessage.append("?\n\nThis action cannot be undone.");
+                        ImGui::Text(promptMessage.c_str());
+                        ImGui::Separator();
+
+                        if (ImGui::Button("Delete", ImVec2(120, 0))) {
+                            int deleteResult = std::remove(absolute(path).c_str());
+                            if(deleteResult != 0){
+                                std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                            }
+
+                            std::cout << absolute(path).c_str() << std::endl;
+                            ModList.erase(pendingDelete);
+                            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+
+                            lampControl::getInstance().deletePos = -1;
+                            ImGui::CloseCurrentPopup();
+                        }
+                        ImGui::SetItemDefaultFocus();
+                        ImGui::SameLine();
+                        // right-align the cancel button to help avoid potential misclicks on the delete button
+                        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - 120);
+                        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                            // Do nothing
+                            lampControl::getInstance().deletePos = -1;
+                            ImGui::CloseCurrentPopup();
+                        }
+
+                        ImGui::EndPopup();
+                    } // end delete confirmation modal
+
+
 
                     ImGui::EndTable();
                 }
