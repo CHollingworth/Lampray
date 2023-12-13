@@ -59,6 +59,7 @@ namespace Lamp::Core{
             std::string temp{"0"};
 
             bool collapsUntilNextSeparator = false;
+            std::string modSeparatorDefaultText = "====================================================";
 
             /**
             * @brief Calculates the Levenshtein distance between two strings.
@@ -282,9 +283,7 @@ namespace Lamp::Core{
                             }
 
                             if(ImGui::Selectable("Add mod separator")){
-                                // TODO: Allow right-click outside of table (specifically below, in case you don't have many mods)
-                                // TODO: allow collapsing everything below a separator, up to the next separator (somewhat like MO2)
-                                Lamp::Games::getInstance().currentGame->registerArchive("====================================================", Lamp::Games::getInstance().currentGame->SeparatorModType());
+                                Lamp::Games::getInstance().currentGame->registerArchive(modSeparatorDefaultText, Lamp::Games::getInstance().currentGame->SeparatorModType());
                                 // move the separator (now at the end of the ModList) to the index the user interacted at
                                 auto tmpSeparator = ModList.end() - 1;
                                 moveModTo(tmpSeparator, i);
@@ -466,6 +465,17 @@ namespace Lamp::Core{
 
                     ImGui::EndTable();
 
+                    ImGuiPopupFlags outsideTablePopupFlags = 0;
+                    outsideTablePopupFlags |= ImGuiPopupFlags_NoOpenOverItems;
+                    outsideTablePopupFlags |= ImGuiPopupFlags_MouseButtonRight;
+                    outsideTablePopupFlags |= ImGuiPopupFlags_NoOpenOverExistingPopup;
+                    if (ImGui::BeginPopupContextWindow("OUTSIDE_TABLE_CONTEXT", outsideTablePopupFlags)){
+                        if(ImGui::Selectable("Add mod separator")){
+                            Lamp::Games::getInstance().currentGame->registerArchive(modSeparatorDefaultText, Lamp::Games::getInstance().currentGame->SeparatorModType());
+                            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+                        }
+                        ImGui::EndPopup();
+                    }
                 }
             }
 
