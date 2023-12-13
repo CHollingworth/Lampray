@@ -63,7 +63,7 @@ namespace Lamp::Game {
                 return MOD_SEPARATOR;
             }
 
-            std::vector<std::map<int, std::string> >& getModTypes() override {
+            std::vector<std::pair<int, std::string> >& getModTypes() override {
                 return ModTypeList;
             }
 
@@ -79,9 +79,9 @@ namespace Lamp::Game {
             };
 
             // use a vector to keep things organized, this allows us to output mod types in the order we define
-            std::vector<std::map<int, std::string> > ModTypeList{
-                {{ C77_MOD, "Mod" }},
-                {{ MOD_SEPARATOR, "Separator" }}
+            std::vector<std::pair<int, std::string> > ModTypeList{
+                { C77_MOD, "Mod" },
+                { MOD_SEPARATOR, "Separator" }
             };
             // we will load the mod type vector above into this so we can get display values by the mod type value
             std::map<int, std::string> ModTypeMap = initModTypesMap();

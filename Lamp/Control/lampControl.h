@@ -347,8 +347,8 @@ namespace Lamp::Core{
                             ImGui::MenuItem("------------");
 
                             for (auto itt = Lamp::Games::getInstance().currentGame->getModTypes().begin(); itt != Lamp::Games::getInstance().currentGame->getModTypes().end(); ++itt){
-                                if (ImGui::MenuItem(((*itt).begin()->second).c_str())) {
-                                    (*it)->modType = (*itt).begin()->first;
+                                if (ImGui::MenuItem(((*itt).second).c_str())) {
+                                    (*it)->modType = (*itt).first;
                                     Core::FS::lampIO::saveModList( Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList);
                                 }
                             }

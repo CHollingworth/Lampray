@@ -116,7 +116,7 @@ namespace Lamp::Game {
             return MOD_SEPARATOR;
         }
 
-        virtual std::vector<std::map<int, std::string> >& getModTypes() {
+        virtual std::vector<std::pair<int, std::string> >& getModTypes() {
             return ModTypeList;
         }
 
@@ -127,10 +127,8 @@ namespace Lamp::Game {
         std::map<int, std::string> initModTypesMap() {
             std::map<int, std::string> returnModTypes = {};
             for(auto it = getModTypes().begin(); it != getModTypes().end(); ++it){
-                //
-                auto typeMap = (*it).begin();
-                auto key = typeMap->first;
-                auto value = typeMap->second;
+                auto key = (*it).first;
+                auto value = (*it).second;
                 returnModTypes.insert({key, value});
             }
             return returnModTypes;
@@ -146,9 +144,9 @@ namespace Lamp::Game {
     private:
 
         // use a vector to keep things organized, this allows us to output mod types in the order we define
-        std::vector<std::map<int, std::string> > ModTypeList{
-            {{ GENERIC_MOD, "Mod" }},
-            {{ MOD_SEPARATOR, "Separator" }}
+        std::vector<std::pair<int, std::string> > ModTypeList{
+            { GENERIC_MOD, "Mod" },
+            { MOD_SEPARATOR, "Separator" }
         };
         // we will load the mod type vector above into this so we can get display values by the mod type value
         std::map<int, std::string> ModTypeMap = {};
