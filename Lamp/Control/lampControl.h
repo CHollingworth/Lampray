@@ -288,6 +288,7 @@ namespace Lamp::Core{
                                 // move the separator (now at the end of the ModList) to the index the user interacted at
                                 auto tmpSeparator = ModList.end() - 1;
                                 moveModTo(tmpSeparator, i);
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
                             }
 
                             // restsrict to only mod separators for now as we do not store a separate "name", just a file path for mods
