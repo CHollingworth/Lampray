@@ -272,6 +272,7 @@ namespace Lamp::Core{
 
                         auto contextId = "MOD_NAME_CONTEXT_" + std::to_string(i);
                         auto renamePopupId = "RENAME_MOD_" + std::to_string(i);
+                        bool openRenamePopup = false;
                         if (ImGui::BeginPopupContextItem(contextId.c_str())){
                             if(ImGui::Selectable("Move to top")){
                                 moveModTo(it, 0);
@@ -293,37 +294,43 @@ namespace Lamp::Core{
                             // restsrict to only mod separators for now as we do not store a separate "name", just a file path for mods
                             if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
                                 // using a button as a Selectable did not work for some reason
-                                if(ImGui::Button("Rename", ImVec2(120, 0))){
-                                    ImGui::OpenPopup(renamePopupId.c_str());
+                                if(ImGui::Selectable("Rename")){
+                                    // workaround for selectable not triggering the rename popup
+                                    openRenamePopup = true;
+                                    //ImGui::OpenPopup(renamePopupId.c_str());
                                 }
                             }
 
-                            if(ImGui::BeginPopupModal(renamePopupId.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize)){
-                                // 200 characters should hopefully be more than enough
-                                static char buf[200];
-                                ImGui::InputTextWithHint("##", cutname.c_str(), buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
-                                ImGui::Separator();
-
-                                if (ImGui::Button("Save")) {
-                                    (*it)->ArchivePath = buf;
-                                    Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
-
-                                    ImGui::CloseCurrentPopup();
-                                }
-                                ImGui::SetItemDefaultFocus();
-                                ImGui::SameLine();
-                                // right-align the cancel button to help avoid potential misclicks
-                                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Cancel").x - ImGui::GetStyle().ItemSpacing.x);
-                                if (ImGui::Button("Cancel")) {
-                                    // Do nothing
-                                    ImGui::CloseCurrentPopup();
-                                }
-                                ImGui::EndPopup();
-                            } // end rename popup modal
-
                             ImGui::EndPopup();
                         }
-                        //ImGui::OpenPopupOnItemClick("MODTABLE_CONTEXT", ImGuiPopupFlags_MouseButtonRight);
+
+                        if(openRenamePopup == true){
+                            ImGui::OpenPopup(renamePopupId.c_str());
+                        }
+
+                        if(ImGui::BeginPopupModal(renamePopupId.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+                            // 200 characters should hopefully be more than enough
+                            static char buf[200];
+                            ImGui::InputTextWithHint("##", cutname.c_str(), buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
+                            ImGui::Separator();
+
+                            if (ImGui::Button("Save")) {
+                                (*it)->ArchivePath = buf;
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+
+                                ImGui::CloseCurrentPopup();
+                            }
+                            ImGui::SetItemDefaultFocus();
+                            ImGui::SameLine();
+                            // right-align the cancel button to help avoid potential misclicks
+                            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Cancel").x - ImGui::GetStyle().ItemSpacing.x);
+                            if (ImGui::Button("Cancel")) {
+                                // Do nothing
+                                ImGui::CloseCurrentPopup();
+                            }
+                            ImGui::EndPopup();
+                        } // end rename popup modal
+
 
                         // start drag and drop handling
                         ImGuiDragDropFlags src_flags = 0;
