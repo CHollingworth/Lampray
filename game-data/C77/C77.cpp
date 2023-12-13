@@ -146,7 +146,7 @@ namespace Lamp {
 
                 Lamp::Core::FS::lampTrack::handleFileDescriptor A{
                         Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFolder,
-                        Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
+                        Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::direct,
                         workingDir+"/Cyberpunk 2777",
                         keyInfo["installPath"],
                         "",
