@@ -307,6 +307,10 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::MenuItem("Quit")) {
+                this->userRequestedQuit = true;
+            }
+
 
 
             ImGui::EndMenu();

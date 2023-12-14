@@ -145,7 +145,7 @@ int main(int, char**)
     Lamp::Core::lampCustomise::getInstance().getConfigColours();
 
     bool done = false;
-    while (!done)
+    while (!done && !Menus.userRequestedQuit)
     {
         SDL_Event event;
         while (SDL_PollEvent(&event))
