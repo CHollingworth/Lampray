@@ -484,9 +484,11 @@ namespace Lamp::Core{
                         ImGui::Separator();
 
                         if (ImGui::Button("Delete", ImVec2(120, 0))) {
-                            int deleteResult = std::remove(absolute(path).c_str());
-                            if(deleteResult != 0){
-                                std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                            if((*pendingDelete)->modType != Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                                int deleteResult = std::remove(absolute(path).c_str());
+                                if(deleteResult != 0){
+                                    std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                                }
                             }
 
                             std::cout << absolute(path).c_str() << std::endl;
