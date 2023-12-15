@@ -312,7 +312,6 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
             }
 
 
-
             ImGui::EndMenu();
         }
 
