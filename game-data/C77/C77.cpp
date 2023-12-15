@@ -130,6 +130,7 @@ namespace Lamp {
                         Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"bin","Cyberpunk 2777/bin");
                         Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"engine","Cyberpunk 2777/engine");
                         Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"REDMod","Cyberpunk 2777/REDMod");
+                        Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"mods","Cyberpunk 2777/mods");
 
                         Lamp::Core::lampControl::getInstance().deplopmentTracker.first++;
                     }
