@@ -450,14 +450,23 @@ namespace Lamp::Core{
                         if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
                             if (ImGui::Button(("  Remove  ##" + std::to_string(i)).c_str())) {
                                 lampControl::getInstance().deletePos = i;
-                            }
-                        }else if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
-                            lampControl::getInstance().deletePos = i;
-                            ImGui::OpenPopup("Confirm Deletion");
+                                ImGui::OpenPopup("Confirm Deletion");
 
-                            ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
-                            break;
+                                ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
+                                break;
+                            }
+                        }else{
+                            if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
+
+                                lampControl::getInstance().deletePos = i;
+                                ImGui::OpenPopup("Confirm Deletion");
+
+                                ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
+                                break;
+                            }
                         }
+
+
 
 
 
