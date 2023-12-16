@@ -303,7 +303,13 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
 
 
             if (ImGui::BeginMenu("About")) {
+                ImGui::MenuItem("Lampray (Linux Application Modding Platform)");
+                ImGui::MenuItem("--------------------------------------");
                 ImGui::MenuItem("Created by Charles Hollingworth");
+                ImGui::MenuItem("-------------Contributors-------------");
+                ImGui::MenuItem("Jinxtaposition");
+                ImGui::MenuItem("Airtonix");
+                ImGui::MenuItem("SnazzyPanda");
                 ImGui::EndMenu();
             }
 
