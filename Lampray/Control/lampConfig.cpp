@@ -5,7 +5,7 @@
 #include "../Filesystem/lampFS.h"
 
 bool Lamp::Core::lampConfig::init() {
-        Base::lampLog::getInstance().log("Initializing Lamp");
+        Base::lampLog::getInstance().log("Initializing Lampray");
 
         if((std::string)bit7zLibaryLocation == "") {
             Base::lampLog::getInstance().log("Searching for 7z.so");

@@ -4,7 +4,7 @@
 
 #include <regex>
 #include "BG3.h"
-#include "../../Lamp/Control/lampControl.h"
+#include "../../Lampray/Control/lampControl.h"
 #include "../../third-party/json/json.hpp"
 
 Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString Path, int ArchiveModType) {

@@ -3,7 +3,7 @@
 //
 
 #include "C77.h"
-#include "../../Lamp/Control/lampControl.h"
+#include "../../Lampray/Control/lampControl.h"
 namespace Lamp {
     namespace Game {
         lampReturn C77::registerArchive(lampString Path, int ArchiveModType) {
@@ -175,5 +175,5 @@ namespace Lamp {
         }
 
 
-    } // Lamp
+    } // Lampray
 } // Game

@@ -32,7 +32,7 @@ runs:
     #     | -- Found CURL: /usr/lib/x86_64-linux-gnu/libcurl.so (found version "7.68.0")  
     #     | -- Configuring done (0.9s)
     #     | CMake Error at CMakeLists.txt:72 (target_link_libraries):
-    #     |   Target "Lamp" links to:
+    #     |   Target "Lampray" links to:
     #     | 
     #     |     pugixml::pugixml
     #     | 

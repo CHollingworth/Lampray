@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.26)
-project(Lamp)
+project(Lampray)
 
 set(CMAKE_CXX_STANDARD 17)
 
 
 
 
-add_executable(Lamp main.cpp
+add_executable(Lampray main.cpp
         third-party/imgui/imconfig.h
         third-party/imgui/imgui.cpp
         third-party/imgui/imgui.h
@@ -23,24 +23,24 @@ add_executable(Lamp main.cpp
         third-party/l4z/lz4.c
         third-party/l4z/lz4.h
         VERSION
-        Lamp/Base/lampBase.h
-        Lamp/Filesystem/lampFS.h
-        Lamp/Control/lampControl.h
-        Lamp/Control/lampControl.cpp
-        Lamp/Parse/lampParse.h
+        Lampray/Base/lampBase.h
+        Lampray/Filesystem/lampFS.h
+        Lampray/Control/lampControl.h
+        Lampray/Control/lampControl.cpp
+        Lampray/Parse/lampParse.h
         game-data/BG3/BG3.cpp
         game-data/BG3/BG3.h
-        Lamp/Control/lampConfig.h
-        Lamp/Control/lampConfig.cpp
-        Lamp/Filesystem/lampExtract.cpp
-        Lamp/Filesystem/lampIO.cpp
-        Lamp/Menu/lampMenu.h
-        Lamp/Menu/lampMenu.cpp
-        Lamp/Filesystem/lampUpdate.cpp
-        Lamp/Control/lampGames.h
-        Lamp/Filesystem/lampShare.cpp
-        "Lamp/Menu/lampCustomise .h"
-        Lamp/Filesystem/lampTrack.cpp
+        Lampray/Control/lampConfig.h
+        Lampray/Control/lampConfig.cpp
+        Lampray/Filesystem/lampExtract.cpp
+        Lampray/Filesystem/lampIO.cpp
+        Lampray/Menu/lampMenu.h
+        Lampray/Menu/lampMenu.cpp
+        Lampray/Filesystem/lampUpdate.cpp
+        Lampray/Control/lampGames.h
+        Lampray/Filesystem/lampShare.cpp
+        "Lampray/Menu/lampCustomise .h"
+        Lampray/Filesystem/lampTrack.cpp
         game-data/C77/C77.cpp
         game-data/C77/C77.h
         third-party/imgui/imgui_impl_sdl2.cpp

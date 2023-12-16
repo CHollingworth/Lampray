@@ -13,6 +13,6 @@ namespace Lamp {
         };
 
     } // Game
-} // Lamp
+} // Lampray
 
 #endif //LAMP_LHL_H

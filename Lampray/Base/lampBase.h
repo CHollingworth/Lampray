@@ -26,13 +26,13 @@
 
 namespace Lamp::Core::Base{
     /**
-     * @brief A holding class for some of the Lamp framework's core types.
+     * @brief A holding class for some of the Lampray framework's core types.
      *
      */
     class lampTypes{
     public:
         /**
-        * @brief A custom string class designed for use in the Lamp framework.
+        * @brief A custom string class designed for use in the Lampray framework.
         *
         * This class provides custom functionality for string manipulation and conversion.
         */
@@ -173,7 +173,7 @@ namespace Lamp::Core::Base{
         };
 
         /**
-        * @brief A custom color class designed for use in the Lamp framework, representing a color with alpha (RGB-A).
+        * @brief A custom color class designed for use in the Lampray framework, representing a color with alpha (RGB-A).
         *
         * This class provides functionality to work with colors in RGBA format and supports conversion to/from hex strings.
         */
@@ -284,7 +284,7 @@ namespace Lamp::Core::Base{
         /**
         * @brief A custom class for representing return values with an associated reason.
         *
-        * This class is designed for use in the Lamp framework to encapsulate return values along with an optional reason.
+        * This class is designed for use in the Lampray framework to encapsulate return values along with an optional reason.
         */
         class lampReturn {
         public:
@@ -370,7 +370,7 @@ namespace Lamp::Core::Base{
     };
 
     /**
-    * @brief A class for managing game mods in the Lamp framework.
+    * @brief A class for managing game mods in the Lampray framework.
     *
     * This class provides functionality for managing and serializing game mods.
     */
@@ -483,7 +483,7 @@ namespace Lamp::Core::Base{
     };
 
     /**
-    * @brief A singleton class for logging messages and displaying warnings in the Lamp framework.
+    * @brief A singleton class for logging messages and displaying warnings in the Lampray framework.
     *
     * This class provides a centralized logging system and a mechanism to display warning messages.
     * It is implemented as a singleton to ensure a single instance throughout the application.

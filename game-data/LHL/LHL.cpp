@@ -7,4 +7,4 @@
 namespace Lamp {
     namespace Game {
     } // Game
-} // Lamp
+} // Lampray

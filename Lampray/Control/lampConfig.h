@@ -16,9 +16,9 @@ namespace Lamp::Core {
     typedef Core::Base::lampTypes::lampReturn lampReturn;
 
 /**
- * @brief The `lampConfig` class manages configuration settings and data paths for Lamp.
+ * @brief The `lampConfig` class manages configuration settings and data paths for Lampray.
  *
- * The `lampConfig` class provides access to Lamp's configuration settings, data paths, and other
+ * The `lampConfig` class provides access to Lampray's configuration settings, data paths, and other
  * configuration-related functionality.
  */
     class lampConfig {
@@ -56,7 +56,7 @@ namespace Lamp::Core {
         };
 
         /**
-         * @brief Gets the default ImGui window flags for Lamp windows.
+         * @brief Gets the default ImGui window flags for Lampray windows.
          *
          * @return The ImGui window flags.
          */

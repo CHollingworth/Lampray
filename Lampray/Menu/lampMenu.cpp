@@ -312,7 +312,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                 ImGui::MenuItem("SnazzyPanda");
                 ImGui::EndMenu();
             }
-
+            ImGui::MenuItem("--------");
             if (ImGui::MenuItem("Quit")) {
                 this->userRequestedQuit = true;
             }

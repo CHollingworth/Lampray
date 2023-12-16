@@ -5,8 +5,8 @@
 #ifndef LAMP_BG3_H
 #define LAMP_BG3_H
 #include "../gameControl.h"
-#include "../../Lamp/Filesystem/lampFS.h"
-#include "../../Lamp/Parse/lampParse.h"
+#include "../../Lampray/Filesystem/lampFS.h"
+#include "../../Lampray/Parse/lampParse.h"
 namespace Lamp::Game {
     typedef Core::Base::lampTypes::lampString lampString;
     typedef Core::Base::lampTypes::lampHexAlpha lampHex;

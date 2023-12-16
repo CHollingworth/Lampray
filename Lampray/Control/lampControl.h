@@ -18,9 +18,9 @@ namespace Lamp::Core{
     typedef Core::Base::lampTypes::lampHexAlpha lampHex;
     typedef Core::Base::lampTypes::lampReturn lampReturn;
     /**
-    * @brief The `lampControl` class manages Lamp's control and user interface.
+    * @brief The `lampControl` class manages Lampray's control and user interface.
     *
-    * The `lampControl` class provides access to various control and user interface-related functionalities in Lamp.
+    * The `lampControl` class provides access to various control and user interface-related functionalities in Lampray.
     */
     class lampControl{
     public:
@@ -276,16 +276,20 @@ namespace Lamp::Core{
                         auto renamePopupId = "RENAME_MOD_" + std::to_string(i);
                         bool openRenamePopup = false;
                         if (ImGui::BeginPopupContextItem(contextId.c_str())){
-                            if(ImGui::Selectable("Move to top")){
+
+
+
+
+                            if(ImGui::Selectable("Move to Top")){
                                 moveModTo(it, 0);
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
-                            if(ImGui::Selectable("Move to bottom")){
+                            if(ImGui::Selectable("Move to Bottom")){
                                 moveModTo(it, std::distance(ModList.begin(), ModList.end()));
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
 
-                            if(ImGui::Selectable("Add mod separator")){
+                            if(ImGui::Selectable("Create Separator")){
                                 Lamp::Games::getInstance().currentGame->registerArchive(modSeparatorDefaultText, Lamp::Games::getInstance().currentGame->SeparatorModType());
                                 // move the separator (now at the end of the ModList) to the index the user interacted at
                                 auto tmpSeparator = ModList.end() - 1;
@@ -296,7 +300,7 @@ namespace Lamp::Core{
                             // restsrict to only mod separators for now as we do not store a separate "name", just a file path for mods
                             if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
                                 // using a button as a Selectable did not work for some reason
-                                if(ImGui::Selectable("Rename")){
+                                if(ImGui::Selectable("Rename Separator")){
                                     // workaround for selectable not triggering the rename popup
                                     openRenamePopup = true;
                                     //ImGui::OpenPopup(renamePopupId.c_str());
@@ -369,21 +373,30 @@ namespace Lamp::Core{
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
-                        if (ImGui::BeginMenu((Lamp::Games::getInstance().currentGame->getModTypesMap()[(*it)->modType] + "##" + std::to_string(i)).c_str())) {
-                            int y = 0;
-                            ImGui::MenuItem(cutname.c_str());
-                            ImGui::MenuItem("------------");
 
-                            for (auto itt = Lamp::Games::getInstance().currentGame->getModTypes().begin(); itt != Lamp::Games::getInstance().currentGame->getModTypes().end(); ++itt){
-                                if (ImGui::MenuItem(((*itt).second).c_str())) {
-                                    (*it)->modType = (*itt).first;
-                                    Core::FS::lampIO::saveModList( Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList);
+                        if((*it)->modType != Lamp::Games::getInstance().currentGame->SeparatorModType()) {
+                            if (ImGui::BeginMenu(
+                                    (Lamp::Games::getInstance().currentGame->getModTypesMap()[(*it)->modType] + "##" +
+                                     std::to_string(i)).c_str())) {
+                                int y = 0;
+                                ImGui::MenuItem(cutname.c_str());
+                                ImGui::MenuItem("------------");
+
+                                for (auto itt = Lamp::Games::getInstance().currentGame->getModTypes().begin();
+                                     itt != Lamp::Games::getInstance().currentGame->getModTypes().end(); ++itt) {
+                                    if((*itt).first != Lamp::Games::getInstance().currentGame->SeparatorModType()) {
+                                        if (ImGui::MenuItem(((*itt).second).c_str())) {
+                                            (*it)->modType = (*itt).first;
+                                            Core::FS::lampIO::saveModList(
+                                                    Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList);
+                                        }
+                                    }
+
                                 }
+
+                                ImGui::EndMenu();
                             }
-
-                            ImGui::EndMenu();
                         }
-
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
@@ -417,8 +430,10 @@ namespace Lamp::Core{
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
+                        if((*it)->modType != Lamp::Games::getInstance().currentGame->SeparatorModType()) {
+                            ImGui::Text((*it)->timeOfUpdate);
+                        }
 
-                        ImGui::Text((*it)->timeOfUpdate);
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                         }
@@ -431,7 +446,12 @@ namespace Lamp::Core{
 
                         ImGui::BeginDisabled((*it)->enabled);
 
-                        if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
+
+                        if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                            if (ImGui::Button(("  Remove  ##" + std::to_string(i)).c_str())) {
+                                lampControl::getInstance().deletePos = i;
+                            }
+                        }else if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
                             lampControl::getInstance().deletePos = i;
                             ImGui::OpenPopup("Confirm Deletion");
 
@@ -569,7 +589,7 @@ namespace Lamp::Core{
 
         std::pair<int, int> deplopmentTracker; ///< A pair of integers representing deployment progress.
         std::string deploymentStageTitle; ///< The title of the current deployment stage.
-        bool inDeployment = false; ///< Indicates whether Lamp is in the deployment process.
+        bool inDeployment = false; ///< Indicates whether Lampray is in the deployment process.
 
 
     private:

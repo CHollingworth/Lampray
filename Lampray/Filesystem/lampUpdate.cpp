@@ -11,7 +11,7 @@
 void Lamp::Core::FS::lampUpdate::checkForUpdates() {
     CURL* curl = curl_easy_init();
     if (curl) {
-        std::string url = "https://raw.githubusercontent.com/CHollingworth/Lamp/master/VERSION";
+        std::string url = "https://raw.githubusercontent.com/CHollingworth/Lampray/master/VERSION";
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         std::string response_data;
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -46,7 +46,7 @@ void Lamp::Core::FS::lampUpdate::getExpression() {
 
     if(versionNumber == "Update Available!") {
         if (ImGui::Button((versionNumber).c_str())) {
-            const char* url = "https://github.com/CHollingworth/Lamp/releases/latest";
+            const char* url = "https://github.com/CHollingworth/Lampray/releases/latest";
             std::string openCommand = "xdg-open " + std::string(url);
             system(openCommand.c_str());
         }

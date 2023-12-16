@@ -6,7 +6,7 @@
 #define LAMP_C77_H
 
 #include "../gameControl.h"
-#include "../../Lamp/Filesystem/lampFS.h"
+#include "../../Lampray/Filesystem/lampFS.h"
 
 
 namespace Lamp::Game {
@@ -93,6 +93,6 @@ namespace Lamp::Game {
             };
         };
 
-    } // Lamp
+    } // Lampray
 
 #endif //LAMP_C77_H

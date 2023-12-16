@@ -239,7 +239,7 @@ namespace Lamp {
         private:
             lampCustomise(){}
         };
-    } // Lamp
+    } // Lampray
 } // Core
 
 #endif //LAMP_LAMPCUSTOMISE_H

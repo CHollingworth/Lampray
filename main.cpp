@@ -2,9 +2,9 @@
 #include "third-party/imgui/imgui_impl_sdl2.h"
 #include "third-party/imgui/imgui_impl_sdlrenderer2.h"
 
-#include "Lamp/Control/lampControl.h"
-#include "Lamp/Menu/lampMenu.h"
-#include "Lamp/Menu/lampCustomise .h"
+#include "Lampray/Control/lampControl.h"
+#include "Lampray/Menu/lampMenu.h"
+#include "Lampray/Menu/lampCustomise .h"
 #include <stdio.h>
 #include "SDL2/SDL.h"
 

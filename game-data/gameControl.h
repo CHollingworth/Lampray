@@ -8,7 +8,7 @@
 #include <string>
 #include <list>
 #include <map>
-#include "../Lamp/Base/lampBase.h"
+#include "../Lampray/Base/lampBase.h"
 
 
 namespace Lamp::Game {
@@ -37,14 +37,14 @@ namespace Lamp::Game {
 
         /**
          * @brief Displays a configuration menu for the game.
-         * See Lamp::Game::BG3 for usage and Lamp::Core::lampControl::lampGameSettingsDisplayHelper for creating config menu items.
+         * See Lampray::Game::BG3 for usage and Lampray::Core::lampControl::lampGameSettingsDisplayHelper for creating config menu items.
          * @return A lampReturn object indicating the success or failure of the operation.
          */
         virtual lampReturn ConfigMenu() = 0;
 
         /**
          * @brief Starts the deployment process for the game.
-         * Called externally by Lamp::Core to start deployment.
+         * Called externally by Lampray::Core to start deployment.
          * @return A lampReturn object indicating the success or failure of the deployment.
          */
         virtual lampReturn startDeployment() = 0;
@@ -79,7 +79,7 @@ namespace Lamp::Game {
 
         /**
          * @brief Lists the registered archives in the game control.
-         * Called Externally, this should be used with Lamp::Core::lampControl::lampArchiveDisplayHelper unless a custom solution is desired.
+         * Called Externally, this should be used with Lampray::Core::lampControl::lampArchiveDisplayHelper unless a custom solution is desired.
          */
         virtual void listArchives() = 0;
 
@@ -156,6 +156,6 @@ namespace Lamp::Game {
             MOD_SEPARATOR = 999
         };
     };
-} // Lamp
+} // Lampray
 
 #endif //LAMP_GAMECONTROL_H
