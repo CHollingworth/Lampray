@@ -30,9 +30,10 @@ namespace Lamp::Game {
          * @brief Registers an archive with the game control.
          * This is called during a file drop event onto lamp.
          * @param Path The path to the archive to be registered.
+         * @param ArchiveModType integer mod type to use for the added archive
          * @return A lampReturn object indicating the success or failure of the operation.
          */
-        virtual lampReturn registerArchive(lampString Path) = 0;
+        virtual lampReturn registerArchive(lampString Path, int ArchiveModType = -1) = 0;
 
         /**
          * @brief Displays a configuration menu for the game.
@@ -110,6 +111,29 @@ namespace Lamp::Game {
          */
         virtual void launch() = 0;
 
+
+        virtual int SeparatorModType(){
+            return MOD_SEPARATOR;
+        }
+
+        virtual std::vector<std::pair<int, std::string> >& getModTypes() {
+            return ModTypeList;
+        }
+
+        virtual std::map<int, std::string>& getModTypesMap(){
+            return ModTypeMap;
+        }
+
+        std::map<int, std::string> initModTypesMap() {
+            std::map<int, std::string> returnModTypes = {};
+            for(auto it = getModTypes().begin(); it != getModTypes().end(); ++it){
+                auto key = (*it).first;
+                auto value = (*it).second;
+                returnModTypes.insert({key, value});
+            }
+            return returnModTypes;
+        }
+
     protected:
         /**
          * @brief Protected constructor for the game control class.
@@ -117,6 +141,20 @@ namespace Lamp::Game {
          * This constructor is protected to ensure that only derived classes can be instantiated.
          */
         gameControl(){}
+    private:
+
+        // use a vector to keep things organized, this allows us to output mod types in the order we define
+        std::vector<std::pair<int, std::string> > ModTypeList{
+            { GENERIC_MOD, "Mod" },
+            { MOD_SEPARATOR, "Separator" }
+        };
+        // we will load the mod type vector above into this so we can get display values by the mod type value
+        std::map<int, std::string> ModTypeMap = {};
+
+        enum ModType{
+            GENERIC_MOD = 0,
+            MOD_SEPARATOR = 999
+        };
     };
 } // Lamp
 

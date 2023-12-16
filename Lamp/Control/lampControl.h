@@ -57,10 +57,11 @@ namespace Lamp::Core{
         private:
             std::list<std::string> columnNames{"Enabled","Mod Name", "Mod Type", "Load Order","Last Updated" ,"Remove Mod"};
             std::vector<Base::lampMod::Mod *>& ModList;
-            std::vector<std::string> typeNames;
             std::list<std::pair<std::string,bool *>> ExtraOptions;
             std::string temp{"0"};
 
+            bool collapsUntilNextSeparator = false;
+            std::string modSeparatorDefaultText = "====================================================";
 
             /**
             * @brief Calculates the Levenshtein distance between two strings.
@@ -176,13 +177,11 @@ namespace Lamp::Core{
              *
              * @param ExtraColumnNames Extra column names to be displayed.
              * @param modList A vector of mod objects.
-             * @param typeNames A vector of mod type names.
              * @param extraOptions A list of extra options.
              */
             lampArchiveDisplayHelper(std::list<std::string> ExtraColumnNames, std::vector<Base::lampMod::Mod *> &modList,
-                    std::vector<std::string> typeNames,
                     std::list<std::pair<std::string, bool * >> extraOptions)
-            : ModList(modList), typeNames(typeNames),
+            : ModList(modList),
             ExtraOptions(extraOptions) {
                 columnNames.insert(columnNames.end(), ExtraColumnNames.begin(), ExtraColumnNames.end());
             }
@@ -210,6 +209,14 @@ namespace Lamp::Core{
 
                     int i = 0;
                     for (auto it = ModList.begin(); it != ModList.end(); ++it) {
+                        if(this->collapsUntilNextSeparator){
+                            if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                                this->collapsUntilNextSeparator = false;
+                            } else{
+                                i++; // this probable messes stuff up
+                                continue;
+                            }
+                        }
 
                         ImGui::TableNextColumn();
                         if(lampConfig::getInstance().listHighlight == i) {
@@ -217,15 +224,25 @@ namespace Lamp::Core{
                         }
 
 
+                        std::string enabledButtonText = "Enabled##" + std::to_string(i);
+                        std::string disabledButtonText = "Disabled##" + std::to_string(i);
+                        if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                            enabledButtonText = "Expand##" + std::to_string(i);
+                            disabledButtonText = "Collapse##" + std::to_string(i);
+                        }
                         if((*it)->enabled) {
+                            if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                                this->collapsUntilNextSeparator = true;
+                            }
+
                             ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)lampControl::getInstance().Colour_ButtonAlt);
-                            if (ImGui::Button(("Enabled##" + std::to_string(i)).c_str())) {
+                            if (ImGui::Button(enabledButtonText.c_str())) {
                                 (*it)->enabled = false;
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
                             ImGui::PopStyleColor(1);
                         }else{
-                            if (ImGui::Button(("Disabled##" + std::to_string(i)).c_str())) {
+                            if (ImGui::Button(disabledButtonText.c_str())) {
                                 (*it)->enabled = true;
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
@@ -256,6 +273,8 @@ namespace Lamp::Core{
                         }
 
                         auto contextId = "MOD_NAME_CONTEXT_" + std::to_string(i);
+                        auto renamePopupId = "RENAME_MOD_" + std::to_string(i);
+                        bool openRenamePopup = false;
                         if (ImGui::BeginPopupContextItem(contextId.c_str())){
                             if(ImGui::Selectable("Move to top")){
                                 moveModTo(it, 0);
@@ -265,8 +284,55 @@ namespace Lamp::Core{
                                 moveModTo(it, std::distance(ModList.begin(), ModList.end()));
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
+
+                            if(ImGui::Selectable("Add mod separator")){
+                                Lamp::Games::getInstance().currentGame->registerArchive(modSeparatorDefaultText, Lamp::Games::getInstance().currentGame->SeparatorModType());
+                                // move the separator (now at the end of the ModList) to the index the user interacted at
+                                auto tmpSeparator = ModList.end() - 1;
+                                moveModTo(tmpSeparator, i);
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+                            }
+
+                            // restsrict to only mod separators for now as we do not store a separate "name", just a file path for mods
+                            if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                                // using a button as a Selectable did not work for some reason
+                                if(ImGui::Selectable("Rename")){
+                                    // workaround for selectable not triggering the rename popup
+                                    openRenamePopup = true;
+                                    //ImGui::OpenPopup(renamePopupId.c_str());
+                                }
+                            }
+
                             ImGui::EndPopup();
                         }
+
+                        if(openRenamePopup == true){
+                            ImGui::OpenPopup(renamePopupId.c_str());
+                        }
+
+                        if(ImGui::BeginPopupModal(renamePopupId.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+                            // 200 characters should hopefully be more than enough
+                            static char buf[200];
+                            ImGui::InputTextWithHint("##", cutname.c_str(), buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
+                            ImGui::Separator();
+
+                            if (ImGui::Button("Save")) {
+                                (*it)->ArchivePath = buf;
+                                Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+
+                                ImGui::CloseCurrentPopup();
+                            }
+                            ImGui::SetItemDefaultFocus();
+                            ImGui::SameLine();
+                            // right-align the cancel button to help avoid potential misclicks
+                            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Cancel").x - ImGui::GetStyle().ItemSpacing.x);
+                            if (ImGui::Button("Cancel")) {
+                                // Do nothing
+                                ImGui::CloseCurrentPopup();
+                            }
+                            ImGui::EndPopup();
+                        } // end rename popup modal
+
 
                         // start drag and drop handling
                         ImGuiDragDropFlags src_flags = 0;
@@ -303,18 +369,18 @@ namespace Lamp::Core{
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, lampControl::getInstance().Colour_SearchHighlight);
                         }
 
-                        if (ImGui::BeginMenu((typeNames[(*it)->modType] + "##" + std::to_string(i)).c_str())) {
+                        if (ImGui::BeginMenu((Lamp::Games::getInstance().currentGame->getModTypesMap()[(*it)->modType] + "##" + std::to_string(i)).c_str())) {
                             int y = 0;
                             ImGui::MenuItem(cutname.c_str());
                             ImGui::MenuItem("------------");
 
-                            for (auto itt = typeNames.begin(); itt != typeNames.end(); ++itt) {
-                                if (ImGui::MenuItem((*itt).c_str())) {
-                                    (*it)->modType = y;
+                            for (auto itt = Lamp::Games::getInstance().currentGame->getModTypes().begin(); itt != Lamp::Games::getInstance().currentGame->getModTypes().end(); ++itt){
+                                if (ImGui::MenuItem(((*itt).second).c_str())) {
+                                    (*it)->modType = (*itt).first;
                                     Core::FS::lampIO::saveModList( Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList);
                                 }
-                                y++;
                             }
+
                             ImGui::EndMenu();
                         }
 
@@ -398,8 +464,6 @@ namespace Lamp::Core{
 
                         ImGui::TableNextRow();
 
-
-
                         i++;
                     }
 
@@ -420,9 +484,11 @@ namespace Lamp::Core{
                         ImGui::Separator();
 
                         if (ImGui::Button("Delete", ImVec2(120, 0))) {
-                            int deleteResult = std::remove(absolute(path).c_str());
-                            if(deleteResult != 0){
-                                std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                            if((*pendingDelete)->modType != Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                                int deleteResult = std::remove(absolute(path).c_str());
+                                if(deleteResult != 0){
+                                    std::cout << "Error deleting file: " << absolute(path).c_str() << "\n   Error msg: " << strerror(errno) << "\n";
+                                }
                             }
 
                             std::cout << absolute(path).c_str() << std::endl;
@@ -448,6 +514,18 @@ namespace Lamp::Core{
 
 
                     ImGui::EndTable();
+
+                    ImGuiPopupFlags outsideTablePopupFlags = 0;
+                    outsideTablePopupFlags |= ImGuiPopupFlags_NoOpenOverItems;
+                    outsideTablePopupFlags |= ImGuiPopupFlags_MouseButtonRight;
+                    outsideTablePopupFlags |= ImGuiPopupFlags_NoOpenOverExistingPopup;
+                    if (ImGui::BeginPopupContextWindow("OUTSIDE_TABLE_CONTEXT", outsideTablePopupFlags)){
+                        if(ImGui::Selectable("Add mod separator")){
+                            Lamp::Games::getInstance().currentGame->registerArchive(modSeparatorDefaultText, Lamp::Games::getInstance().currentGame->SeparatorModType());
+                            Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
+                        }
+                        ImGui::EndPopup();
+                    }
                 }
             }
 

@@ -13,7 +13,7 @@ namespace Lamp::Game {
 
         class C77 : public gameControl  {
 
-             lampReturn registerArchive(lampString Path) override;
+             lampReturn registerArchive(lampString Path, int ArchiveModType = -1) override;
 
              lampReturn ConfigMenu() override;
 
@@ -38,8 +38,6 @@ namespace Lamp::Game {
 
             std::vector<Core::Base::lampMod::Mod *>& getModList() override{ return ModList; };
 
-
-
             void launch() override {
                 for (const auto& pair : keyInfo) {
                     const std::string& key = pair.first;
@@ -60,10 +58,33 @@ namespace Lamp::Game {
                 ModList = Lamp::Core::FS::lampIO::loadModList(Ident().ShortHand, keyInfo["CurrentProfile"]);
             }
 
+
+            int SeparatorModType(){
+                return MOD_SEPARATOR;
+            }
+
+            std::vector<std::pair<int, std::string> >& getModTypes() override {
+                return ModTypeList;
+            }
+
+            std::map<int, std::string>& getModTypesMap() override{
+                return ModTypeMap;
+            }
+
         private:
+
             enum ModType{
-                C77_MOD
+                C77_MOD,
+                MOD_SEPARATOR = 999
             };
+
+            // use a vector to keep things organized, this allows us to output mod types in the order we define
+            std::vector<std::pair<int, std::string> > ModTypeList{
+                { C77_MOD, "Mod" },
+                { MOD_SEPARATOR, "Separator" }
+            };
+            // we will load the mod type vector above into this so we can get display values by the mod type value
+            std::map<int, std::string> ModTypeMap = initModTypesMap();
 
             std::map<std::string,std::string> keyInfo{
                     {"installPath",""},

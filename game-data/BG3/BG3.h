@@ -15,7 +15,7 @@ namespace Lamp::Game {
     class BG3 : public gameControl {
     public:
 
-        lampReturn registerArchive(lampString Path) override;
+        lampReturn registerArchive(lampString Path, int ArchiveModType = -1) override;
         lampReturn ConfigMenu() override;
         lampReturn startDeployment() override;
         lampReturn preCleanUp() override;
@@ -56,15 +56,43 @@ namespace Lamp::Game {
             ModList = Lamp::Core::FS::lampIO::loadModList(Ident().ShortHand, keyInfo["CurrentProfile"]);
         }
 
-    private:
+        int SeparatorModType(){
+            return MOD_SEPARATOR;
+        }
+
+        std::vector<std::pair<int, std::string> >& getModTypes() override {
+            return ModTypeList;
+        }
+
+        std::map<int, std::string>& getModTypesMap() override{
+            return ModTypeMap;
+        }
+
+	private:
+
         enum ModType{
             BG3_ENGINE_INJECTION = 0,
             BG3_MOD,
             BG3_BIN_OVERRIDE,
             BG3_DATA_OVERRIDE,
             BG3_MOD_FIXER,
-            NaN
+            NaN,
+            MOD_SEPARATOR = 999,
         };
+
+        // use a vector to keep things organized, this allows us to output mod types in the order we define
+        std::vector<std::pair<int, std::string> > ModTypeList{
+            { BG3_ENGINE_INJECTION, "Engine Injection" },
+            { BG3_MOD, "Standard Mod" },
+            { BG3_BIN_OVERRIDE, "Bin Overwrite" },
+            { BG3_DATA_OVERRIDE, "Data Overwrite" },
+            { BG3_MOD_FIXER, "No Json Mod" },
+            { NaN, "Select Type" },
+            { MOD_SEPARATOR, "Separator" },
+        };
+        // we will load the mod type vector above into this so we can get display values by the mod type value
+        std::map<int, std::string> ModTypeMap = initModTypesMap();
+
 
         std::map<std::string,std::string> keyInfo{
                 {"installDirPath",""},

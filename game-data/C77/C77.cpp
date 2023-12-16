@@ -6,40 +6,43 @@
 #include "../../Lamp/Control/lampControl.h"
 namespace Lamp {
     namespace Game {
-        lampReturn C77::registerArchive(lampString Path) {
-
-            for (Core::Base::lampMod::Mod* it : ModList) {
-
-                std::filesystem::path NewFilePath = Path;
-                std::filesystem::path TestingAgainstPath = it->ArchivePath;
-
-
-                std::string NewFilePathCut = NewFilePath.filename();
-                /*
-                size_t posA = NewFilePathCut.find('-');
-                if (posA != std::string::npos) {
-                    NewFilePathCut.erase(posA);
-                }
-                */
-
-                std::string TestingAgainstPathCut = TestingAgainstPath.filename();
-                size_t posB = TestingAgainstPathCut.find('/');
-                if (posB != std::string::npos) {
-                    TestingAgainstPathCut.erase(posB);
-                }
-
-
-                if(NewFilePathCut == TestingAgainstPathCut){
-
-                    it->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
-                    it->ArchivePath = Path;
-                    return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
-                }
-
-
+        lampReturn C77::registerArchive(lampString Path, int ArchiveModType) {
+            if(ArchiveModType < 0){
+                ArchiveModType = C77_MOD;
             }
 
-            Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path,ModType::C77_MOD, false};
+            if(ArchiveModType != MOD_SEPARATOR){
+                for (Core::Base::lampMod::Mod* it : ModList) {
+
+                    std::filesystem::path NewFilePath = Path;
+                    std::filesystem::path TestingAgainstPath = it->ArchivePath;
+
+
+                    std::string NewFilePathCut = NewFilePath.filename();
+                    /*
+                    size_t posA = NewFilePathCut.find('-');
+                    if (posA != std::string::npos) {
+                        NewFilePathCut.erase(posA);
+                    }
+                    */
+
+                    std::string TestingAgainstPathCut = TestingAgainstPath.filename();
+                    size_t posB = TestingAgainstPathCut.find('/');
+                    if (posB != std::string::npos) {
+                        TestingAgainstPathCut.erase(posB);
+                    }
+
+
+                    if(NewFilePathCut == TestingAgainstPathCut){
+
+                        it->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
+                        it->ArchivePath = Path;
+                        return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
+                    }
+                }
+            }
+
+            Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path, ArchiveModType, false};
             newArchive->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
             ModList.push_back(newArchive);
             return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
@@ -116,7 +119,7 @@ namespace Lamp {
             Lamp::Core::lampControl::getInstance().deplopmentTracker = {0,0};
             Core::Base::lampLog::getInstance().log("Extracting Archives", Core::Base::lampLog::warningLevel::LOG);
             auto lambdaFunction = [](const Core::Base::lampMod::Mod* item) {
-                if(item->enabled) {
+                if(item->enabled && item->modType != MOD_SEPARATOR) {
                     Lamp::Core::lampControl::getInstance().deplopmentTracker.second++;
                     if(Lamp::Core::FS::lampExtract::extract(item)) {
 
@@ -167,7 +170,6 @@ namespace Lamp {
             Lamp::Core::lampControl::lampArchiveDisplayHelper(
                     std::list<std::string>{},
                     ModList,
-                    std::vector<std::string>{"Mod"},
                     std::list<std::pair<std::string, bool *>>{}
             ).createImguiMenu();
         }

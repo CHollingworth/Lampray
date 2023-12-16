@@ -7,40 +7,44 @@
 #include "../../Lamp/Control/lampControl.h"
 #include "../../third-party/json/json.hpp"
 
-Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString Path) {
-
-    for (Core::Base::lampMod::Mod* it : ModList) {
-
-        std::filesystem::path NewFilePath = Path;
-        std::filesystem::path TestingAgainstPath = it->ArchivePath;
-
-
-        std::string NewFilePathCut = NewFilePath.filename();
-		/*
-        size_t posA = NewFilePathCut.find('-');
-        if (posA != std::string::npos) {
-            NewFilePathCut.erase(posA);
-        }
-		*/
-
-        std::string TestingAgainstPathCut = TestingAgainstPath.filename();
-        size_t posB = TestingAgainstPathCut.find('/');
-        if (posB != std::string::npos) {
-            TestingAgainstPathCut.erase(posB);
-        }
-
-
-        if(NewFilePathCut == TestingAgainstPathCut){
-
-            it->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
-            it->ArchivePath = Path;
-            return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
-        }
-
-
+Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString Path, int ArchiveModType) {
+    if(ArchiveModType < 0){
+        ArchiveModType = NaN;
     }
 
-    Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path,ModType::NaN, false};
+    // skip the filename checks for mod separators
+    if(ArchiveModType != MOD_SEPARATOR){
+        for (Core::Base::lampMod::Mod* it : ModList) {
+
+            std::filesystem::path NewFilePath = Path;
+            std::filesystem::path TestingAgainstPath = it->ArchivePath;
+
+
+            std::string NewFilePathCut = NewFilePath.filename();
+            /*
+            size_t posA = NewFilePathCut.find('-');
+            if (posA != std::string::npos) {
+                NewFilePathCut.erase(posA);
+            }
+            */
+
+            std::string TestingAgainstPathCut = TestingAgainstPath.filename();
+            size_t posB = TestingAgainstPathCut.find('/');
+            if (posB != std::string::npos) {
+                TestingAgainstPathCut.erase(posB);
+            }
+
+
+            if(NewFilePathCut == TestingAgainstPathCut){
+
+                it->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
+                it->ArchivePath = Path;
+                return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
+            }
+        }
+    }
+
+    Core::Base::lampMod::Mod  * newArchive = new Core::Base::lampMod::Mod{Path, ArchiveModType, false};
     newArchive->timeOfUpdate = Lamp::Core::lampControl::getFormattedTimeAndDate();
     ModList.push_back(newArchive);
     return Lamp::Core::FS::lampIO::saveModList(Ident().ShortHand,ModList,Games::getInstance().currentProfile);
@@ -294,6 +298,8 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preDeployment() {
                 case BG3_MOD_FIXER:
                     Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"pak","Mods");
                     break;
+                case MOD_SEPARATOR:
+                    break;
                 default:
                     break;
             }
@@ -420,7 +426,6 @@ void Lamp::Game::BG3::listArchives() {
     Lamp::Core::lampControl::lampArchiveDisplayHelper(
             std::list<std::string>{},
             ModList,
-            std::vector<std::string>{"Engine Injection", "Standard Mod", "Bin Overwrite","Data Overwrite","No Json Mod", "Select Type"},
             std::list<std::pair<std::string, bool *>>{}
     ).createImguiMenu();
 }
