@@ -42,7 +42,7 @@ namespace Lamp::Core::Parse{
             return tblEntries;
         }
 
-        static void extractMetadataFromLSX(const std::string& lsxData) {
+        static bool extractMetadataFromLSX(const std::string& lsxData) {
             bool gotModInfo = false;
             std::string workingDir = Lamp::Core::lampConfig::getInstance().DeploymentDataPath + "/Baldur's Gate 3";
             std::string UUID;
@@ -97,7 +97,7 @@ namespace Lamp::Core::Parse{
             pugi::xml_document doc;
             while (!doc.load_file((workingDir + "/PlayerProfiles/Public/modsettings.lsx").c_str())) {
                 std::cerr << "Failed to load XML file." << std::endl;
-
+                return false;
             }
 
             pugi::xml_node moduleNode = doc.select_node("//node[@id='ModOrder']").node();
@@ -144,10 +144,11 @@ namespace Lamp::Core::Parse{
 
             if (!doc.save_file((workingDir + "/PlayerProfiles/Public/modsettings.lsx").c_str())) {
                 std::cerr << "Failed to save XML file." << std::endl;
+                return false;
             }
 
 
-
+            return true;
         }
 
     public:
@@ -155,7 +156,7 @@ namespace Lamp::Core::Parse{
         static bool extractJsonData(std::string ArchivePath) {
            std::vector<int> SUP_VER = {15, 18};
            std::string workingDir = Lamp::Core::lampConfig::getInstance().DeploymentDataPath + "/Baldur's Gate 3";
-
+           int countedSucsesses = 0;
            for (const auto& entry : std::filesystem::directory_iterator((workingDir + "/ext/" + std::filesystem::path(ArchivePath).filename().stem().string()).c_str())) {
                if(std::regex_match (entry.path().filename().string(), std::regex("^.*\\.(pak)$") )) {
                    // debugging from pearl script. set to 5 for full info dump;
@@ -269,12 +270,14 @@ namespace Lamp::Core::Parse{
                    }
 
                    std::vector<std::string> seenAttr;
-                   extractMetadataFromLSX(std::string(ucFile.data(), ucFile.size()));
+
+                   // This is a poor fix, however will fix the incosistancy with data extraction.
+                   countedSucsesses += extractMetadataFromLSX(std::string(ucFile.data(), ucFile.size()));
 
 
 
                }}
-            return 1;
+           return true;
         }
         static bool collectJsonData(std::string ArchivePath){
             std::string workingDir = Lamp::Core::lampConfig::getInstance().DeploymentDataPath + "/Baldur's Gate 3";

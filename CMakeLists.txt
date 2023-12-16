@@ -45,6 +45,8 @@ add_executable(Lamp main.cpp
         game-data/C77/C77.h
         third-party/imgui/imgui_impl_sdl2.cpp
         third-party/imgui/imgui_impl_sdlrenderer2.cpp
+        game-data/LHL/LHL.cpp
+        game-data/LHL/LHL.h
 )
 
 
