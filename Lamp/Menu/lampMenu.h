@@ -20,6 +20,7 @@ namespace Lamp::Core{
         };
 
         Menus currentMenu = LICENCE_MENU;
+        bool userRequestedQuit = false;
 
         void RunMenus();
 

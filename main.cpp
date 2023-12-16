@@ -177,6 +177,10 @@ int main(int, char**)
         SDL_RenderClear(renderer);
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);
+
+        if(Menus.userRequestedQuit){
+            done = true;
+        }
     }
 
     ImGui_ImplSDLRenderer2_Shutdown();
