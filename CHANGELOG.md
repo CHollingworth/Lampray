@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/CHollingworth/Lampray/compare/v1.3.0...v1.3.1) (2023-12-16)
+
+
+### Bug Fixes
+
+* Sepeators are able to be removed ([45faaad](https://github.com/CHollingworth/Lampray/commit/45faaad64562b394ec908f85f8f6996cba917428))
+
 ## [1.3.0](https://github.com/CHollingworth/Lampray/compare/v1.2.0...v1.3.0) (2023-12-16)
 
 
