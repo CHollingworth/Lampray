@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.3.0](https://github.com/CHollingworth/Lampray/compare/v1.2.0...v1.3.0) (2023-12-16)
+
+
+### Features
+
+* Add confirmation before deleting mods ([#89](https://github.com/CHollingworth/Lampray/issues/89)) ([ab3e358](https://github.com/CHollingworth/Lampray/commit/ab3e358db686f7b00db9b1e236c54432294c60d4))
+* Add confirmation before deleting mods ([#98](https://github.com/CHollingworth/Lampray/issues/98)) ([fd72f1a](https://github.com/CHollingworth/Lampray/commit/fd72f1a0bd065afc406f51503e7e863afecdd654))
+* Add context menu for moving mods to top or bottom ([#93](https://github.com/CHollingworth/Lampray/issues/93)) ([e5303d3](https://github.com/CHollingworth/Lampray/commit/e5303d3b55620b155d9e05ef9049257c12e2e6a4))
+* Add mod separators ([#94](https://github.com/CHollingworth/Lampray/issues/94)) ([79e8d55](https://github.com/CHollingworth/Lampray/commit/79e8d55c6855419ca1d018915041a62e0929ef8d))
+* Add quit button to the menu ([#99](https://github.com/CHollingworth/Lampray/issues/99)) ([62d778c](https://github.com/CHollingworth/Lampray/commit/62d778cd448f853240b134e7544e185e5f21da65))
+
+
+### Bug Fixes
+
+* Added proper credit to contributors, they do amazing work please give em love. ([9c30861](https://github.com/CHollingworth/Lampray/commit/9c308616b8b60b0b16ade8615450b76b5e82eedf))
+* BG3 now functions. (First Push of LHL) ([a7b1848](https://github.com/CHollingworth/Lampray/commit/a7b1848dbbabe1202ca33a460386956bf257e6e9))
+* Cyberpunk deployment will now deploy all files. ([188c44f](https://github.com/CHollingworth/Lampray/commit/188c44f0b75c0b2900bbad72964f478b606f8db5))
+* Fix installing REDMod into the /mods directory ([#100](https://github.com/CHollingworth/Lampray/issues/100)) ([0b20181](https://github.com/CHollingworth/Lampray/commit/0b201817682fadfeacc958300b63472d032688c5))
+
 ## [1.2.0](https://github.com/CHollingworth/Lampray/compare/v1.1.0...v1.2.0) (2023-12-04)
 
 
