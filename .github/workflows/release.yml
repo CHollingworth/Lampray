@@ -24,7 +24,7 @@ jobs:
           release-type: simple
           extra-files: |
             VERSION
-            Lamp/Filesystem/lampFS.h
+            Lampray/Filesystem/lampFS.h
       #
       # This step serves as an interop layer between the online and offline
       # when online, we use release-please and further execution is gated by the releases_created output
