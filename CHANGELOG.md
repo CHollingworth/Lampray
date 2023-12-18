@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/CHollingworth/Lampray/compare/v1.3.1...v1.3.2) (2023-12-18)
+
+
+### Bug Fixes
+
+* Hotfix. Fixed update detection. ([b61e276](https://github.com/CHollingworth/Lampray/commit/b61e27658b866d350cfcaa009e3e507d278adf44))
+
 ## [1.3.1](https://github.com/CHollingworth/Lampray/compare/v1.3.0...v1.3.1) (2023-12-16)
 
 
