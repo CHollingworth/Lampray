@@ -3,6 +3,7 @@
 //
 #include "lampMenu.h"
 #include "lampCustomise .h"
+#include "../Lang/lampLang.h"
 
 void Lamp::Core::lampMenu::RunMenus() {
 
@@ -63,39 +64,16 @@ void Lamp::Core::lampMenu::IntroMenu() {
     if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
     ImGui::Text("Lampray");
 
-    size = ImGui::CalcTextSize("Linux Application Modding Platform").x + style.FramePadding.x * 2.0f;
+    size = ImGui::CalcTextSize(lampLang::LS("LAMPRAY_LONGNAME")).x + style.FramePadding.x * 2.0f;
     off = (avail - size) * 0.5f;
     if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
-    ImGui::Text("Linux Application Modding Platform");
+    ImGui::Text(lampLang::LS("LAMPRAY_LONGNAME"));
     ImGui::Separator();
-    ImGui::Text("This is free and unencumbered software released into the public domain.\n"
-                "\n"
-                "Anyone is free to copy, modify, publish, use, compile, sell, or\n"
-                "distribute this software, either in source code form or as a compiled\n"
-                "binary, for any purpose, commercial or non-commercial, and by any\n"
-                "means.\n"
-                "\n"
-                "In jurisdictions that recognize copyright laws, the author or authors\n"
-                "of this software dedicate any and all copyright interest in the\n"
-                "software to the public domain. We make this dedication for the benefit\n"
-                "of the public at large and to the detriment of our heirs and\n"
-                "successors. We intend this dedication to be an overt act of\n"
-                "relinquishment in perpetuity of all present and future rights to this\n"
-                "software under copyright law.\n"
-                "\n"
-                "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\n"
-                "EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\n"
-                "MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\n"
-                "IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR\n"
-                "OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,\n"
-                "ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR\n"
-                "OTHER DEALINGS IN THE SOFTWARE.\n"
-                "\n"
-                "For more information, please refer to <https://unlicense.org>");
+    ImGui::Text(lampLang::LS("LAMPRAY_LICENSE"));
 
 
 
-    if(ImGui::Button("I have read and understood the text above.")){
+    if(ImGui::Button(lampLang::LS("LAMPRAY_AKNOWL"))){
         Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"] = "0";
         Lamp::Core::FS::lampIO::saveKeyData("showIntroMenu", Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"], "LAMP CONFIG");
         currentMenu = GAME_MOD_MENU;
@@ -110,28 +88,28 @@ void Lamp::Core::lampMenu::ModMenu() {
     DefaultMenuBar();
 
     ImGuiStyle& style = ImGui::GetStyle();
-    float size = ImGui::CalcTextSize("Drag archives onto this window to start adding mods to your game!").x + style.FramePadding.x * 2.0f;
+    float size = ImGui::CalcTextSize(lampLang::LS("LAMPRAY_DRAGANDDROP")).x + style.FramePadding.x * 2.0f;
     float avail = ImGui::GetContentRegionAvail().x;
 
     float off = (avail - size) * 0.5f;
     if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
-    ImGui::Text("Drag archives onto this window to start adding mods to your game!");
+    ImGui::Text(lampLang::LS("LAMPRAY_DRAGANDDROP"));
 
-    size = ImGui::CalcTextSize("Deploy").x + style.FramePadding.x * 2.0f;
+    size = ImGui::CalcTextSize(lampLang::LS("LAMPRAY_DEPLOY")).x + style.FramePadding.x * 2.0f;
     avail = ImGui::GetContentRegionAvail().x;
 
     off = (avail - size) * 0.5f;
     if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
-    if(ImGui::Button("Deploy")) {
+    if(ImGui::Button(lampLang::LS("LAMPRAY_DEPLOY"))) {
         deployCheck = true;
     }
 
-    size = ImGui::CalcTextSize("Reset").x + style.FramePadding.x * 2.0f;
+    size = ImGui::CalcTextSize(lampLang::LS("LAMPRAY_RESET")).x + style.FramePadding.x * 2.0f;
     avail = ImGui::GetContentRegionAvail().x;
 
     off = (avail - size) * 0.5f;
     if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
-    if(ImGui::Button("Reset")) {
+    if(ImGui::Button(lampLang::LS("LAMPRAY_RESET"))) {
         Lamp::Core::FS::lampTrack::reset(Lamp::Games::getInstance().currentGame->Ident().ReadableName);
     }
 
@@ -141,10 +119,10 @@ void Lamp::Core::lampMenu::ModMenu() {
         ImGui::SetNextWindowSize(io.DisplaySize, 0);
         ImGui::SetNextWindowPos(ImVec2(0, 0));
 
-        ImGui::Begin("Checks", NULL, Lamp::Core::lampConfig::getInstance().DefaultWindowFlags());
-        ImGui::Text("Start Deployment?");
+        ImGui::Begin(lampLang::LS("LAMPRAY_CHECK"), NULL, Lamp::Core::lampConfig::getInstance().DefaultWindowFlags());
+        ImGui::Text(lampLang::LS("LAMPRAY_STARTTEXT"));
 
-        if(ImGui::Button("Start")){
+        if(ImGui::Button(lampLang::LS("LAMPRAY_START"))){
             deployCheck = !deployCheck;
 
             std::thread([] {
@@ -163,7 +141,7 @@ void Lamp::Core::lampMenu::ModMenu() {
 
         }
         ImGui::SameLine();
-        if(ImGui::Button("Go Back")){ deployCheck = !deployCheck; }
+        if(ImGui::Button(lampLang::LS("LAMPRAY_GOBACK"))){ deployCheck = !deployCheck; }
 
         ImGui::End();
     }
@@ -184,7 +162,7 @@ void Lamp::Core::lampMenu::GameConfigMenu() {
     ImGui::Begin("testConfig",NULL,windowFlags);
     Lamp::Games::getInstance().currentGame->ConfigMenu();
     ImGui::Separator();
-    if(ImGui::Button("Back")){
+    if(ImGui::Button(lampLang::LS("LAMPRAY_GOBACK"))){
         currentMenu = GAME_MOD_MENU;
     }
 
@@ -197,7 +175,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
 
         if(ImGui::BeginMenu("Lampray - " + Lamp::Games::getInstance().currentGame->Ident().ReadableName +" - "+Lamp::Games::getInstance().currentProfile)){
 
-            if (ImGui::BeginMenu("Game Selection")) {
+            if (ImGui::BeginMenu(lampLang::LS("LAMPRAY_GAMEPICK"))) {
                 int gameCount = 0;
                 for (Game::gameControl *element: Lamp::Games::getInstance().gameList){
                     if(ImGui::MenuItem(element->Ident().ReadableName)){
@@ -212,17 +190,17 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
 
             ImGui::MenuItem("--------");
             if(currentMenu == GAME_MOD_MENU){
-            if (ImGui::MenuItem("Game Configuration")) {
+            if (ImGui::MenuItem(lampLang::LS("LAMPRAY_GAMECONFIG"))) {
                 currentMenu = GAME_CONFIG_MENU;
             }
 
-            if(ImGui::BeginMenu("Profile Selection")){
+            if(ImGui::BeginMenu(lampLang::LS("LAMPRAY_PROFSELECT"))){
 
                 for (std::string x: Lamp::Core::Base::lampMod::Profile::splitString(Lamp::Games::getInstance().currentGame->KeyInfo()["ProfileList"])) {
 
                     if (x == Lamp::Games::getInstance().currentProfile) {
                         if (ImGui::BeginMenu(("* "+x+" *").c_str())) {
-                            if (ImGui::MenuItem("Load Profile")) {
+                            if (ImGui::MenuItem(lampLang::LS("LAMPRAY_PROFLOAD"))) {
                                 Lamp::Games::getInstance().currentProfile = x;
                                 Lamp::Games::getInstance().currentGame->getModList().clear();
                                 Lamp::Games::getInstance().currentGame->getModList() = FS::lampIO::loadModList(
@@ -230,7 +208,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                                 FS::lampIO::saveKeyData("CurrentProfile", x, Lamp::Games::getInstance().currentGame->Ident().ShortHand);
                             }
                             if (x != "Default") {
-                                if (ImGui::MenuItem("Delete Profile")) {
+                                if (ImGui::MenuItem(lampLang::LS("LAMPRAY_PROFDEL"))) {
 
                                 }
                             }
@@ -238,7 +216,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                         }
                     }else{
                         if (ImGui::BeginMenu(x.c_str())) {
-                            if (ImGui::MenuItem("Load Profile")) {
+                            if (ImGui::MenuItem(lampLang::LS("LAMPRAY_PROFLOAD"))) {
                                 Lamp::Games::getInstance().currentProfile = x;
                                 Lamp::Games::getInstance().currentGame->getModList().clear();
                                 Lamp::Games::getInstance().currentGame->getModList() = FS::lampIO::loadModList(
@@ -246,7 +224,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                                 FS::lampIO::saveKeyData("CurrentProfile", x, Lamp::Games::getInstance().currentGame->Ident().ShortHand);
                             }
                             if (x != "Default") {
-                                if (ImGui::MenuItem("Delete Profile")) {
+                                if (ImGui::MenuItem(lampLang::LS("LAMPRAY_PROFDEL"))) {
                                     Lamp::Core::Base::lampMod::Profile::removeValue(Lamp::Games::getInstance().currentGame->KeyInfo()["ProfileList"],x);
                                     FS::lampIO::saveKeyData("ProfileList", Lamp::Games::getInstance().currentGame->KeyInfo()["ProfileList"], Lamp::Games::getInstance().currentGame->Ident().ShortHand);
                                 }
@@ -261,7 +239,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                 ImGui::MenuItem("--------");
 
 
-                if(ImGui::MenuItem("Create New Profile")){
+                if(ImGui::MenuItem(lampLang::LS("LAMPRAY_PROFCRE"))){
                     displayProfileCreateMenu = true;
                 }
                 ImGui::EndMenu();
@@ -271,7 +249,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
 
             ImGui::MenuItem("--------");
 
-            if (ImGui::BeginMenu("Export Profile")) {
+            if (ImGui::BeginMenu(lampLang::LS("LAMPRAY_PROFEXP"))) {
                 for (std::string x: Lamp::Core::Base::lampMod::Profile::splitString(
                         Lamp::Games::getInstance().currentGame->KeyInfo()["ProfileList"])) {
                         if (ImGui::MenuItem((x).c_str())) {
@@ -282,7 +260,7 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
             }
 
 
-            if (ImGui::MenuItem("Import Profile")) {
+            if (ImGui::MenuItem(lampLang::LS("LAMPRAY_PROFIMP"))) {
                 Lamp::Core::FS::lampShare::importProfile();
             }
 
@@ -293,19 +271,19 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
 
 
 
-            if (ImGui::MenuItem("Check for Updates")) {
+            if (ImGui::MenuItem(lampLang::LS("LAMPRAY_UPDATE_CHECK"))) {
                 Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
             }
 
-            if (ImGui::MenuItem("Customise Lampray")) {
+            if (ImGui::MenuItem(lampLang::LS("LAMPRAY_CUSTOM"))) {
                 currentMenu = CUSTOMIZE;
             }
 
 
-            if (ImGui::BeginMenu("About")) {
+            if (ImGui::BeginMenu(lampLang::LS("LAMPRAY_ABT"))) {
                 ImGui::MenuItem("Lampray (Linux Application Modding Platform)");
                 ImGui::MenuItem("--------------------------------------");
-                ImGui::MenuItem("Created by Charles Hollingworth");
+                ImGui::MenuItem(lampLang::LS("LAMPRAY_ABT1")+" Charles Hollingworth");
                 ImGui::MenuItem("-------------Contributors-------------");
                 ImGui::MenuItem("Jinxtaposition");
                 ImGui::MenuItem("Airtonix");
@@ -313,21 +291,13 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                 ImGui::EndMenu();
             }
             ImGui::MenuItem("--------");
-            if (ImGui::MenuItem("Quit")) {
+            if (ImGui::MenuItem(lampLang::LS("LAMPRAY_QUIT"))) {
                 this->userRequestedQuit = true;
             }
 
 
             ImGui::EndMenu();
         }
-
-
-
-
-
-
-
-
 
 
         Lamp::Core::FS::lampUpdate::getInstance().getExpression();
@@ -337,9 +307,9 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
 
 void Lamp::Core::lampMenu::createProfileDialog() {
         if(!displayProfileCreateMenu) return;
-        ImGui::Begin("Create Profile");
+        ImGui::Begin(lampLang::LS("LAMPRAY_PROFCRE"));
 
-        if(ImGui::BeginMenu("Copy From")){
+        if(ImGui::BeginMenu(lampLang::LS("LAMPRAY_PROFFRM"))){
 
             for (std::string x: Lamp::Core::Base::lampMod::Profile::splitString(Lamp::Games::getInstance().currentGame->KeyInfo()["ProfileList"])) {
                 if(pfCopyStr == x){
@@ -355,7 +325,7 @@ void Lamp::Core::lampMenu::createProfileDialog() {
                 }
             }
             ImGui::MenuItem("--------");
-            if(ImGui::MenuItem("None")){
+            if(ImGui::MenuItem(lampLang::LS("LAMPRAY_PROFNON"))){
                 pfCopyStr = "";
                 pfCopy = false;
             }
@@ -363,8 +333,8 @@ void Lamp::Core::lampMenu::createProfileDialog() {
         }
 
 
-        ImGui::Text("New Profile Name");
-        if(ImGui::InputText("##inputProf",profileBuffer,250, ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Create")){
+        ImGui::Text(lampLang::LS("LAMPRAY_PROFNM"));
+        if(ImGui::InputText("##inputProf",profileBuffer,250, ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button(lampLang::LS("LAMPRAY_PROFCRES"))){
             std::string pb(profileBuffer);
             Lamp::Core::Base::lampMod::Profile::addValue(Lamp::Games::getInstance().currentGame->KeyInfo()["ProfileList"],pb);
 
@@ -384,7 +354,7 @@ void Lamp::Core::lampMenu::createProfileDialog() {
             displayProfileCreateMenu = false;
         }
         ImGui::SameLine();
-    if(ImGui::Button("Close")){
+    if(ImGui::Button(lampLang::LS("LAMPRAY_GOBACK"))){
         displayProfileCreateMenu = false;
     }
         ImGui::End();

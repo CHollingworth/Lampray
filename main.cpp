@@ -1,7 +1,7 @@
 #include "third-party/imgui/imgui.h"
 #include "third-party/imgui/imgui_impl_sdl2.h"
 #include "third-party/imgui/imgui_impl_sdlrenderer2.h"
-
+#include "Lampray/Lang/lampLang.h"
 #include "Lampray/Control/lampControl.h"
 #include "Lampray/Menu/lampMenu.h"
 #include "Lampray/Menu/lampCustomise .h"
@@ -58,6 +58,25 @@ int main(int, char**)
     }
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    std::string languageCheck = Lamp::Core::FS::lampIO::loadKeyData("LanguagePath", "LAMP CONFIG");
+    Lamp::Core::lampLang::getInstance().CurrentLanguage = Lamp::Core::lampLang::LanguageContainer();
+
+    if(languageCheck != ""){
+        if (!std::filesystem::exists(languageCheck)) {
+            Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampLang::getInstance().CurrentLanguage.build(languageCheck).returnReason);
+        }else{
+            if (!std::filesystem::exists("Lamp_Language/English (UK).xml")) {
+                Lamp::Core::lampLang::getInstance().createEnglishUK();
+            }
+            Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampLang::getInstance().CurrentLanguage.build("Lamp_Language/English (UK).xml").returnReason);
+        }
+    }else{
+        if (!std::filesystem::exists("Lamp_Language/English (UK).xml")) {
+            Lamp::Core::lampLang::getInstance().createEnglishUK();
+        }
+        Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampLang::getInstance().CurrentLanguage.build("Lamp_Language/English (UK).xml").returnReason);
+    }
 
 
 

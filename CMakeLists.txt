@@ -47,6 +47,7 @@ add_executable(Lampray main.cpp
         third-party/imgui/imgui_impl_sdlrenderer2.cpp
         game-data/LHL/LHL.cpp
         game-data/LHL/LHL.h
+        Lampray/Lang/lampLang.h
 )
 
 

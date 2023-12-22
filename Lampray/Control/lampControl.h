@@ -12,6 +12,7 @@
 #include "../Filesystem/lampFS.h"
 #include "lampGames.h"
 #include "../../third-party/nfd/include/nfd.h"
+#include "../Lang/lampLang.h"
 
 namespace Lamp::Core{
     typedef Core::Base::lampTypes::lampString lampString;
@@ -55,7 +56,7 @@ namespace Lamp::Core{
         */
         struct lampArchiveDisplayHelper{
         private:
-            std::list<std::string> columnNames{"Enabled","Mod Name", "Mod Type", "Load Order","Last Updated" ,"Remove Mod"};
+            std::list<std::string> columnNames{lampLang::LS("LAMPRAY_MODLIST_TITLE_ENABLED"),lampLang::LS("LAMPRAY_MODLIST_TITLE_MODNAME"), lampLang::LS("LAMPRAY_MODLIST_TITLE_MODTYPE"), lampLang::LS("LAMPRAY_MODLIST_TITLE_ORDER"),lampLang::LS("LAMPRAY_MODLIST_TITLE_LASTUPDATE") ,lampLang::LS("LAMPRAY_MODLIST_TITLE_REMOVEMOD")};
             std::vector<Base::lampMod::Mod *>& ModList;
             std::list<std::pair<std::string,bool *>> ExtraOptions;
             std::string temp{"0"};
@@ -191,7 +192,7 @@ namespace Lamp::Core{
             void createImguiMenu(){
                 ImGuiIO &io = ImGui::GetIO();
                 ImGui::SetNextItemWidth(io.DisplaySize.x);
-                if (ImGui::InputTextWithHint("##searcher","Type here to search your mods...", lampConfig::getInstance().searchBuffer, 250)) {
+                if (ImGui::InputTextWithHint("##searcher",lampLang::LS("LAMPRAY_MODLIST_SEARCH"), lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
                 }
 
@@ -224,11 +225,11 @@ namespace Lamp::Core{
                         }
 
 
-                        std::string enabledButtonText = "Enabled##" + std::to_string(i);
-                        std::string disabledButtonText = "Disabled##" + std::to_string(i);
+                        std::string enabledButtonText = lampLang::LS("LAMPRAY_MODLIST_ENABLE")+"##" + std::to_string(i);
+                        std::string disabledButtonText = lampLang::LS("LAMPRAY_MODLIST_DISABLE")+"##" + std::to_string(i);
                         if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
-                            enabledButtonText = "Expand##" + std::to_string(i);
-                            disabledButtonText = "Collapse##" + std::to_string(i);
+                            enabledButtonText = (std::string)lampLang::LS("LAMPRAY_MODLIST_EXPND")+"##" + std::to_string(i);
+                            disabledButtonText =  (std::string)lampLang::LS("LAMPRAY_MODLIST_COLL")+"##" + std::to_string(i);
                         }
                         if((*it)->enabled) {
                             if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
@@ -280,16 +281,16 @@ namespace Lamp::Core{
 
 
 
-                            if(ImGui::Selectable("Move to Top")){
+                            if(ImGui::Selectable(lampLang::LS("LAMPRAY_MODLIST_MV_TOP"))){
                                 moveModTo(it, 0);
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
-                            if(ImGui::Selectable("Move to Bottom")){
+                            if(ImGui::Selectable(lampLang::LS("LAMPRAY_MODLIST_MV_BTTM"))){
                                 moveModTo(it, std::distance(ModList.begin(), ModList.end()));
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                             }
 
-                            if(ImGui::Selectable("Create Separator")){
+                            if(ImGui::Selectable(lampLang::LS("LAMPRAY_MODLIST_CREATE_SEP"))){
                                 Lamp::Games::getInstance().currentGame->registerArchive(modSeparatorDefaultText, Lamp::Games::getInstance().currentGame->SeparatorModType());
                                 // move the separator (now at the end of the ModList) to the index the user interacted at
                                 auto tmpSeparator = ModList.end() - 1;
@@ -300,7 +301,7 @@ namespace Lamp::Core{
                             // restsrict to only mod separators for now as we do not store a separate "name", just a file path for mods
                             if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
                                 // using a button as a Selectable did not work for some reason
-                                if(ImGui::Selectable("Rename Separator")){
+                                if(ImGui::Selectable(lampLang::LS("LAMPRAY_MODLIST_RENAME"))){
                                     // workaround for selectable not triggering the rename popup
                                     openRenamePopup = true;
                                     //ImGui::OpenPopup(renamePopupId.c_str());
@@ -320,7 +321,7 @@ namespace Lamp::Core{
                             ImGui::InputTextWithHint("##", cutname.c_str(), buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
                             ImGui::Separator();
 
-                            if (ImGui::Button("Save")) {
+                            if (ImGui::Button(lampLang::LS("LAMPRAY_CUSTOM_SV"))) {
                                 (*it)->ArchivePath = buf;
                                 Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
 
@@ -330,7 +331,7 @@ namespace Lamp::Core{
                             ImGui::SameLine();
                             // right-align the cancel button to help avoid potential misclicks
                             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Cancel").x - ImGui::GetStyle().ItemSpacing.x);
-                            if (ImGui::Button("Cancel")) {
+                            if (ImGui::Button(lampLang::LS("LAMPRAY_GOBACK"))) {
                                 // Do nothing
                                 ImGui::CloseCurrentPopup();
                             }
@@ -404,7 +405,7 @@ namespace Lamp::Core{
                         }
 
 
-                        if(ImGui::Button(("Up##"+std::to_string(i)).c_str())){
+                        if(ImGui::Button((lampLang::LS("LAMPRAY_MODLIST_UP")+"##"+std::to_string(i)))){
                             moveUp(it);
                             Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                         }
@@ -417,7 +418,7 @@ namespace Lamp::Core{
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                         }
                         ImGui::SameLine();
-                        if(ImGui::Button(("Down##"+std::to_string(i)).c_str())){
+                        if(ImGui::Button((lampLang::LS("LAMPRAY_MODLIST_DOWN")+"##"+std::to_string(i)))){
                             moveDown(it);
                             Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList, Games::getInstance().currentProfile);
                         }
@@ -448,18 +449,18 @@ namespace Lamp::Core{
 
 
                         if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
-                            if (ImGui::Button(("  Remove  ##" + std::to_string(i)).c_str())) {
+                            if (ImGui::Button(("  "+lampLang::LS("LAMPRAY_MODLIST_REMOVE_SEP")+"  ##" + std::to_string(i)))) {
                                 lampControl::getInstance().deletePos = i;
-                                ImGui::OpenPopup("Confirm Deletion");
+                                ImGui::OpenPopup(lampLang::LS("LAMPRAY_MODLIST_CONFRIMDEL"));
 
                                 ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
                                 break;
                             }
                         }else{
-                            if (ImGui::Button(("Remove Mod##" + std::to_string(i)).c_str())) {
+                            if (ImGui::Button((lampLang::LS("LAMPRAY_MODLIST_REMOVE_MOD")+"##" + std::to_string(i)))) {
 
                                 lampControl::getInstance().deletePos = i;
-                                ImGui::OpenPopup("Confirm Deletion");
+                                ImGui::OpenPopup(lampLang::LS("LAMPRAY_MODLIST_CONFRIMDEL"));
 
                                 ImGui::EndDisabled(); // fixes a crash when deleting items (when at least 1 mod has been enabled)
                                 break;
@@ -472,7 +473,7 @@ namespace Lamp::Core{
 
 
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
-                            ImGui::SetTooltip("Only disabled mods can be removed.");
+                            ImGui::SetTooltip(lampLang::LS("LAMPRAY_MODLIST_WARN"));
                         }
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
@@ -500,19 +501,19 @@ namespace Lamp::Core{
                     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
                     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
                     ImGui::SetNextWindowBgAlpha(0.9f); // This doesn't seem to mess anything up, but if it does search for new way to make modal bg more opaque.
-                    if(ImGui::BeginPopupModal("Confirm Deletion", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+                    if(ImGui::BeginPopupModal(lampLang::LS("LAMPRAY_MODLIST_CONFRIMDEL"), NULL, ImGuiWindowFlags_AlwaysAutoResize)){
                         auto pendingDelete = ModList.begin() + lampControl::getInstance().deletePos;
 
                         std::filesystem::path path((*pendingDelete)->ArchivePath);
                         std::string delname = path.filename().c_str();
 
-                        std::string promptMessage = "Are you sure you want to delete: ";
+                        std::string promptMessage = lampLang::LS("LAMPRAY_MODLIST_WARN_SURE");
                         promptMessage.append(delname);
-                        promptMessage.append("?\n\nThis action cannot be undone.");
+                        promptMessage.append((std::string)lampLang::LS("LAMPRAY_MODLIST_WARN_FINAL"));
                         ImGui::Text(promptMessage.c_str());
                         ImGui::Separator();
 
-                        if (ImGui::Button("Delete", ImVec2(120, 0))) {
+                        if (ImGui::Button(lampLang::LS("LAMPRAY_MODLIST_DELETE"), ImVec2(120, 0))) {
                             if((*pendingDelete)->modType != Lamp::Games::getInstance().currentGame->SeparatorModType()){
                                 int deleteResult = std::remove(absolute(path).c_str());
                                 if(deleteResult != 0){
@@ -531,7 +532,7 @@ namespace Lamp::Core{
                         ImGui::SameLine();
                         // right-align the cancel button to help avoid potential misclicks on the delete button
                         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - 120);
-                        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                        if (ImGui::Button(lampLang::LS("LAMPRAY_GOBACK"), ImVec2(120, 0))) {
                             // Do nothing
                             lampControl::getInstance().deletePos = -1;
                             ImGui::CloseCurrentPopup();
@@ -549,7 +550,7 @@ namespace Lamp::Core{
                     outsideTablePopupFlags |= ImGuiPopupFlags_MouseButtonRight;
                     outsideTablePopupFlags |= ImGuiPopupFlags_NoOpenOverExistingPopup;
                     if (ImGui::BeginPopupContextWindow("OUTSIDE_TABLE_CONTEXT", outsideTablePopupFlags)){
-                        if(ImGui::Selectable("Add mod separator")){
+                        if(ImGui::Selectable(lampLang::LS("LAMPRAY_MODLIST_CREATE_SEP"))){
                             Lamp::Games::getInstance().currentGame->registerArchive(modSeparatorDefaultText, Lamp::Games::getInstance().currentGame->SeparatorModType());
                             Core::FS::lampIO::saveModList(Lamp::Games::getInstance().currentGame->Ident().ShortHand, ModList,Games::getInstance().currentProfile);
                         }
