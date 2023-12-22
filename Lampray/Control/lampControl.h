@@ -264,6 +264,10 @@ namespace Lamp::Core{
                                 cutname.erase(pos);
                             }
                         }
+                        // use full path string for separators
+                        if((*it)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                            cutname = path.c_str();
+                        }
 
                         ImGui::Text(cutname.c_str());
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
@@ -506,6 +510,10 @@ namespace Lamp::Core{
 
                         std::filesystem::path path((*pendingDelete)->ArchivePath);
                         std::string delname = path.filename().c_str();
+                        // use full path string for separators
+                        if((*pendingDelete)->modType == Lamp::Games::getInstance().currentGame->SeparatorModType()){
+                            delname = path.c_str();
+                        }
 
                         std::string promptMessage = lampLang::LS("LAMPRAY_MODLIST_WARN_SURE");
                         promptMessage.append(delname);
