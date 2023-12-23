@@ -191,6 +191,7 @@ This action cannot be undone.)");
                 addLangNode("LAMPRAY_CUSTOM_COLOUR", "Colours");
                 addLangNode("LAMPRAY_CUSTOM_FONT", "Font Size");
                 addLangNode("LAMPRAY_CUSTOM_SV", "Save");
+                addLangNode("LAMPRAY_SELECT_PATH", "Select Path");
                 std::filesystem::create_directories("Lamp_Language/");
                 doc.save_file("Lamp_Language/English (UK).xml");
             }
