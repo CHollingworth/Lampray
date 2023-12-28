@@ -14,6 +14,8 @@ bool Lamp::Core::lampConfig::init() {
                 bit7zLibaryLocation = "/usr/libexec/p7zip/7z.so";
             } else if (exists(std::filesystem::path{"/usr/lib/p7zip/7z.so"})) {
                 bit7zLibaryLocation = "/usr/lib/p7zip/7z.so";
+            } else if (exists(std::filesystem::path{"/usr/lib64/p7zip/7z.so"})) {
+                bit7zLibaryLocation = "/usr/lib64/p7zip/7z.so";
             } else if (exists(std::filesystem::path{"/usr/libexec/7z.so"})) {
                 bit7zLibaryLocation = "/usr/libexec/7z.so";
             } else {
