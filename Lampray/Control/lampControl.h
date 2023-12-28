@@ -587,6 +587,12 @@ namespace Lamp::Core{
             void createImGuiMenu(){
                 ImGui::Text(displayString.c_str());
                 ImGui::Text(toolTip.c_str());
+
+                // set some default text to make the button more obvious when the path is not set (instead of just having small colored box that is not obviously clickable)
+                if(stringTarget == ""){
+                    stringTarget = (std::string) lampLang::LS("LAMPRAY_SELECT_PATH");
+                }
+
                 if(ImGui::Button((stringTarget+"##"+displayString).c_str())) {
                     nfdchar_t *outPath = NULL;
                     nfdresult_t result = NFD_PickFolder(NULL, &outPath);
