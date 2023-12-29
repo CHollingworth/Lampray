@@ -19,17 +19,10 @@ Use your Linux distribution's recommended package manager to install the followi
 
 ## Building from source
 
-In your terminal, go to your home folder, then clone the Lampray GitHub repository.
+Download the [latest release](https://github.com/CHollingworth/Lampray/releases) of Lampray into your home directory, then open it in your terminal.
 
 ```bash
-cd ~
-git clone https://github.com/CHollingworth/Lampray.git
-```
-
-Open the `Lampray` directory.
-
-```bash
-cd Lampray
+cd ~/Lampray
 ```
 
 Generate and configure Lampray's build files by running the following command:
