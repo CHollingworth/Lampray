@@ -1,10 +1,10 @@
 # Building Lampray
 
-Learn how to build Lampray from source.
+> Learn how to build Lampray from source.
 
 ## Prerequisites
 
-Use your Linux distribution's package manager to install the following dependencies:
+Use your Linux distribution's recommended package manager to install the following dependencies:
 
 | Type        | Name                 | Version          |
 |-------------|----------------------|------------------|
@@ -17,7 +17,7 @@ Use your Linux distribution's package manager to install the following dependenc
 | Build Tool  | ninja-build          | 1.11.1 or later  |
 | Build Tool  | CMake                | 3.26 or later    |
 
-## Building
+## Building from source
 
 In your terminal, go to your home folder, then clone the Lampray GitHub repository.
 
@@ -50,7 +50,7 @@ Finally, build the Lampray executable by running the following command:
 ninja
 ```
 
-Now you can launch Lampray at anytime by running the following command in your terminal:
+Now you can launch Lampray at anytime by running the following command:
 
 ```bash
 ~/Lampray/Build/Lampray
