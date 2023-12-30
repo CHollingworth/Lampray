@@ -9,32 +9,59 @@ void Lamp::Core::lampMenu::DisplayNotifications() {
     //std::cout << this->show7zerror << "\n";
     //ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[5]));
 
-    ImVec4 warningColor = ImVec4(lampCustomise::getInstance().floatMap[6][0],
+    ImVec4 sectionBGColor = ImVec4(
+        lampCustomise::getInstance().floatMap[6][0],
         lampCustomise::getInstance().floatMap[6][1],
         lampCustomise::getInstance().floatMap[6][2],
-        lampCustomise::getInstance().floatMap[6][3]);
+        lampCustomise::getInstance().floatMap[6][3]
+    );
+    ImVec4 warningColor = ImVec4(
+        lampCustomise::getInstance().floatMap[7][0],
+        lampCustomise::getInstance().floatMap[7][1],
+        lampCustomise::getInstance().floatMap[7][2],
+        lampCustomise::getInstance().floatMap[7][3]
+    );
 
+/*
     ImGui::PushStyleColor(ImGuiCol_WindowBg, warningColor);
-    ImGui::PushStyleColor(ImGuiCol_ChildBg, warningColor);
+
     ImGui::PushStyleColor(ImGuiCol_HeaderActive, warningColor);
     ImGui::PushStyleColor(ImGuiCol_Header, warningColor);
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, warningColor);
+    ImGui::PushStyleColor(ImGuiCol_PopupBg, warningColor);
+    ImGui::PushStyleColor(ImGuiCol_TitleBg, warningColor);
 
+    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, warningColor);
+    ImGui::PushStyleColor(ImGuiCol_TableHeaderBg, warningColor);
+    ImGui::PushStyleColor(ImGuiCol_TableRowBg, warningColor);
+*/
+ImGui::PushStyleColor(ImGuiCol_ChildBg, sectionBGColor);
     ImGui::PushStyleColor(ImGuiCol_HeaderHovered, warningColor); // this works...
 
 
-    if(this->show7zerror){
-        // display some message to the user that we did not find 7z
-        // TODO: make this generic enough to handle other types of startup errors...
+    //ImGui::PushStyleColor(ImGuiCol_Button, warningColor);
+    //ImGui::PushStyleColor(ImGuiCol_ButtonHovered, warningColor);
 
-        if (ImGui::Selectable("Failed to find 7z.so! Many actions, such as deployment, will not function correctly!")){
-            std::cout << "\n";
-            //std::cout << warningColor << "\n";
-            std::cout << "Hit the selectable...\n";
-            // reset the flag as the user has acknowledged it...
-            this->show7zerror = false;
+
+    ImGui::BeginChild("NotificationBar", ImVec2(ImGui::GetContentRegionAvail().x, 0.0f), ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysUseWindowPadding);
+
+        if(this->show7zerror){
+            // display some message to the user that we did not find 7z
+            // TODO: make this generic enough to handle other types of startup errors...
+
+            //if(ImGui::Button("Failed to find 7z.so! Many actions, such as deployment, will not function correctly!")){
+            if(ImGui::Selectable("Failed to find 7z.so! Many actions, such as deployment, will not function correctly!")){
+                std::cout << "\n";
+                //std::cout << warningColor << "\n";
+                std::cout << "Hit the selectable...\n";
+                // reset the flag as the user has acknowledged it...
+                this->show7zerror = false;
+            }
         }
-    }
-    ImGui::PopStyleColor(5);
+        ImGui::EndChild();
+
+
+    ImGui::PopStyleColor(2);
 }
 
 void Lamp::Core::lampMenu::RunMenus() {
