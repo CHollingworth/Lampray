@@ -5,6 +5,38 @@
 #include "lampCustomise .h"
 #include "../Lang/lampLang.h"
 
+void Lamp::Core::lampMenu::DisplayNotifications() {
+    //std::cout << this->show7zerror << "\n";
+    //ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)Lamp::Core::Base::lampTypes::lampHexAlpha(Lamp::Core::lampCustomise::getInstance().defaultColours[5]));
+
+    ImVec4 warningColor = ImVec4(lampCustomise::getInstance().floatMap[6][0],
+        lampCustomise::getInstance().floatMap[6][1],
+        lampCustomise::getInstance().floatMap[6][2],
+        lampCustomise::getInstance().floatMap[6][3]);
+
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, warningColor);
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, warningColor);
+    ImGui::PushStyleColor(ImGuiCol_HeaderActive, warningColor);
+    ImGui::PushStyleColor(ImGuiCol_Header, warningColor);
+
+    ImGui::PushStyleColor(ImGuiCol_HeaderHovered, warningColor); // this works...
+
+
+    if(this->show7zerror){
+        // display some message to the user that we did not find 7z
+        // TODO: make this generic enough to handle other types of startup errors...
+
+        if (ImGui::Selectable("Failed to find 7z.so! Many actions, such as deployment, will not function correctly!")){
+            std::cout << "\n";
+            //std::cout << warningColor << "\n";
+            std::cout << "Hit the selectable...\n";
+            // reset the flag as the user has acknowledged it...
+            this->show7zerror = false;
+        }
+    }
+    ImGui::PopStyleColor(5);
+}
+
 void Lamp::Core::lampMenu::RunMenus() {
 
 
@@ -86,6 +118,8 @@ void Lamp::Core::lampMenu::ModMenu() {
 
     ImGui::Begin("Blank Menu", NULL, Lamp::Core::lampConfig::getInstance().DefaultWindowFlags());
     DefaultMenuBar();
+
+    this->DisplayNotifications();
 
     ImGuiStyle& style = ImGui::GetStyle();
     float size = ImGui::CalcTextSize(lampLang::LS("LAMPRAY_DRAGANDDROP")).x + style.FramePadding.x * 2.0f;

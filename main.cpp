@@ -127,10 +127,11 @@ int main(int, char**)
     }
     Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"]=(std::string)Lamp::Core::FS::lampIO::loadKeyData("showIntroMenu","LAMP CONFIG").returnReason;
     Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibaryLocation","LAMP CONFIG").returnReason;
-    Lamp::Core::lampConfig::getInstance().init();
+    bool found7z = Lamp::Core::lampConfig::getInstance().init();
     Lamp::Core::FS::lampIO::saveKeyData("bit7zLibaryLocation", Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation, "LAMP CONFIG");
 
     Lamp::Core::lampMenu Menus;
+    Menus.show7zerror = !found7z;
     // This is a very inefficent way of doing this.
 
 
