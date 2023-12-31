@@ -1,16 +1,43 @@
 # Customizing Lampray
 
-> Learn how to customize Lampray's fonts and colors.
+> Learn how to customize Lampray's fonts, transparency, color theme, and more.
 
-## Customizing fonts
+## Prerequisites
 
-Custom fonts can be added into Lampray simply by creating a folder called `Font` and adding any `.ttf` file into that folder.
+Before you can customize Lampray, you'll need to [build Lampray from source](./building-lampray.md). 
+
+## Setting the path to 7z
+
+7z is required to use Lampray. If your 7z.so utility is located in a non-standard location, you'll need to manually set the path to7z.so in Lampray. First, open you're terminal and go to `~/Lampray/Build/Config/` and open `config.mdf` in your text editor.
+
+Find and replace the following line with the path to your 7z.so utility's non-standard location.
+
+```sql
+<bit7zLibaryLocation>/usr/lib/p7zip/7z.so</bit7zLibaryLocation>
+```
+
+## Font
+
+You can customize the font in Lampray by creating a `Font` directory inside `Build/Lamp_Data/Config` and adding your font's `.ttf` file. Your directory structure should be similar to the following:
+
+```bash
+Lampray
+├── Build
+│   └── Lamp_Data 
+│       └── Config 
+│           └── terminus.ttf 
+├── docs
+├── game-data
+├── Lampray
+├── logo
+└── third-party
+```
 
 ## Transparency
 
-Due to how Lampray stores these colours I've made a quick cheat sheet for the alpha column;
+You can customize the transparency of Lampray by editing `Conf.mdf` located in the `Build/Lamp_Data/Config/` directory. Use the following syntax to set the background transparency: 
 
-```markdown 
+```sql 
 0.0f: -00 
 0.1f: -1a
 0.2f: -33
@@ -24,15 +51,15 @@ Due to how Lampray stores these colours I've made a quick cheat sheet for the al
 1.0f: -ff
 ```
 
-## Color themes
+## Color theme
 
-You can customize the colors of Lampray by editing `Conf.md` in the `Build/Lamp_Data/Config/` directory.
+You can customize the color theme for Lampray by editing `Conf.mdf` located in the `Build/Lamp_Data/Config/` directory.
 
 ### Pre-made Colour Schemes
 
 #### Default
 
-```markdown
+```sql
 <Colour_WindowBackground>0f0f0f-ef</Colour_WindowBackground>
 <Colour_MenuBar>232323-ff</Colour_MenuBar>
 <Colour_Text>ffffff-ff</Colour_Text>
@@ -46,7 +73,7 @@ You can customize the colors of Lampray by editing `Conf.md` in the `Build/Lamp_
 
 #### Light Mode
 
-```markdown
+```sql
 <Colour_WindowBackground>efefef-ff</Colour_WindowBackground>
 <Colour_MenuBar>dbdbdb-ff</Colour_MenuBar>
 <Colour_Text>000000-ff</Colour_Text>
@@ -61,7 +88,7 @@ You can customize the colors of Lampray by editing `Conf.md` in the `Build/Lamp_
 
 #### ImGui 
 
-```markdown
+```sql
 <Colour_WindowBackground>0f0f0f-ef</Colour_WindowBackground>
 <Colour_MenuBar>232323-ff</Colour_MenuBar>
 <Colour_Text>ffffff-ff</Colour_Text>
@@ -76,7 +103,7 @@ You can customize the colors of Lampray by editing `Conf.md` in the `Build/Lamp_
 
 #### ImGui Classic
 
-```markdown
+```sql
 <Colour_WindowBackground>000000-d8</Colour_WindowBackground>
 <Colour_MenuBar>66668c-cc</Colour_MenuBar>
 <Colour_Text>e5e5e5-ff</Colour_Text>
@@ -91,7 +118,7 @@ You can customize the colors of Lampray by editing `Conf.md` in the `Build/Lamp_
 
 #### Warlock Purple
 
-```markdown
+```sql
 <Colour_SearchHighlight>a61103-ff</Colour_SearchHighlight>
 <Colour_Text>ffffff-ff</Colour_Text>
 <Colour_WindowBackground>0d0f12-ff</Colour_WindowBackground>
@@ -110,7 +137,7 @@ You can customize the colors of Lampray by editing `Conf.md` in the `Build/Lamp_
 
 #### Discord's Clyde's Ai Generated Scheme
 
-```markdown
+```sql
 <Colour_WindowBackground>51216B-ef</Colour_WindowBackground>
 <Colour_MenuBar>EFD951-ff</Colour_MenuBar>
 <Colour_Text>ffffff-ff</Colour_Text>

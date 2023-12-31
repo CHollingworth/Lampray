@@ -1,6 +1,6 @@
-# Building Lampray
+# Building Lampray 
 
-> Learn how to build Lampray from source.
+> Learn how to build Lampray from source. When you're finished, you'll be able to [mod your games with Lampray](./modding-your-game.md).
 
 ## Prerequisites
 
@@ -48,4 +48,16 @@ Now you can launch Lampray at anytime by running the following command:
 ```bash
 ~/Lampray/Build/Lampray
 ```
+
+## Optional: setting path to 7z
+
+7z is required to use Lampray. If your 7z.so utility is located in a non-standard location, you'll need to manually set the path to7z.so in Lampray. First, open you're terminal and go to `~/Lampray/Build/Config/` and open `config.mdf` in your text editor.
+
+Find and replace the following line with the path to your 7z.so utility's non-standard location.
+
+```sql
+<bit7zLibaryLocation>/usr/lib/p7zip/7z.so</bit7zLibaryLocation>
+```
+
+When you're finished, save your changes.
 
