@@ -1,6 +1,6 @@
 # Frequently Asked Questions (FAQ) 
 
-These are the frequently asked questions for Lampray. This list will continue to be updated over time.
+> These are the frequently asked questions for Lampray. This list will continue to be updated over time.
 
 ### Q: Lamp will not open
 
