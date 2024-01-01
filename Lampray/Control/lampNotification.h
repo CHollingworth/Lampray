@@ -20,19 +20,15 @@ namespace Lamp::Core{
 
 
 // TODO:
-// - Restructure to allow defining the order notifications get displayed
 // - decouple type access from enum? May not be necessary
-// - simplify initlization of "notifications" vector
 // - define colors, in relation to the enums/vector position
 // - probably not, but possible allow configuring colors
 // - styling tweaks, specifically giving the notification more padding (clickable padding)
 
-        enum NotificationTypes{
-            INFO,
-            WARNING,
-            ERROR,
-            SUCCESS,
-        };
+
+// Basically done:
+// - simplify initlization of "notifications" vector
+// - Restructure to allow defining the order notifications get displayed
 
         void DisplayNotifications(){
             ImGuiStyle& imStyle = ImGui::GetStyle();
@@ -130,16 +126,18 @@ namespace Lamp::Core{
         }
 
     private:
-        // vector containing a vector of notifications for each type, so typeList<notificationList>
-        std::vector<std::vector<std::string>> notifications = {
-            {}, // info
-            {}, // warning
-            {}, // error
-            {}, // success?
+        // NOTE: Do not customize the values as it will break init/display logic
+        enum NotificationTypes{
+            INFO,
+            WARNING,
+            ERROR,
+            SUCCESS,
+
+            NOTIFTYPE_END_PLACEHOLDER, // used for initializations. KEEP THIS AT THE END
         };
 
-        // TODO: maybe an array of vectors, so a vector for each type
-
+        // array containing a vector of notifications for each type, so typeList<notificationList>
+        std::array<std::vector<std::string>, NOTIFTYPE_END_PLACEHOLDER> notifications;
 
         void addNotification(int notiftype, std::string message){
             this->notifications[notiftype].push_back(message);
