@@ -18,7 +18,6 @@ namespace Lamp::Core{
             return instance;
         }
 
-
         struct NotificationColors{
             ImColor notificationBG;
             ImColor notificationBGHover;
@@ -45,55 +44,25 @@ namespace Lamp::Core{
             ImColor(150, 0, 0, 255),
         };
 
-
-// TODO:
-// - decouple type access from enum? May not be necessary
-// - define colors, in relation to the enums/vector position
-// - probably not, but possible allow configuring colors
-// - styling tweaks, specifically giving the notification more padding (clickable padding)
-
-
-// Basically done:
-// - simplify initlization of "notifications" vector
-// - Restructure to allow defining the order notifications get displayed
-
         void DisplayNotifications(){
             ImGuiStyle& imStyle = ImGui::GetStyle();
-            /*
-            ImGui::PushStyleColor(ImGuiCol_WindowBg, warningColor);
 
-            ImGui::PushStyleColor(ImGuiCol_HeaderActive, warningColor);
-            ImGui::PushStyleColor(ImGuiCol_Header, warningColor);
-            ImGui::PushStyleColor(ImGuiCol_FrameBg, warningColor);
-            ImGui::PushStyleColor(ImGuiCol_PopupBg, warningColor);
-            ImGui::PushStyleColor(ImGuiCol_TitleBg, warningColor);
-
-            ImGui::PushStyleColor(ImGuiCol_MenuBarBg, warningColor);
-            ImGui::PushStyleColor(ImGuiCol_TableHeaderBg, warningColor);
-            ImGui::PushStyleColor(ImGuiCol_TableRowBg, warningColor);
-            */
-            //ImGui::PushStyleColor(ImGuiCol_ChildBg, sectionBGColor);
-            //ImGui::PushStyleColor(ImGuiCol_HeaderHovered, warningColor); // this works...
-
-
-            //ImGui::PushStyleColor(ImGuiCol_Button, warningColor);
-            //ImGui::PushStyleColor(ImGuiCol_ButtonHovered, warningColor);
             int outerindex = 0;
             for (auto it = this->notifications.begin(); it != this->notifications.end(); ++it) {
-                // TODO: DEFINE COLORS FOR EACH TYPE AND HAVE WAY TO GRAB THEM
+                // get the coloring for this notification type
                 NotificationColors notifColors = this->getNotificationColors(outerindex);
 
                 if(this->notifications[outerindex].size() > 0){
                     ImGui::PushStyleColor(ImGuiCol_ChildBg, notifColors.notificationBG.Value);
                     ImGui::PushStyleColor(ImGuiCol_HeaderHovered, notifColors.notificationBGHover.Value);
 
-                    //ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0.5f, 0.5f));
-                    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(imStyle.ItemSpacing.x, imStyle.CellPadding.y * 2)); // does not add padding as I want right now...
                     ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.0f)); // center-align text
 
                     std::string NOTIF_BAR_CONTAINER_ID = "NotificationBar_" + outerindex;
                     ImGui::BeginChild(NOTIF_BAR_CONTAINER_ID.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.0f), ImGuiChildFlags_AutoResizeY);
 
+                    // scale this child window ~25% larger
+                    ImGui::SetWindowFontScale(1.25f);
                     for (auto itt = (*it).begin(); itt != (*it).end(); ++itt) {
                         if(ImGui::Selectable((*itt).c_str())){
                             this->clearNotification(outerindex, itt);
@@ -103,7 +72,8 @@ namespace Lamp::Core{
                     }
 
                     ImGui::EndChild();
-                    ImGui::PopStyleVar(2);
+
+                    ImGui::PopStyleVar(1);
                     ImGui::PopStyleColor(2);
                 }
                 outerindex++;
@@ -138,6 +108,7 @@ namespace Lamp::Core{
 
     private:
         // NOTE: Do not customize the values as it will break init/display logic
+        // (re-ordering everything except the NOTIFTYPE_END_PLACEHOLDER is fine)
         enum NotificationTypes{
             INFO,
             SUCCESS,
