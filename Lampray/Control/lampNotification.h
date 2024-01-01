@@ -44,6 +44,9 @@ namespace Lamp::Core{
             ImColor(150, 0, 0, 255),
         };
 
+        // scale notifications about 25% larger than the rest of the content
+        float notificationScale = 1.25f;
+
         void DisplayNotifications(){
             ImGuiStyle& imStyle = ImGui::GetStyle();
 
@@ -61,10 +64,16 @@ namespace Lamp::Core{
                     std::string NOTIF_BAR_CONTAINER_ID = "NotificationBar_" + outerindex;
                     ImGui::BeginChild(NOTIF_BAR_CONTAINER_ID.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.0f), ImGuiChildFlags_AutoResizeY);
 
-                    // scale this child window ~25% larger
-                    ImGui::SetWindowFontScale(1.25f);
+                    ImGui::SetWindowFontScale(this->notificationScale);
                     for (auto itt = (*it).begin(); itt != (*it).end(); ++itt) {
-                        if(ImGui::Selectable((*itt).c_str())){
+                        std::string wrappedText = (*itt);
+                        auto spaceAvail = ImGui::GetContentRegionAvail().x;
+                        auto spaceNeeded = ImGui::CalcTextSize(wrappedText.c_str()).x;
+
+                        // attempt to manually wrap the text for long messages
+                        wrappedText = this->manuallyWrapText(wrappedText);
+
+                        if(ImGui::Selectable(wrappedText.c_str())){
                             this->clearNotification(outerindex, itt);
                             // go back 1 iteration as we just removed this item. Prevents a crash when clearning a notification.
                             itt--;
@@ -149,6 +158,53 @@ namespace Lamp::Core{
             }
 
             return this->notificationColorValues[notificationType];
+        }
+
+
+        std::string manuallyWrapText(std::string textToWrap){
+            auto spaceAvail = ImGui::GetContentRegionAvail().x;
+            auto spaceNeeded = ImGui::CalcTextSize(textToWrap.c_str()).x;
+            // no wrapping needed
+            if(spaceNeeded < spaceAvail){
+                return textToWrap;
+            }
+
+            std::vector<int> spacesToWrapAt = {};
+            int approxSizePerByte = std::ceil(spaceNeeded / textToWrap.size());
+            int charsThatFit = std::floor(spaceAvail / approxSizePerByte);
+            int prevspace = textToWrap.rfind(" ", charsThatFit);
+
+            // calculate the spots to try to wrap at... NOTE: This does not work if there are not well palced spaces!
+            for(auto i = charsThatFit; i < textToWrap.size(); i+= charsThatFit){
+                prevspace = textToWrap.rfind(" ", i);
+
+                // if we got a repeat prevspace, we are looping the same stuff
+                if(std::find(spacesToWrapAt.begin(), spacesToWrapAt.end(), prevspace) != spacesToWrapAt.end()){
+                    // we are looping, so just add a wrap anyway to continue...
+                    prevspace = i;
+                }
+
+                spacesToWrapAt.push_back(prevspace);
+                i = prevspace;
+            }
+
+            int offsetForInserts = 0;
+            // add newlines to manually wrap the text
+            for(auto it = spacesToWrapAt.begin(); it != spacesToWrapAt.end(); ++it){
+                int strpos = (*it) + offsetForInserts;
+                std::string spaceCheckString;
+                spaceCheckString += textToWrap.at(strpos);
+
+                if(spaceCheckString == " "){
+                    textToWrap.replace(strpos, 1, "\n");
+                } else{
+                    // character was not a space, so insert instead of replace
+                    textToWrap.insert(strpos, "\n");
+                    offsetForInserts += 1;
+                }
+            }
+
+            return textToWrap;
         }
     };
 }
