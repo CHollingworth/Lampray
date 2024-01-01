@@ -131,7 +131,7 @@ int main(int, char**)
     Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibaryLocation","LAMP CONFIG").returnReason;
     bool found7z = Lamp::Core::lampConfig::getInstance().init();
     if(!found7z){
-        Lamp::Core::lampNotification::getInstance().pushErrorNotification("Failed to find 7z.so! Many actions, such as deployment, will not function correctly! See the wiki for more information.");
+        Lamp::Core::lampNotification::getInstance().pushErrorNotification(Lamp::Core::lampLang::getInstance().LS("LAMPRAY_ERROR_7Z"));
     }
     Lamp::Core::FS::lampIO::saveKeyData("bit7zLibaryLocation", Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation, "LAMP CONFIG");
 
