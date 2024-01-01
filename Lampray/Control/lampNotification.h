@@ -19,6 +19,33 @@ namespace Lamp::Core{
         }
 
 
+        struct NotificationColors{
+            ImColor notificationBG;
+            ImColor notificationBGHover;
+        };
+
+        NotificationColors DefaultTypeColors = {
+            ImColor(100, 100, 100, 255),
+            ImColor(50, 50, 50, 255),
+        };
+        NotificationColors InfoTypeColors = {
+            ImColor(0, 100, 200, 255),
+            ImColor(0, 100, 150, 255),
+        };
+        NotificationColors SuccessTypeColors = {
+            ImColor(0, 175, 50, 255),
+            ImColor(0, 125, 50, 255),
+        };
+        NotificationColors WarningTypeColors = {
+            ImColor(175, 100, 0, 255),
+            ImColor(150, 50, 0, 255),
+        };
+        NotificationColors ErrorTypeColors = {
+            ImColor(200, 0, 0, 255),
+            ImColor(150, 0, 0, 255),
+        };
+
+
 // TODO:
 // - decouple type access from enum? May not be necessary
 // - define colors, in relation to the enums/vector position
@@ -54,37 +81,22 @@ namespace Lamp::Core{
             int outerindex = 0;
             for (auto it = this->notifications.begin(); it != this->notifications.end(); ++it) {
                 // TODO: DEFINE COLORS FOR EACH TYPE AND HAVE WAY TO GRAB THEM
-                ImVec4 sectionBGColor = ImVec4(
-                    lampCustomise::getInstance().floatMap[6][0],
-                    lampCustomise::getInstance().floatMap[6][1],
-                    lampCustomise::getInstance().floatMap[6][2],
-                    lampCustomise::getInstance().floatMap[6][3]
-                );
-                ImVec4 warningColor = ImVec4(
-                    lampCustomise::getInstance().floatMap[7][0],
-                    lampCustomise::getInstance().floatMap[7][1],
-                    lampCustomise::getInstance().floatMap[7][2],
-                    lampCustomise::getInstance().floatMap[7][3]
-                );
+                NotificationColors notifColors = this->getNotificationColors(outerindex);
 
                 if(this->notifications[outerindex].size() > 0){
-                    ImGui::PushStyleColor(ImGuiCol_ChildBg, sectionBGColor);
-                    ImGui::PushStyleColor(ImGuiCol_HeaderHovered, warningColor);
+                    ImGui::PushStyleColor(ImGuiCol_ChildBg, notifColors.notificationBG.Value);
+                    ImGui::PushStyleColor(ImGuiCol_HeaderHovered, notifColors.notificationBGHover.Value);
 
                     //ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0.5f, 0.5f));
                     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(imStyle.ItemSpacing.x, imStyle.CellPadding.y * 2)); // does not add padding as I want right now...
                     ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.0f)); // center-align text
 
-                    ImGui::BeginChild("NotificationBar", ImVec2(ImGui::GetContentRegionAvail().x, 0.0f), ImGuiChildFlags_AutoResizeY);
+                    std::string NOTIF_BAR_CONTAINER_ID = "NotificationBar_" + outerindex;
+                    ImGui::BeginChild(NOTIF_BAR_CONTAINER_ID.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.0f), ImGuiChildFlags_AutoResizeY);
 
                     for (auto itt = (*it).begin(); itt != (*it).end(); ++itt) {
                         if(ImGui::Selectable((*itt).c_str())){
-                            //std::cout << "\n";
-                            //std::cout << warningColor << "\n";
-                            //std::cout << "Hit the selectable...\n";
-
                             this->clearNotification(outerindex, itt);
-
                             // go back 1 iteration as we just removed this item. Prevents a crash when clearning a notification.
                             itt--;
                         }
@@ -101,17 +113,16 @@ namespace Lamp::Core{
         void pushInfoNotification(std::string message){
             this->addNotification(INFO, message);
         }
+        void pushSuccessNotification(std::string message){
+            this->addNotification(SUCCESS, message);
+        }
         void pushWarningNotification(std::string message){
             this->addNotification(WARNING, message);
         }
         void pushErrorNotification(std::string message){
             this->addNotification(ERROR, message);
         }
-        void pushSuccessNotification(std::string message){
-            this->addNotification(SUCCESS, message);
-        }
         void pushNotification(std::string notiftype, std::string message){
-
             if(notiftype == "info"){
                 this->pushInfoNotification(message);
             } else if(notiftype == "warning"){
@@ -129,12 +140,22 @@ namespace Lamp::Core{
         // NOTE: Do not customize the values as it will break init/display logic
         enum NotificationTypes{
             INFO,
+            SUCCESS,
             WARNING,
             ERROR,
-            SUCCESS,
 
             NOTIFTYPE_END_PLACEHOLDER, // used for initializations. KEEP THIS AT THE END
         };
+
+        std::array<NotificationColors, NOTIFTYPE_END_PLACEHOLDER> initNotificationColors(){
+            std::array<NotificationColors, NOTIFTYPE_END_PLACEHOLDER> colArray = {};
+            colArray[INFO] = InfoTypeColors;
+            colArray[SUCCESS] = SuccessTypeColors;
+            colArray[WARNING] = WarningTypeColors;
+            colArray[ERROR] = ErrorTypeColors;
+
+            return colArray;
+        }
 
         // array containing a vector of notifications for each type, so typeList<notificationList>
         std::array<std::vector<std::string>, NOTIFTYPE_END_PLACEHOLDER> notifications;
@@ -144,6 +165,19 @@ namespace Lamp::Core{
         }
         void clearNotification(int notiftype, std::vector<std::string>::iterator item){
             this->notifications[notiftype].erase(item);
+        }
+
+
+        // first element is background, second is background hover (TODO: Better way to store these)
+        std::array<NotificationColors, NOTIFTYPE_END_PLACEHOLDER> notificationColorValues = initNotificationColors();
+
+        NotificationColors getNotificationColors(int notificationType){
+            // if not in that array, return default colors
+            if(notificationType < 0 || notificationType >= this->notificationColorValues.size()){
+                return DefaultTypeColors;
+            }
+
+            return this->notificationColorValues[notificationType];
         }
     };
 }
