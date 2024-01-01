@@ -24,9 +24,6 @@ namespace Lamp::Core{
 
         void RunMenus();
 
-
-        bool show7zerror = false;
-
     private:
 
         char profileBuffer[250]{};
@@ -41,7 +38,6 @@ namespace Lamp::Core{
         bool displayProfileCreateMenu;
         void createProfileDialog();
         void DefaultMenuBar();
-        void DisplayNotifications();
     };
 }
 #endif //LAMP_LAMPMENU_H
