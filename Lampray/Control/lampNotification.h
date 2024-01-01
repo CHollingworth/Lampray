@@ -18,15 +18,25 @@ namespace Lamp::Core{
             return instance;
         }
 
+
+// TODO:
+// - Restructure to allow defining the order notifications get displayed
+// - decouple type access from enum? May not be necessary
+// - simplify initlization of "notifications" vector
+// - define colors, in relation to the enums/vector position
+// - probably not, but possible allow configuring colors
+// - styling tweaks, specifically giving the notification more padding (clickable padding)
+
         enum NotificationTypes{
             INFO,
             WARNING,
-            ERROR
+            ERROR,
+            SUCCESS,
         };
 
         void DisplayNotifications(){
-
-        /*
+            ImGuiStyle& imStyle = ImGui::GetStyle();
+            /*
             ImGui::PushStyleColor(ImGuiCol_WindowBg, warningColor);
 
             ImGui::PushStyleColor(ImGuiCol_HeaderActive, warningColor);
@@ -38,7 +48,7 @@ namespace Lamp::Core{
             ImGui::PushStyleColor(ImGuiCol_MenuBarBg, warningColor);
             ImGui::PushStyleColor(ImGuiCol_TableHeaderBg, warningColor);
             ImGui::PushStyleColor(ImGuiCol_TableRowBg, warningColor);
-        */
+            */
             //ImGui::PushStyleColor(ImGuiCol_ChildBg, sectionBGColor);
             //ImGui::PushStyleColor(ImGuiCol_HeaderHovered, warningColor); // this works...
 
@@ -64,6 +74,11 @@ namespace Lamp::Core{
                 if(this->notifications[outerindex].size() > 0){
                     ImGui::PushStyleColor(ImGuiCol_ChildBg, sectionBGColor);
                     ImGui::PushStyleColor(ImGuiCol_HeaderHovered, warningColor);
+
+                    //ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0.5f, 0.5f));
+                    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(imStyle.ItemSpacing.x, imStyle.CellPadding.y * 2)); // does not add padding as I want right now...
+                    ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.0f)); // center-align text
+
                     ImGui::BeginChild("NotificationBar", ImVec2(ImGui::GetContentRegionAvail().x, 0.0f), ImGuiChildFlags_AutoResizeY);
 
                     for (auto itt = (*it).begin(); itt != (*it).end(); ++itt) {
@@ -80,6 +95,7 @@ namespace Lamp::Core{
                     }
 
                     ImGui::EndChild();
+                    ImGui::PopStyleVar(2);
                     ImGui::PopStyleColor(2);
                 }
                 outerindex++;
@@ -95,6 +111,9 @@ namespace Lamp::Core{
         void pushErrorNotification(std::string message){
             this->addNotification(ERROR, message);
         }
+        void pushSuccessNotification(std::string message){
+            this->addNotification(SUCCESS, message);
+        }
         void pushNotification(std::string notiftype, std::string message){
 
             if(notiftype == "info"){
@@ -103,6 +122,8 @@ namespace Lamp::Core{
                 this->pushWarningNotification(message);
             } else if(notiftype == "error"){
                 this->pushErrorNotification(message);
+            } else if(notiftype == "success"){
+                this->pushSuccessNotification(message);
             } else{
                 std::cout << "Invalid notification type given: " << notiftype << "\n";
             }
@@ -114,6 +135,7 @@ namespace Lamp::Core{
             {}, // info
             {}, // warning
             {}, // error
+            {}, // success?
         };
 
         // TODO: maybe an array of vectors, so a vector for each type
