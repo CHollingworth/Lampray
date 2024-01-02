@@ -141,7 +141,10 @@ namespace Lamp::Core{
         std::array<std::vector<std::string>, NOTIFTYPE_END_PLACEHOLDER> notifications;
 
         void addNotification(int notiftype, std::string message){
-            this->notifications[notiftype].push_back(message);
+            // avoid adding duplicate notifications
+            if(std::find(this->notifications[notiftype].begin(), this->notifications[notiftype].end(), message) == this->notifications[notiftype].end()){
+                this->notifications[notiftype].push_back(message);
+            }
         }
         void clearNotification(int notiftype, std::vector<std::string>::iterator item){
             this->notifications[notiftype].erase(item);
