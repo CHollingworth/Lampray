@@ -180,7 +180,8 @@ namespace Lamp {
                             lampCustomise::getInstance().floatMap[x][2], lampCustomise::getInstance().floatMap[x][3]);
                     }
 
-                    if (ImGui::CollapsingHeader(lampLang::LS("LAMPRAY_CUSTOM_FONT"))) {
+                    auto FontScaleHeaderText = lampLang::LS("LAMPRAY_CUSTOM_FONT") + " ##"; // make the font scale header id unique from the drag bar to fix the drag behavior
+                    if (ImGui::CollapsingHeader(FontScaleHeaderText)) {
                         const float MIN_SCALE = 0.3f;
                         const float MAX_SCALE = 2.0f;
 

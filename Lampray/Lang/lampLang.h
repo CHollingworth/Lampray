@@ -192,6 +192,7 @@ This action cannot be undone.)");
                 addLangNode("LAMPRAY_CUSTOM_FONT", "Font Size");
                 addLangNode("LAMPRAY_CUSTOM_SV", "Save");
                 addLangNode("LAMPRAY_SELECT_PATH", "Select Path");
+                addLangNode("LAMPRAY_ERROR_7Z", "Failed to find 7z.so! Many actions, such as deployment, will not function correctly. See the wiki for more information.");
                 std::filesystem::create_directories("Lamp_Language/");
                 doc.save_file("Lamp_Language/English (UK).xml");
             }
