@@ -25,7 +25,7 @@ Open the newly created `Build` directory, then build the Lampray executable:
 ninja
 ```
 
-Launch Lampray by calling the newly created exeutable in the `Build` directory:
+Launch Lampray by calling the newly created exeutable:
 
 ```bash
 ~/Lampray/Build/Lampray
