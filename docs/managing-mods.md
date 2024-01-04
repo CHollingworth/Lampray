@@ -31,7 +31,7 @@ At the top corner, choose the game you'd like to mod.
 
 Drag and drop the `.zip` packages for each mod into Lampray.
 
-Enable each mod, choose their mod type, then set their load order. For more information about each mod type, see [Mod types](./mod-types.md). 
+Enable each mod, choose their mod type, then set their load order. For more information about each mod type, see [Mod types](about-lampray/mod-types.md). 
 
 Select **Deploy**.
 
