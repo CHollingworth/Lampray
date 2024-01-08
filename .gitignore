@@ -25,8 +25,6 @@ ipch
 *.VC.db
 *.VC.VC.opendb
 
-docs*/
-
 ## Commonly used CMake directories
 build*/
 
