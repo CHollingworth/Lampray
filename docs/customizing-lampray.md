@@ -18,37 +18,19 @@ Find and replace the following line with the path to your 7z.so utility's non-st
 
 ## Font
 
-You can customize the font in Lampray by creating a `Font` directory inside `Build/Lamp_Data/Config` and adding your font's `.ttf` file. Your directory structure should be similar to the following:
+You can customize the font in Lampray by creating a `Font` directory beside `Build/Lamp_Data/` and adding your font's `.ttf` file. Your directory structure should be similar to the following:
 
 ```bash
 Lampray
 ├── Build
-│   └── Lamp_Data 
-│       └── Config 
-│           └── terminus.ttf 
+│   ├── Lamp_Data 
+│   └── Lamp_Font 
+│       └── terminus.ttf 
 ├── docs
 ├── game-data
 ├── Lampray
 ├── logo
 └── third-party
-```
-
-## Transparency
-
-You can customize the transparency of Lampray by editing `Conf.mdf` located in the `Build/Lamp_Data/Config/` directory. Use the following syntax to set the background transparency: 
-
-```sql 
-0.0f: -00 
-0.1f: -1a
-0.2f: -33
-0.3f: -4d
-0.4f: -66
-0.5f: -80
-0.6f: -99
-0.7f: -b3
-0.8f: -cc
-0.9f: -e6
-1.0f: -ff
 ```
 
 ## Color theme
