@@ -1,4 +1,4 @@
-# Mod types 
+# Baldur's gate 3 Mod types 
 
 > These are the various mod types you can select when [modding your game](./modding-your-game.md).
 
