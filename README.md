@@ -11,7 +11,7 @@ If you'd like to learn more about Lampray, see [Lampray Docs](./docs/lampray-doc
 
 ## Quick start
 
-> For a full walkthrough, see [Building Lampray](./docs/building-lampray.md) instead.
+> For a full walkthrough, see [Building Lampray](./docs/building-from-source.md) instead.
 
 Download the [latest release](https://github.com/CHollingworth/Lampray/releases) of Lampray, then generate and configure the build files:
 

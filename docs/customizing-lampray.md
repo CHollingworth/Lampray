@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-Before you can customize Lampray, you'll need to [build Lampray from source](./building-lampray.md). 
+Before you can customize Lampray, you'll need to [build Lampray from source](./building-from-source.md). 
 
 ## Setting the path to 7z
 

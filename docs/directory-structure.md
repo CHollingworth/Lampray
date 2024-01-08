@@ -1,8 +1,8 @@
-# Directories
+# Directory structure
 
 > These are the various directories that make up Lampray.
 
-## Directory overview
+## Overview
 
 These are the primary directories you'll use to manage and configure Lampray.
 
@@ -17,7 +17,7 @@ Lampray
 
 ## `Lamp_Data`
 
-The directory where Lampray stores all the neccessary files needed for deployment before you [deploy your mods](../managing-mods.md#adding-mods). This directory is fully managed by Lampray, so there's no need to modify this directory or its contents.
+The directory where Lampray stores all the neccessary files needed for deployment before you [deploy your mods](managing-mods.md#adding-mods). This directory is fully managed by Lampray, so there's no need to modify this directory or its contents.
 
 ## `Archives`
 
@@ -25,7 +25,7 @@ The directory that stores your mods' `.zip` files when you drag and drop your mo
 
 ## `Config`
 
-The directory that stores your Lampray configuration files, such as `conf.mdf` which is used to [customize Lampray](../customizing-lampray.md).
+The directory that stores your Lampray configuration files, such as `conf.mdf` which is used to [customize Lampray](customizing-lampray.md).
 
 ## `Mod_Lists`
 

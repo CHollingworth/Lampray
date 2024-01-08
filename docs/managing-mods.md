@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-Before you start, you'll need to [build Lampray from source](./building-lampray.md).
+Before you start, you'll need to [build Lampray from source](./building-from-source.md).
 
 ## Setting the path to Steam
 

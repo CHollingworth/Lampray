@@ -1,6 +1,6 @@
-# Baldur's gate 3 Mod types 
+# Baldur's Gate 3 Mod types
 
-> These are the various mod types you can select when [modding your game](./modding-your-game.md).
+> These are the various mod types you can select when [modding your game](./modding-your-game.md) for Baldur's Gate 3 (BG3).
 
 ## Standard Mods
 

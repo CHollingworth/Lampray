@@ -4,10 +4,10 @@ Welcome to Lampray Docs! Whether you're new to Lampray or a long-time user, the 
 
 ## In this section:
 
-- [Building Lampray](./building-lampray.md)
+- [Building Lampray](./building-from-source.md)
 - [Managing mods](./managing-mods.md)
 - [Customizing Lampray](./customizing-lampray.md)
-- **About Lampray**
-  - [Mod types](./about-lampray/bg3-mod-types.md)
-  - [Directory structure](./about-lampray/directories.md)
+- **Mod Types**
+  - [Balder's Gate 3](mod-types/baulders-gate-3.md)
+- [Directory structure](directory-structure.md)
 - [Frequently Asked Questions (FAQ)](./frequently-asked-questions.md)
