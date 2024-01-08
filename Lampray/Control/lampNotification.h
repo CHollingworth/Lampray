@@ -5,8 +5,12 @@
 #ifndef LAMP_LAMPNOTIFICATION_H
 #define LAMP_LAMPNOTIFICATION_H
 
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <string>
 #include "../../third-party/imgui/imgui.h"
-#include "../Lang/lampLang.h"
+
 
 namespace Lamp::Core{
     class lampNotification{

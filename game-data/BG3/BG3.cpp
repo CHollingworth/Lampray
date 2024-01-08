@@ -253,18 +253,31 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
             std::filesystem::is_directory(installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string()))) {
         if(std::filesystem::is_empty(std::filesystem::path(keyInfo["installDirPath"]))){
             system(("pkexec umount \""+Lamp::Games::getInstance().currentGame->KeyInfo()["installDirPath"]+"\"").c_str());
-            std::filesystem::rename(installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string()), keyInfo["installDirPath"]);
+            try {
+                std::filesystem::rename(
+                        installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string()),
+                        keyInfo["installDirPath"]);
+            } catch (std::exception ex) {
+
+            }
+
             skipMount = false;
         }else {
             skipMount = true;
         }
         if(std::filesystem::is_empty(std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods"))){
             system(("pkexec umount \""+Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods\"").c_str());
-            std::filesystem::rename(std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods").parent_path() / ("Lampray Managed - " + std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods").stem().string()), std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods"));
+            try {
+                std::filesystem::rename(std::filesystem::path(KeyInfo()["appDataPath"] + "/Mods").parent_path() /
+                                        ("Lampray Managed - " +
+                                         std::filesystem::path(KeyInfo()["appDataPath"] + "/Mods").stem().string()),
+                                        std::filesystem::path(KeyInfo()["appDataPath"] + "/Mods"));
+            } catch (std::exception ex) {
+
+            }
             skipMount = false;
-        }else {
-            skipMount = true;
         }
+
         std::cout << "The version directory exists in the parent path." << std::endl;
     } else {
         if(std::filesystem::is_empty(keyInfo["installDirPath"])){
