@@ -11,6 +11,7 @@
 #include <vector>
 #include <sstream>
 #include "../../third-party/imgui/imgui.h"
+#include "../Control/lampNotification.h"
 #include <iomanip>
 #include <functional>
 #include <vector>
@@ -569,8 +570,16 @@ namespace Lamp::Core::Base{
             }
 
             if (pop) {
+                switch (warningLevel) {
+                    case WARNING:
+                        Lamp::Core::lampNotification::getInstance().pushWarningNotification(ping);
+                        break;
+                    case ERROR:
+                        Lamp::Core::lampNotification::getInstance().pushErrorNotification(ping);
+                        break;
+                }
                 //  if(!lampConfig::getInstance().ShowIntroMenu) {
-                poplist.push_front(ping);
+                //poplist.push_front(ping);
                 //    }
             }
         }
@@ -580,7 +589,7 @@ namespace Lamp::Core::Base{
          *
          * @return true if there are warnings to display, false otherwise.
          */
-        bool showWarns() {
+        [[maybe_unused]] bool showWarns() {
             for (auto it = poplist.begin(); it != poplist.end();) {
                 if (!poplist.empty()) {
                     lampTypes::lampString x = *it;

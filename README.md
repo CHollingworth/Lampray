@@ -9,6 +9,7 @@ Big thanks to airtonix & SnazzyPanda for their amazing work on Lampray.
 If you want early information about lamp, and how things are progressing join me on my very basic development discord.
 [discord](https://discord.gg/5macMedevy)
 
+
 ## List of currently supported games
 - Baldur's Gate 3
 - Cyberpunk 2077
@@ -40,6 +41,9 @@ If you want early information about lamp, and how things are progressing join me
 
 ## Building
 See Wiki
+
+## Support
+If you wish to support the development of Lampray please consider contributing to the project directly with code or via [ko-fi](https://ko-fi.com/lampray)
 
 ## Contributing
 

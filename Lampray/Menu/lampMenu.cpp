@@ -5,6 +5,8 @@
 #include "lampCustomise .h"
 #include "../Lang/lampLang.h"
 #include <cstdlib>
+#include "../Control/lampNotification.h"
+
 void Lamp::Core::lampMenu::RunMenus() {
 
 
@@ -86,6 +88,8 @@ void Lamp::Core::lampMenu::ModMenu() {
 
     ImGui::Begin("Blank Menu", NULL, Lamp::Core::lampConfig::getInstance().DefaultWindowFlags());
     DefaultMenuBar();
+
+    Lamp::Core::lampNotification::getInstance().DisplayNotifications();
 
     ImGuiStyle& style = ImGui::GetStyle();
     float size = ImGui::CalcTextSize(lampLang::LS("LAMPRAY_DRAGANDDROP")).x + style.FramePadding.x * 2.0f;

@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include "SDL2/SDL.h"
 
+#include "Lampray/Control/lampNotification.h"
+
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
@@ -127,7 +129,10 @@ int main(int, char**)
     }
     Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"]=(std::string)Lamp::Core::FS::lampIO::loadKeyData("showIntroMenu","LAMP CONFIG").returnReason;
     Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibaryLocation","LAMP CONFIG").returnReason;
-    Lamp::Core::lampConfig::getInstance().init();
+    bool found7z = Lamp::Core::lampConfig::getInstance().init();
+    if(!found7z){
+        Lamp::Core::lampNotification::getInstance().pushErrorNotification(Lamp::Core::lampLang::getInstance().LS("LAMPRAY_ERROR_7Z"));
+    }
     Lamp::Core::FS::lampIO::saveKeyData("bit7zLibaryLocation", Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation, "LAMP CONFIG");
 
     Lamp::Core::lampMenu Menus;
