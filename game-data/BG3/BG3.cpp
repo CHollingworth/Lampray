@@ -64,6 +64,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::ConfigMenu() {
 
 Lamp::Game::lampReturn Lamp::Game::BG3::startDeployment() {
     Lamp::Core::lampControl::getInstance().inDeployment = true;
+    Lamp::Core::FS::lampTrack::reset(Ident().ReadableName);
     if(KeyInfo()["installDirPath"] == "" | KeyInfo()["appDataPath"] == "" ) {
         return Core::Base::lampLog::getInstance().pLog({0, "Game Configuration not set."}, Core::Base::lampLog::warningLevel::WARNING, true, Core::Base::lampLog::LMP_NOCONFIG);
     }
@@ -81,6 +82,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::startDeployment() {
         if(!result) Core::Base::lampLog::getInstance().log("Pre Deployment has failed.", Core::Base::lampLog::warningLevel::ERROR, true, Core::Base::lampLog::LMP_PREDEPLOYFAILED);
         return result;
     });
+
 
     Core::Base::LampSequencer::add("BG3 Deployment Queue", [this]() -> lampReturn {
         Lamp::Core::lampControl::getInstance().deploymentStageTitle = "Deploying";
@@ -101,23 +103,32 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
     Lamp::Core::lampControl::getInstance().deplopmentTracker = {0,6};
 
     std::filesystem::path dir(workingDir);
+
     Core::Base::lampLog::getInstance().log("Cleaning Working Directory : "+workingDir, Core::Base::lampLog::warningLevel::LOG);
     try {
         for (const auto &entry: std::filesystem::directory_iterator(dir)) {
-            std::filesystem::remove_all(entry.path());
+            if(entry.is_directory()){
+               for(const auto &sub_entry: std::filesystem::directory_iterator(entry)){
+                   std::filesystem::remove_all(sub_entry.path());
+               }
+            }else {
+                std::filesystem::remove_all(entry.path());
+            }
         }
     }catch(std::exception e){
         return {-1, "Cannot clean working directories"};
     }
+
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 1;
     // Phantom Step.
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 2;
     Core::Base::lampLog::getInstance().log("Creating Working Directories", Core::Base::lampLog::warningLevel::LOG);
     try {
-        std::filesystem::create_directories(workingDir + "/bin/NativeMods");
-        std::filesystem::create_directories(workingDir + "/Data");
+        std::filesystem::create_directories(workingDir + "/Steam/bin/NativeMods");
+        std::filesystem::create_directories(workingDir + "/Steam/Data");
         std::filesystem::create_directories(workingDir + "/Mods");
         std::filesystem::create_directories(workingDir + "/PlayerProfiles/Public");
+        std::filesystem::create_directories(workingDir + "/OverlayConfigLayer");
         std::filesystem::create_directories(workingDir + "/ext");
     }catch(std::exception e){
         return {-1, "Unable to create working directories."};
@@ -231,6 +242,42 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
     }
 
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 6;
+
+    if(std::filesystem::is_empty(keyInfo["installDirPath"])){
+        // Overlay did exist, not anymore.
+    }
+
+    std::filesystem::path installPath(keyInfo["installDirPath"]);
+    if (std::filesystem::exists(installPath) && std::filesystem::is_directory(installPath) &&
+            std::filesystem::exists(installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string())) &&
+            std::filesystem::is_directory(installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string()))) {
+        if(std::filesystem::is_empty(std::filesystem::path(keyInfo["installDirPath"]))){
+            system(("pkexec umount \""+Lamp::Games::getInstance().currentGame->KeyInfo()["installDirPath"]+"\"").c_str());
+            std::filesystem::rename(installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string()), keyInfo["installDirPath"]);
+            skipMount = false;
+        }else {
+            skipMount = true;
+        }
+        if(std::filesystem::is_empty(std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods"))){
+            system(("pkexec umount \""+Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods\"").c_str());
+            std::filesystem::rename(std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods").parent_path() / ("Lampray Managed - " + std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods").stem().string()), std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods"));
+            skipMount = false;
+        }else {
+            skipMount = true;
+        }
+        std::cout << "The version directory exists in the parent path." << std::endl;
+    } else {
+        if(std::filesystem::is_empty(keyInfo["installDirPath"])){
+            // panic
+        }
+        // we good
+    }
+
+//    std::string managedString = std::string("Lampray Managed - ") + gamePath.filename().string();
+//    std::filesystem::path MergedPath = gamePath.parent_path() / managedString;
+//    std::filesystem::rename(gamePath, MergedPath);
+//    std::filesystem::create_directories(gamePath);
+
     return {1, "PreCleanup Finished."};
 }
 
@@ -273,9 +320,9 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preDeployment() {
             std::string x = item->ArchivePath;
             switch (item->modType) {
                 case BG3_ENGINE_INJECTION:
-                    Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"dll","bin/NativeMods");
-                    Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"toml","bin/NativeMods");
-                    Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"ini","bin/NativeMods");
+                    Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"dll","Steam/bin/NativeMods");
+                    Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"toml","Steam/bin/NativeMods");
+                    Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"ini","Steam/bin/NativeMods");
                     break;
                 case BG3_MOD:
                     Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"pak","Mods");
@@ -289,11 +336,11 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preDeployment() {
                     });
                     break;
                 case BG3_BIN_OVERRIDE:
-                    Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"bin","bin");
-                    Lamp::Core::FS::lampExtract::moveModSpecificFileType(item, "dll", "bin");
+                    Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"bin","Steam/bin");
+                    Lamp::Core::FS::lampExtract::moveModSpecificFileType(item, "dll", "Steam/bin");
                     break;
                 case BG3_DATA_OVERRIDE:
-                    Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"Data","Data");
+                    Lamp::Core::FS::lampExtract::moveModSpecificFolder(item,"Data","Steam/Data");
                     break;
                 case BG3_MOD_FIXER:
                     Lamp::Core::FS::lampExtract::moveModSpecificFileType(item,"pak","Mods");
@@ -315,90 +362,41 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preDeployment() {
 
 Lamp::Game::lampReturn Lamp::Game::BG3::deployment() {
     std::string workingDir = Lamp::Core::lampConfig::getInstance().DeploymentDataPath + Ident().ReadableName;
-    Lamp::Core::lampControl::getInstance().deplopmentTracker = {0,5};
+    Lamp::Core::lampControl::getInstance().deplopmentTracker = {0,4};
 
-    try {
-        Lamp::Core::FS::lampTrack::handleFileDescriptor A{
-            Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFilesIgnoreExt,
-            Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
-            workingDir+"/bin/",
-            keyInfo["installDirPath"]+"/bin/",
-            "NativeMods",
-            Ident().ReadableName
-        };
-        Lamp::Core::FS::lampTrack::handleFile(A);
-        Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 1;
+    if(!skipMount) {
+        Core::Base::OverlayBuilder *BG3Overlay = new Core::Base::OverlayBuilder;
+        std::filesystem::path SteamDataPath(workingDir + "/Steam");
+        std::filesystem::path SteamConfig(
+                Lamp::Core::lampConfig::getInstance().ConfigDataPath + Ident().ReadableName + "/STEAM/");
+        std::filesystem::path SteamWorkingDir(
+                Lamp::Core::lampConfig::getInstance().workingPaths + Ident().ReadableName + "/STEAM/");
 
+        BG3Overlay->addPath(absolute(SteamDataPath));
+        lampReturn SteamReturn = BG3Overlay->create(std::filesystem::absolute(keyInfo["installDirPath"]),
+                                                    absolute(SteamConfig), absolute(SteamWorkingDir));
+        Core::Base::lampLog::getInstance().log(SteamReturn.returnReason, Core::Base::lampLog::warningLevel::WARNING,
+                                               false);
 
+        Lamp::Core::lampControl::getInstance().deplopmentTracker = {1,4};
+        Core::Base::OverlayBuilder *BG3OverlayMods = new Core::Base::OverlayBuilder;
+        std::filesystem::path ModsWorkingDir(
+                Lamp::Core::lampConfig::getInstance().workingPaths + Ident().ReadableName + "/MODS/");
+        std::filesystem::path ModsConfig(
+                Lamp::Core::lampConfig::getInstance().ConfigDataPath + Ident().ReadableName + "/MODS/");
 
-        Core::Base::lampLog::getInstance().log("Copying NativeMods");
+        std::filesystem::path ModsDataPath(workingDir + "/Mods");
+        BG3OverlayMods->addPath(absolute(ModsDataPath));
+        Lamp::Core::lampControl::getInstance().deplopmentTracker = {2,4};
+        Core::Base::lampLog::getInstance().log(
+                BG3OverlayMods->create(std::filesystem::absolute(KeyInfo()["appDataPath"] + "/Mods"),
+                                       absolute(ModsConfig), absolute(ModsWorkingDir)).returnReason,
+                Core::Base::lampLog::warningLevel::WARNING, false);
 
+    }
 
-        Lamp::Core::FS::lampTrack::handleFileDescriptor B{
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyOnlyExt,
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
-                workingDir+"/bin/NativeMods",
-                keyInfo["installDirPath"]+"/bin/NativeMods",
-                ".dll",
-                Ident().ReadableName
-        };
-        Lamp::Core::FS::lampTrack::handleFile(B);
-
-        Lamp::Core::FS::lampTrack::handleFileDescriptor B2{
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyOnlyExt,
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::skipExisting,
-                workingDir+"/bin/NativeMods",
-                keyInfo["installDirPath"]+"/bin/NativeMods",
-                ".toml",
-                Ident().ReadableName
-        };
-        Lamp::Core::FS::lampTrack::handleFile(B2);
-
-        Lamp::Core::FS::lampTrack::handleFileDescriptor B3{
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyOnlyExt,
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::skipExisting,
-                workingDir+"/bin/NativeMods",
-                keyInfo["installDirPath"]+"/bin/NativeMods",
-                ".ini",
-                Ident().ReadableName
-        };
-        Lamp::Core::FS::lampTrack::handleFile(B3);
-
-        Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 2;
-
-        Core::Base::lampLog::getInstance().log("Copying Data");
-        Lamp::Core::FS::lampTrack::handleFileDescriptor C{
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFolder,
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
-                workingDir+"/Data/",
-                keyInfo["installDirPath"]+"/Data/",
-                "",
-                Ident().ReadableName
-        };
-        Lamp::Core::FS::lampTrack::handleFile(C);
-
-
-        Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 3;
-
-        Core::Base::lampLog::getInstance().log("Copying Mods");
-
-        Lamp::Core::FS::lampTrack::handleFileDescriptor D{
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFolder,
-                Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
-                workingDir+"/Mods",
-                KeyInfo()["appDataPath"]+"/Mods/",
-                "",
-                Ident().ReadableName
-        };
-        Lamp::Core::FS::lampTrack::handleFile(D);
-
-
-
-
-        Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 4;
-
-        Core::Base::lampLog::getInstance().log("Copying ModProfile");
-
+    Core::Base::lampLog::getInstance().log("Copying ModProfile");
+    Lamp::Core::lampControl::getInstance().deplopmentTracker = {3,4};
         Lamp::Core::FS::lampTrack::handleFileDescriptor E{
                 Lamp::Core::FS::lampTrack::handleFileDescriptor::operation::copyFolder,
                 Lamp::Core::FS::lampTrack::handleFileDescriptor::mode::updateExisting,
@@ -408,14 +406,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::deployment() {
                 Ident().ReadableName
         };
         Lamp::Core::FS::lampTrack::handleFile(E);
-
-        Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 5;
-
-        return {1, "Deployed"};
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        return {0, "Deployment Failed."};
-    }
+    Lamp::Core::lampControl::getInstance().deplopmentTracker = {4,4};
 }
 
 Lamp::Game::lampReturn Lamp::Game::BG3::postDeploymentTasks() {

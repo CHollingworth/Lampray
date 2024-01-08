@@ -45,7 +45,7 @@ int main(int, char**)
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer2_Init(renderer);
 
-    std::filesystem::path fontFolder("Font/");
+    std::filesystem::path fontFolder("Lamp_Font/");
 
     // Check if the "Font" folder exists
     if (std::filesystem::is_directory(fontFolder)) {
@@ -148,12 +148,17 @@ int main(int, char**)
         std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().archiveDataPath);
         std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().ConfigDataPath);
         std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().DeploymentDataPath);
-
+        std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().workingPaths);
         for (Lamp::Game::gameControl *element: Lamp::Games::getInstance().gameList){
             std::filesystem::create_directories(std::filesystem::path(Lamp::Core::lampConfig::getInstance().DeploymentDataPath + element->Ident().ReadableName));
             std::filesystem::create_directories(std::filesystem::path(Lamp::Core::lampConfig::getInstance().archiveDataPath + element->Ident().ReadableName + "/GameFiles"));
+            std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().workingPaths + element->Ident().ReadableName);
+            std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().ConfigDataPath + element->Ident().ReadableName);
         }
-
+        std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().workingPaths + Lamp::Games::getInstance().gameList[0]->Ident().ReadableName+"/MODS/");
+        std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().workingPaths + Lamp::Games::getInstance().gameList[0]->Ident().ReadableName+"/STEAM/");
+        std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().ConfigDataPath + Lamp::Games::getInstance().gameList[0]->Ident().ReadableName+"/MODS/");
+        std::filesystem::create_directories(Lamp::Core::lampConfig::getInstance().ConfigDataPath + Lamp::Games::getInstance().gameList[0]->Ident().ReadableName+"/STEAM/");
     } catch (std::exception ex) {
         Lamp::Core::Base::lampLog::getInstance().log("Could not create base directories", Lamp::Core::Base::lampLog::ERROR,
                                                      Lamp::Core::Base::lampLog::LMP_NODIRCREATION);

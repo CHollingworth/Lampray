@@ -111,6 +111,7 @@ namespace Lamp::Game {
          */
         virtual void launch() = 0;
 
+        virtual void unmount() = 0;
 
         virtual int SeparatorModType(){
             return MOD_SEPARATOR;

@@ -58,6 +58,9 @@ namespace Lamp::Game {
                 ModList = Lamp::Core::FS::lampIO::loadModList(Ident().ShortHand, keyInfo["CurrentProfile"]);
             }
 
+            void unmount() override{
+
+            }
 
             int SeparatorModType(){
                 return MOD_SEPARATOR;

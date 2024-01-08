@@ -43,7 +43,7 @@ namespace Lamp {
                             KnownKeys.insert(S);
                             return LanguageMap[S];
                         } else {
-                            return "TERM NOT LOCALIZED";
+                            return "[?]"+S;
                         }
                     }
 
