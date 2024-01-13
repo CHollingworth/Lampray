@@ -4,7 +4,7 @@ Welcome to Lampray Docs! Whether you're new to Lampray or a long-time user, the 
 
 ## In this section:
 
-- [Building Lampray](./building-from-source.md)
+- [Building from source](./building-from-source.md)
 - [Managing mods](./managing-mods.md)
 - [Customizing Lampray](./customizing-lampray.md)
 - **Mod Types**

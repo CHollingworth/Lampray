@@ -4,49 +4,32 @@
 
 ## Prerequisites
 
-Before you start, you'll need to [build Lampray from source](./building-from-source.md).
+Before you can manage your mods using Lampray, you'll need to complete one of the following:
 
-## Setting the path to Steam
+- [Download the latest release](../README.md#quick-start)
+- [Build from source](./building-from-source.md).
 
-You'll need to set the path your Steam library and game data in Lampray, so your mods are added to the right directories. First, open your terminal and launch Lampray:
+## Step 1: Set the path to Steam
 
-```bash
-~/Lampray/Build/Lampray
-```
+You'll need to set the path your Steam library and game data in Lampray, so your mods are added to the right directories.
 
 At the top of the window, select **Lampray** > **Steam Directory**, then follow the on-screen instructions to set the path to your Steam game's root directory and `AppData` directory.
 
-## Adding mods
+## Step 2: Manage your mods
 
-To add your mods to Lampray, first download your mods from Nexus Mods.
+### Adding mods
 
-> **NOTE:** At this time, Lampray only supports `.zip` packages, **not** `.rar` packages.
+> **Note:** At this time, mods using `.rar` files are not supported.
 
-Next, open your terminal and launch Lampray:
+1. Download your mods from a mod repository, such as Nexus Mods.
+2. At the top corner, choose the game you'd like to mod.
+3. Drag and drop the `.zip` packages for each mod into Lampray.
+4. Enable each mod, choose their mod type, then set their load order. For more information about each mod type, see [Mod types](about-lampray/mod-types.md). 
+5. Select **Deploy**.
+6. When Lampray is finished deploying your mods, exit Lampray, then launch your game.
 
-```bash
-~/Lampray/Build/Lampray
-```
-At the top corner, choose the game you'd like to mod.
+### Removing mods
 
-Drag and drop the `.zip` packages for each mod into Lampray.
-
-Enable each mod, choose their mod type, then set their load order. For more information about each mod type, see [Mod types](about-lampray/mod-types.md). 
-
-Select **Deploy**.
-
-When Lampray is finished deploying your mods, exit Lampray, then launch your game.
-
-## Removing mods
-
-To remove your mods from Lampray, open your terminal and launch Lampray:
-
-```bash
-~/Lampray/Build/Lampray
-```
-At the top corner, choose the game you'd like to remove a mod from.
-
-For each mod you'd like to remove, select **Disable**, then **Remove Mod**.
-
-When you're finished, select **Deploy**.
-
+1. At the top corner, choose the game you'd like to remove a mod from.
+2. For each mod you'd like to remove, select **Disable**, then **Remove Mod**.
+3. When you're finished, select **Deploy**.

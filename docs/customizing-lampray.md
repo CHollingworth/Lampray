@@ -4,13 +4,16 @@
 
 ## Prerequisites
 
-Before you can customize Lampray, you'll need to [build Lampray from source](./building-from-source.md). 
+Before you can customize Lampray, you'll need to complete one of the following:
 
-## Setting the path to 7z
+- [Download the latest release](../README.md#quick-start)
+- [Build from source](./building-from-source.md).
 
-7z is required to use Lampray. If your 7z.so utility is located in a non-standard location, you'll need to manually set the path to7z.so in Lampray. First, open you're terminal and go to `~/Lampray/Build/Config/` and open `config.mdf` in your text editor.
+## Setting the path to 7-Zip
 
-Find and replace the following line with the path to your 7z.so utility's non-standard location.
+In most cases, Lampray can find your 7-Zip installation automatically. However, if it's located in a non-standard location, you'll need to manually set the path to `7z.so` in Lampray.
+
+First open `~/Lampray/Config/config.mdf` in your text editor, then find and replace the following line with the path to your `7z.so` utility.
 
 ```sql
 <bit7zLibaryLocation>/usr/lib/p7zip/7z.so</bit7zLibaryLocation>
@@ -18,24 +21,21 @@ Find and replace the following line with the path to your 7z.so utility's non-st
 
 ## Font
 
-You can customize the font in Lampray by creating a `Font` directory beside `Build/Lamp_Data/` and adding your font's `.ttf` file. Your directory structure should be similar to the following:
+You can customize your font by creating a `Lamp_Font` directory within `Lamp_Data` and adding a `.ttf` file. Your file tree should be similar to the following:
 
 ```bash
-Lampray
-├── Build
-│   ├── Lamp_Data 
-│   └── Lamp_Font 
-│       └── terminus.ttf 
-├── docs
-├── game-data
-├── Lampray
-├── logo
-└── third-party
+Lamp_Data
+├── Archives
+├── Config
+├── Deployment
+├── Lamp_Font 
+│   └── terminus.ttf
+└── Mod_Lists
 ```
 
 ## Color theme
 
-You can customize the color theme for Lampray by editing `Conf.mdf` located in the `Build/Lamp_Data/Config/` directory.
+You can customize your color theme by editing `Lamp_Data/Config/Conf.mdf`.
 
 ### Pre-made Colour Schemes
 
@@ -131,4 +131,3 @@ You can customize the color theme for Lampray by editing `Conf.mdf` located in t
 <Colour_SearchHighlight>4c004c-ff</Colour_SearchHighlight>
 <Colour_ToolTipAndTypes>000CF2-ef</Colour_ToolTipAndTypes>
 ```
-

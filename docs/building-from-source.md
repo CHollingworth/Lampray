@@ -1,31 +1,72 @@
-# Building Lampray 
+# Building from source
 
 > Learn how to build Lampray from source. When you're finished, you'll be able to [mod your games using Lampray](./modding-your-game.md).
 
-## Prerequisites
+## Step 1: Clone the repository
 
-Use your Linux distribution's recommended package manager to install the following dependencies:
+To clone the Lampray repository into your home directory, run the following command:
 
-| Type        | Name                 | Version          |
-|-------------|----------------------|------------------|
-| Library     | SDL2                 | 2.0              |
-| Library     | pkg-config           | 0.29.2           |
-| Library     | libcurl4-openssl-dev | 7.64.0 or later  |
-| System Tool | Zenity               | 1.8.2 or later   |
-| Build Tool  | C++                  | C++ 17           |
-| Build Tool  | GCC                  | 13.2 or later    |
-| Build Tool  | ninja-build          | 1.11.1 or later  |
-| Build Tool  | CMake                | 3.26 or later    |
-
-## Building from source
-
-Download the [latest release](https://github.com/CHollingworth/Lampray/releases) of Lampray into your home directory, then open it in your terminal.
-
-```bash
-cd ~/Lampray
+```
+git clone git@github.com:CHollingworth/Lampray.git ~
 ```
 
-Generate and configure Lampray's build files by running the following command:
+## Step 2: Install dependencies
+
+Lampray requires the following:
+
+| Type        | Name                 |
+|-------------|----------------------|
+| Build Tool  | C++                  |
+| Build Tool  | CMake                |
+| Build Tool  | GCC                  |
+| Build Tool  | ninja-build          |
+| Library     | libcurl4-openssl-dev |
+| Library     | pkg-config           |
+| Library     | SDL2                 |
+| System Tool | 7-Zip                |
+| System Tool | Zenity               |
+
+> **Note:** In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./customizing-lampray.md#setting-the-path-to-7-zip).
+
+You can either use your install these dependencies manually or use the included setup script. To use the setup script, run the following command:
+
+```bash
+~/Lampray/setup.sh
+```
+
+If your setup is successful, you'll see the following output:
+
+```bash
+==> 💁 [ASDF] Done ✅
+```
+
+## Step 3: Build from source
+
+You can build Lampray by [using the Lampray build script](#build-script-recommended) or by [manually running commands](#manual).
+
+### Build script (recommended)
+
+To build Lampray using the included build script, run the following command:
+
+```bash
+~/Lampray/build.sh
+```
+
+If your build is successful, you'll see the following output:
+
+```
+📦 Build complete
+```
+
+Finally, launch Lampray.
+
+```bash
+~/Lampray/Build/Lampray
+```
+
+### Manual
+
+To generate and configure Lampray's build files manually, run the following command:
 
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=ninja -G Ninja -S ./ -B ./Build
@@ -37,27 +78,14 @@ Open the newly created `Build` directory.
 cd Build
 ```
 
-Finally, build the Lampray executable by running the following command:
+Build the Lampray executable.
 
 ```bash
 ninja
 ```
 
-Now you can launch Lampray at anytime by running the following command:
+Finally, launch Lampray.
 
 ```bash
 ~/Lampray/Build/Lampray
 ```
-
-## Optional: setting path to 7z
-
-7z is required to use Lampray. If your 7z.so utility is located in a non-standard location, you'll need to manually set the path to7z.so in Lampray. First, open you're terminal and go to `~/Lampray/Build/Config/` and open `config.mdf` in your text editor.
-
-Find and replace the following line with the path to your 7z.so utility's non-standard location.
-
-```sql
-<bit7zLibaryLocation>/usr/lib/p7zip/7z.so</bit7zLibaryLocation>
-```
-
-When you're finished, save your changes.
-

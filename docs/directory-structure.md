@@ -30,4 +30,3 @@ The directory that stores your Lampray configuration files, such as `conf.mdf` w
 ## `Mod_Lists`
 
 The directory containing your games' `.mdf` files which lists the installed game, its mods, and the corresponding [mod types](mod-types.md). This directory is fully managed by Lampray, so there's no need to modify this directory or its contents.
-

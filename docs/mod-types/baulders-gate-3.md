@@ -4,14 +4,14 @@
 
 ## Standard Mods
 
-Mods using a single `.pak` file. Typically this would be mods that are dependent on other mods.
+Mods using a single `.pak` file. Typically, these are mods that are dependent on other mods.
 
 ### Example
 
 **Deployed from:**
 
 ```bash
-~/Lampray/Build/Lamp_Data/Deployment/Baldur's Gate 3/Mods
+~/Lamp_Data/Deployment/Baldur's Gate 3/Mods
 ```
 
 **Deployed to:**
@@ -29,7 +29,7 @@ Mods containing DLL's that need to be loaded with the game via NativeModLoader.
 **Deployed from:**
 
 ```bash
-~/Lampray/Build/Lamp_Data/Deployment/Baldur's Gate 3/bin/NativeMods
+~/Lamp_Data/Deployment/Baldur's Gate 3/bin/NativeMods
 ```
 
 **Deployed to:**
@@ -47,7 +47,7 @@ Mods that directly overwrite files in the `/BG3/bin` directory, such as mods tha
 **Deployed from:**
 
 ```bash
-~/Lampray/Build/Lamp_Data/Deployment/Baldur's Gate 3/bin
+~/Lamp_Data/Deployment/Baldur's Gate 3/bin
 ```
 
 **Deployed to:**
@@ -65,7 +65,7 @@ Mods containing loose files, such as textures or meshes for characters and objec
 **Deployed from:**
 
 ```bash
-~/Lampray/Build/Lamp_Data/Deployment/Baldur's Gate 3/Data
+~/Lamp_Data/Deployment/Baldur's Gate 3/Data
 ```
 
 **Deployed to:**
@@ -83,7 +83,7 @@ Mods that contain a single `.pak` file, but **do not** depend on other mods, suc
 **Deployed from:**
 
 ```bash
-~/Lampray/Build/Lamp_Data/Deployment/Baldur's Gate 3/Mods
+~/Lamp_Data/Deployment/Baldur's Gate 3/Mods
 ```
 
 **Deployed to:**
@@ -91,4 +91,3 @@ Mods that contain a single `.pak` file, but **do not** depend on other mods, suc
 ```bash
 ~/.steam/debian-installation/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios/Baldurs Gate 3/Mods
 ```
-
