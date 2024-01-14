@@ -11,7 +11,7 @@ Before you can manage your mods using Lampray, you'll need to complete one of th
 
 ## Step 1: Set your game paths
 
-You'll need to set the path your Steam library and game data in Lampray, so your mods are added to the right directories.
+You'll need to set the path to your Steam library and game data in Lampray, so your mods are added to the right directories.
 
 At the top of the window, select **Lampray** > **Steam Directory**, then follow the on-screen instructions to set the path to your Steam game's root directory and `AppData` directory.
 
@@ -26,7 +26,7 @@ You'll need to complete the following steps anytime you add or remove mods using
 1. Download your mods from a mod repository, such as Nexus Mods.
 2. At the top corner, choose the game you'd like to mod.
 3. Drag and drop the `.zip` packages for each mod into Lampray.
-4. Enable each mod, choose their mod type, then set their load order. For more information about each mod type, see [Mod types](about-lampray/mod-types.md). 
+4. Enable each mod, choose their mod type, then set their load order. For more information about each mod type, see [Mod types](./mod-types/supported-games.md). 
 5. Select **Deploy**.
 6. When Lampray is finished deploying your mods, exit Lampray, then launch your game.
 

@@ -8,6 +8,8 @@ Welcome to Lampray Docs! Whether you're new to Lampray or a long-time user, the 
 - [Managing mods](./managing-mods.md)
 - [Customizing Lampray](./customizing-lampray.md)
 - **Mod Types**
-  - [Balder's Gate 3](mod-types/baulders-gate-3.md)
+  - [Supported games](./mod-types/supported-games.md) 
+  - [Balder's Gate 3](mod-types/baldurs-gate-3.md)
+  - [Cyberpunk 2077](./mod-types/cyberpunk-2077.md)
 - [Directory structure](directory-structure.md)
 - [Frequently Asked Questions (FAQ)](./frequently-asked-questions.md)

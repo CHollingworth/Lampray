@@ -1,6 +1,6 @@
-# Baldur's Gate 3 Mod types
+# Baldur's Gate 3 mod types
 
-> These are the various mod types you can select when [modding your game](./modding-your-game.md) for Baldur's Gate 3 (BG3).
+> These are the various mod types you can select when [modding your game](../managing-mods.md) for Baldur's Gate 3 (BG3).
 
 ## Standard Mods
 
@@ -40,7 +40,7 @@ Mods containing DLL's that need to be loaded with the game via NativeModLoader.
 
 ## Bin Overwrite
 
-Mods that directly overwrite files in the `/BG3/bin` directory, such as mods that overwrite an executable or core DLLs. (Only a few mods will ever need this.) _(This operation cannot be undone by Lamp)._
+Mods that directly overwrite files in the `/BG3/bin` directory, such as mods that overwrite an executable or core DLLs. (Only a few mods will ever need this.) _(Lampray cannot undo This operation)._
 
 ### Example
 
@@ -58,7 +58,7 @@ Mods that directly overwrite files in the `/BG3/bin` directory, such as mods tha
 
 ## Data Overwrite
 
-Mods containing loose files, such as textures or meshes for characters and objects. To verify, check if the mod's `.zip` file contains multiple loose files or a single `.pak` file. If contians loose files, choose **Data Overwrite**. _(This operation cannot be undone by Lamp)._
+Mods containing loose files, such as textures or meshes for characters and objects. To verify, check if the mod's `.zip` file contains multiple loose files or a single `.pak` file. If it contains loose files, choose **Data Overwrite**. _(Lampray cannot undo This operation)._
 
 ### Example
 

@@ -1,6 +1,6 @@
 # Building from source
 
-> Learn how to build Lampray from source. When you're finished, you'll be able to [mod your games using Lampray](./modding-your-game.md).
+> Learn how to build Lampray from source. When you're finished, you'll be able to [mod your games using Lampray](./managing-mods.md).
 
 ## Step 1: Clone the repository
 
