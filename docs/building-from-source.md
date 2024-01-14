@@ -28,7 +28,7 @@ Lampray requires the following:
 
 > **Note:** In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./customizing-lampray.md#setting-the-path-to-7-zip).
 
-You can either use your install these dependencies manually or use the included setup script. To use the setup script, run the following command:
+You can either these dependencies manually or use the included setup script. To use the setup script, run the following command:
 
 ```bash
 ~/Lampray/setup.sh
