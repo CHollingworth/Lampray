@@ -19,7 +19,7 @@ First open `~/Lampray/Config/config.mdf` in your text editor, then find and repl
 <bit7zLibaryLocation>/usr/lib/p7zip/7z.so</bit7zLibaryLocation>
 ```
 
-## Font
+## Customizing your font
 
 You can customize your font by creating a `Lamp_Font` directory within `Lamp_Data` and adding a `.ttf` file. Your file tree should be similar to the following:
 
@@ -33,7 +33,7 @@ Lamp_Data
 └── Mod_Lists
 ```
 
-## Color theme
+## Customizing your color theme
 
 You can customize your color theme by editing `Lamp_Data/Config/Conf.mdf`.
 
