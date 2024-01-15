@@ -63,6 +63,8 @@ The first time you run Lampray, the following files and directories will be crea
 └── Lampray
 ```
 
+Now you're ready to [mod your game](./docs/managing-mods.md).
+
 ## Supported games
 
 ### Currently supported
