@@ -10,6 +10,10 @@
 
 **A:** Lampray may be having difficulty locating 7-Zip. To set the path to `7z.so` manually, see [Customizing Lampray](./customizing-lampray.md#setting-the-path-to-7-zip). 
 
+### Q: My deployment gets stuck at 0/0
+
+**A:** Youll need to set your config paths in the game configuration menu. If your error persists, [create a GitHub issue](https://github.com/CHollingworth/Lampray/issues/new?assignees=&labels=bug&projects=&template=-game--bug-report.md&title=) and send us your terminal output.
+
 ### Q: Where can I find Canary updates or pre-releases they are no longer on GitHub?
 
 **A:** You can find these in [our Discord](https://discord.gg/5macMedevy).
