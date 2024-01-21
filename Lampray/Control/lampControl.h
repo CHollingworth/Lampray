@@ -269,9 +269,9 @@ namespace Lamp::Core{
                             cutname = path.c_str();
                         }
 
-                        ImGui::Text(cutname.c_str());
+                        ImGui::Text("%s", cutname.c_str());
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
-                            ImGui::SetTooltip((*it)->ArchivePath);
+                            ImGui::SetTooltip("%s", (*it)->ArchivePath.c_str());
                         }
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
@@ -417,7 +417,7 @@ namespace Lamp::Core{
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                         }
                         ImGui::SameLine();
-                        ImGui::Text((std::to_string(i)).c_str());
+                        ImGui::Text("%s", (std::to_string(i)).c_str());
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
                         }
@@ -436,7 +436,7 @@ namespace Lamp::Core{
                         }
 
                         if((*it)->modType != Lamp::Games::getInstance().currentGame->SeparatorModType()) {
-                            ImGui::Text((*it)->timeOfUpdate);
+                            ImGui::Text("%s", (*it)->timeOfUpdate.c_str());
                         }
 
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
@@ -477,7 +477,7 @@ namespace Lamp::Core{
 
 
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled) && (*it)->enabled) {
-                            ImGui::SetTooltip(lampLang::LS("LAMPRAY_MODLIST_WARN"));
+                            ImGui::SetTooltip("%s", lampLang::LS("LAMPRAY_MODLIST_WARN").c_str());
                         }
                         if (ImGui::IsItemHovered(ImGuiHoveredFlags_None)) {
                             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, lampControl::getInstance().Colour_SearchHighlight);
@@ -518,7 +518,7 @@ namespace Lamp::Core{
                         std::string promptMessage = lampLang::LS("LAMPRAY_MODLIST_WARN_SURE");
                         promptMessage.append(delname);
                         promptMessage.append((std::string)lampLang::LS("LAMPRAY_MODLIST_WARN_FINAL"));
-                        ImGui::Text(promptMessage.c_str());
+                        ImGui::Text("%s", promptMessage.c_str());
                         ImGui::Separator();
 
                         if (ImGui::Button(lampLang::LS("LAMPRAY_MODLIST_DELETE"), ImVec2(120, 0))) {
@@ -585,8 +585,8 @@ namespace Lamp::Core{
          * @brief Creates an ImGui menu for displaying game settings.
          */
             void createImGuiMenu(){
-                ImGui::Text(displayString.c_str());
-                ImGui::Text(toolTip.c_str());
+                ImGui::Text("%s", displayString.c_str());
+                ImGui::Text("%s", toolTip.c_str());
 
                 // set some default text to make the button more obvious when the path is not set (instead of just having small colored box that is not obviously clickable)
                 if(stringTarget == ""){

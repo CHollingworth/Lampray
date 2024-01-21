@@ -615,7 +615,7 @@ namespace Lamp::Core::Base{
 
                     ImGui::Begin(x, NULL, windowFlags);
 
-                    ImGui::Text(x);
+                    ImGui::Text("%s", x.c_str());
                     ImGui::Separator();
 
                     ImGui::Text("If an error persists please create an issue on GitHub.");
