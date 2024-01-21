@@ -171,6 +171,15 @@ namespace Lamp::Core::Base{
             bool as_bool() {
                 return (data == "1" || data == "true");
             }
+
+            /**
+             * @brief Get C string equivalent
+             *
+             * @return  A pointer to the c-string representation of the lampString object's value.
+             */
+            const char *c_str() const {
+                return static_cast<const char*>(*this);
+            }
         };
 
         /**
