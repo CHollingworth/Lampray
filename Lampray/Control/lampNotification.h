@@ -9,6 +9,7 @@
 #include <cmath>
 #include <algorithm>
 #include <string>
+#include <array>
 #include "../../third-party/imgui/imgui.h"
 
 
