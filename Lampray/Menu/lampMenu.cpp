@@ -16,8 +16,8 @@ void Lamp::Core::lampMenu::RunMenus() {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     if(Lamp::Core::lampControl::getInstance().inDeployment){
         ImGui::Begin("DEPLOYMENT", NULL, Lamp::Core::lampConfig::getInstance().DefaultWindowFlags());
-        ImGui::Text(Lamp::Core::lampControl::getInstance().deploymentStageTitle.c_str());
-        ImGui::Text((std::to_string(Lamp::Core::lampControl::getInstance().deplopmentTracker.first) + "/" + std::to_string(Lamp::Core::lampControl::getInstance().deplopmentTracker.second)).c_str());
+        ImGui::Text("%s", Lamp::Core::lampControl::getInstance().deploymentStageTitle.c_str());
+        ImGui::Text("%s", (std::to_string(Lamp::Core::lampControl::getInstance().deplopmentTracker.first) + "/" + std::to_string(Lamp::Core::lampControl::getInstance().deplopmentTracker.second)).c_str());
         ImGui::End();
     }else {
         switch (currentMenu) {
@@ -69,9 +69,9 @@ void Lamp::Core::lampMenu::IntroMenu() {
     size = ImGui::CalcTextSize(lampLang::LS("LAMPRAY_LONGNAME")).x + style.FramePadding.x * 2.0f;
     off = (avail - size) * 0.5f;
     if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
-    ImGui::Text(lampLang::LS("LAMPRAY_LONGNAME"));
+    ImGui::Text("%s", lampLang::LS("LAMPRAY_LONGNAME").c_str());
     ImGui::Separator();
-    ImGui::Text(lampLang::LS("LAMPRAY_LICENSE"));
+    ImGui::Text("%s", lampLang::LS("LAMPRAY_LICENSE").c_str());
 
 
 
@@ -97,7 +97,7 @@ void Lamp::Core::lampMenu::ModMenu() {
 
     float off = (avail - size) * 0.5f;
     if (off > 0.0f){ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);}
-    ImGui::Text(lampLang::LS("LAMPRAY_DRAGANDDROP"));
+    ImGui::Text("%s", lampLang::LS("LAMPRAY_DRAGANDDROP").c_str());
 
     size = ImGui::CalcTextSize(lampLang::LS("LAMPRAY_DEPLOY")).x + style.FramePadding.x * 2.0f;
     avail = ImGui::GetContentRegionAvail().x;
@@ -129,7 +129,7 @@ void Lamp::Core::lampMenu::ModMenu() {
         ImGui::SetNextWindowPos(ImVec2(0, 0));
 
         ImGui::Begin(lampLang::LS("LAMPRAY_CHECK"), NULL, Lamp::Core::lampConfig::getInstance().DefaultWindowFlags());
-        ImGui::Text(lampLang::LS("LAMPRAY_STARTTEXT"));
+        ImGui::Text("%s", lampLang::LS("LAMPRAY_STARTTEXT").c_str());
 
         if(ImGui::Button(lampLang::LS("LAMPRAY_START"))){
             deployCheck = !deployCheck;
@@ -344,7 +344,7 @@ void Lamp::Core::lampMenu::createProfileDialog() {
         }
 
 
-        ImGui::Text(lampLang::LS("LAMPRAY_PROFNM"));
+        ImGui::Text("%s", lampLang::LS("LAMPRAY_PROFNM").c_str());
         if(ImGui::InputText("##inputProf",profileBuffer,250, ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button(lampLang::LS("LAMPRAY_PROFCRES"))){
             std::string pb(profileBuffer);
             Lamp::Core::Base::lampMod::Profile::addValue(Lamp::Games::getInstance().currentGame->KeyInfo()["ProfileList"],pb);
