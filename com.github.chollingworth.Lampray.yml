@@ -1,0 +1,17 @@
+id: io.github.chollingworth.Lampray
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+command: /app/lampray
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+modules:
+  - name: lampray
+    buildsystem: simple
+    build-commands:
+      - echo "skipping"
+    sources:
+      - type: file
+        path: ./build/Lamp
+        dest-filename: lampray
