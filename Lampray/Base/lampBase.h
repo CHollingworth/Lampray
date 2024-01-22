@@ -171,6 +171,15 @@ namespace Lamp::Core::Base{
             bool as_bool() {
                 return (data == "1" || data == "true");
             }
+
+            /**
+             * @brief Get C string equivalent
+             *
+             * @return  A pointer to the c-string representation of the lampString object's value.
+             */
+            const char *c_str() const {
+                return static_cast<const char*>(*this);
+            }
         };
 
         /**
@@ -606,7 +615,7 @@ namespace Lamp::Core::Base{
 
                     ImGui::Begin(x, NULL, windowFlags);
 
-                    ImGui::Text(x);
+                    ImGui::Text("%s", x.c_str());
                     ImGui::Separator();
 
                     ImGui::Text("If an error persists please create an issue on GitHub.");

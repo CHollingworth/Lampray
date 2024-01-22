@@ -51,6 +51,6 @@ void Lamp::Core::FS::lampUpdate::getExpression() {
             system(openCommand.c_str());
         }
     }else{
-        ImGui::Text(("v"+versionNumber).c_str());
+        ImGui::Text("%s", ("v"+versionNumber).c_str());
     }
 }
