@@ -297,8 +297,13 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
                 ImGui::MenuItem("Jinxtaposition");
                 ImGui::MenuItem("Airtonix");
                 ImGui::MenuItem("SnazzyPanda");
+                ImGui::MenuItem("makiftasova");
+                ImGui::MenuItem("internetisaiah");
+                ImGui::MenuItem("MagicD3VIL");
+                ImGui::MenuItem("Invisible Friend");
                 ImGui::MenuItem("-------------Donators-------------");
                 ImGui::MenuItem("Plarpoon");
+                ImGui::MenuItem("Den");
                 ImGui::EndMenu();
             }
             ImGui::MenuItem("--------");
