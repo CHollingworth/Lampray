@@ -135,6 +135,10 @@ namespace Lamp::Game {
             return returnModTypes;
         }
 
+        virtual bool installPathSet(){
+            return true;
+        }
+
     protected:
         /**
          * @brief Protected constructor for the game control class.

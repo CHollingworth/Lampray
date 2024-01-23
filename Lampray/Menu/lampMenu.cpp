@@ -124,11 +124,16 @@ void Lamp::Core::lampMenu::ModMenu() {
 
 
     if(deployCheck) {
+        if(!Lamp::Games::getInstance().currentGame->installPathSet()){
+            Lamp::Core::lampNotification::getInstance().pushNotification("warning", "Game paths not set for " + Lamp::Games::getInstance().currentGame->Ident().ReadableName);
+        }
+
         ImGuiIO &io = ImGui::GetIO();
         ImGui::SetNextWindowSize(io.DisplaySize, 0);
         ImGui::SetNextWindowPos(ImVec2(0, 0));
 
         ImGui::Begin(lampLang::LS("LAMPRAY_CHECK"), NULL, Lamp::Core::lampConfig::getInstance().DefaultWindowFlags());
+        Lamp::Core::lampNotification::getInstance().DisplayNotifications();
         ImGui::Text("%s", lampLang::LS("LAMPRAY_STARTTEXT").c_str());
 
         if(ImGui::Button(lampLang::LS("LAMPRAY_START"))){

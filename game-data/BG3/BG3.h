@@ -76,6 +76,14 @@ namespace Lamp::Game {
             std::filesystem::rename(std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods").parent_path() / ("Lampray Managed - " + std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods").stem().string()), std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods"));
         }
 
+        bool installPathSet() override{
+            // if they set the install path, assume they set the appdirpath as well...
+            if(this->KeyInfo()["installDirPath"] == ""){
+                return false;
+            }
+            return true;
+        }
+
 	private:
 
         bool skipMount = false;
