@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Lampray
+Comment=A mod manager for Linux
+Exec=io.github.chollingworth.Lampray
+Icon=io.github.chollingworth.Lampray
+Type=Application
+Categories=Game
