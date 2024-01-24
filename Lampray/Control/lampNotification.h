@@ -94,27 +94,27 @@ namespace Lamp::Core{
             }
         }
 
-        void pushInfoNotification(std::string message){
-            this->addNotification(INFO, message);
+        void pushInfoNotification(std::string message, bool oneTime = false){
+            this->addNotification(INFO, message, oneTime);
         }
-        void pushSuccessNotification(std::string message){
-            this->addNotification(SUCCESS, message);
+        void pushSuccessNotification(std::string message, bool oneTime = false){
+            this->addNotification(SUCCESS, message, oneTime);
         }
-        void pushWarningNotification(std::string message){
-            this->addNotification(WARNING, message);
+        void pushWarningNotification(std::string message, bool oneTime = false){
+            this->addNotification(WARNING, message, oneTime);
         }
-        void pushErrorNotification(std::string message){
-            this->addNotification(ERROR, message);
+        void pushErrorNotification(std::string message, bool oneTime = false){
+            this->addNotification(ERROR, message, oneTime);
         }
-        void pushNotification(std::string notiftype, std::string message){
+        void pushNotification(std::string notiftype, std::string message, bool oneTime = false){
             if(notiftype == "info"){
-                this->pushInfoNotification(message);
+                this->pushInfoNotification(message, oneTime);
             } else if(notiftype == "warning"){
-                this->pushWarningNotification(message);
+                this->pushWarningNotification(message, oneTime);
             } else if(notiftype == "error"){
-                this->pushErrorNotification(message);
+                this->pushErrorNotification(message, oneTime);
             } else if(notiftype == "success"){
-                this->pushSuccessNotification(message);
+                this->pushSuccessNotification(message, oneTime);
             } else{
                 std::cout << "Invalid notification type given: " << notiftype << "\n";
             }
@@ -144,8 +144,19 @@ namespace Lamp::Core{
 
         // array containing a vector of notifications for each type, so typeList<notificationList>
         std::array<std::vector<std::string>, NOTIFTYPE_END_PLACEHOLDER> notifications;
+        // oneTimeNotifications are notifications that should only be displayed once per session (we do not keep track between sessions)
+        std::vector<std::string> oneTimeNotifications;
 
-        void addNotification(int notiftype, std::string message){
+        void addNotification(int notiftype, std::string message, bool oneTime = false){
+            if(oneTime){
+                if((std::find(this->oneTimeNotifications.begin(), this->oneTimeNotifications.end(), message) != this->oneTimeNotifications.end())){
+                    // we have already seen this oneTime notification, so do not try to display it again
+                    return;
+                } else{
+                    this->oneTimeNotifications.push_back(message);
+                }
+            }
+
             // avoid adding duplicate notifications
             if(std::find(this->notifications[notiftype].begin(), this->notifications[notiftype].end(), message) == this->notifications[notiftype].end()){
                 this->notifications[notiftype].push_back(message);

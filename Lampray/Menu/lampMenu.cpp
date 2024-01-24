@@ -125,7 +125,7 @@ void Lamp::Core::lampMenu::ModMenu() {
 
     if(deployCheck) {
         if(!Lamp::Games::getInstance().currentGame->installPathSet()){
-            Lamp::Core::lampNotification::getInstance().pushNotification("warning", "Game paths not set for " + Lamp::Games::getInstance().currentGame->Ident().ReadableName);
+            Lamp::Core::lampNotification::getInstance().pushNotification("warning", "Game paths not set for " + Lamp::Games::getInstance().currentGame->Ident().ReadableName, true);
         }
 
         ImGuiIO &io = ImGui::GetIO();
