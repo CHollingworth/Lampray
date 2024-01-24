@@ -148,13 +148,13 @@ namespace Lamp::Core{
         std::vector<std::string> oneTimeNotifications;
 
         void addNotification(int notiftype, std::string message, bool oneTime = false){
-            if(oneTime){
-                if((std::find(this->oneTimeNotifications.begin(), this->oneTimeNotifications.end(), message) != this->oneTimeNotifications.end())){
-                    // we have already seen this oneTime notification, so do not try to display it again
-                    return;
-                } else{
-                    this->oneTimeNotifications.push_back(message);
-                }
+            if((std::find(this->oneTimeNotifications.begin(), this->oneTimeNotifications.end(), message) != this->oneTimeNotifications.end())){
+                // we have already seen this oneTime notification, so do not try to display it again
+                return;
+            }
+
+            if(oneTime && (std::find(this->oneTimeNotifications.begin(), this->oneTimeNotifications.end(), message) == this->oneTimeNotifications.end())){
+                this->oneTimeNotifications.push_back(message);
             }
 
             // avoid adding duplicate notifications
