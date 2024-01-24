@@ -77,8 +77,7 @@ namespace Lamp::Game {
         }
 
         bool installPathSet() override{
-            // if they set the install path, assume they set the appdirpath as well...
-            if(this->KeyInfo()["installDirPath"] == ""){
+            if(this->KeyInfo()["installDirPath"] == "" || this->KeyInfo()["appDataPath"] == ""){
                 return false;
             }
             return true;
