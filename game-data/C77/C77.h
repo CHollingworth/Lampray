@@ -74,6 +74,13 @@ namespace Lamp::Game {
                 return ModTypeMap;
             }
 
+            bool installPathSet() override{
+                if(this->KeyInfo()["installPath"] == ""){
+                    return false;
+                }
+                return true;
+            }
+
         private:
 
             enum ModType{
