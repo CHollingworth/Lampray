@@ -1,4 +1,6 @@
 site_name: Lampray Docs
+repo_url: https://github.com/CHollingworth/Lampray
+repo_name: CHollingworth/Lampray
 
 # Standard theme with dark mode enabled
 # For feature descriptions, see: https://squidfunk.github.io/mkdocs-material/setup/
@@ -13,7 +15,6 @@ theme:
     - content.tabs.link
     - navigation.path
     - navigation.indexes
-    - navigation.expand
 
 markdown_extensions:
   - admonition
@@ -32,11 +33,10 @@ markdown_extensions:
 # Global site navigation
 nav:
   - Getting started: 'index.md'
+  - Configuration: 'configuration.md'
   - Modding games: 'modding-games.md'
   - Mod types:
       - 'mod-types/index.md'
       - Baldur's Gate 3: 'mod-types/baldurs-gate-3.md'
       - Cyberpunk 2077: 'mod-types/cyberpunk-2077.md'
-  - Customizing Lampray: 'customizing-lampray.md'
-  - Directory structure: 'directory-structure.md'
-  - Frequently Asked Questions: 'frequently-asked-questions.md'
+  - Troubleshooting: 'troubleshooting.md'

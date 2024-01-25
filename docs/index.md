@@ -1,8 +1,8 @@
 # Getting started
 
-Lampray is a mod manager for gaming on Linux! Learn how to install and launch Lampray, so you can start [modding your games](./modding-games.md). 
+> Lampray is a mod manager for gaming on Linux! Learn how to install and launch Lampray, so you can start [modding your games](./modding-games.md). 
 
-## Setting up Lampray 
+## Installing Lampray 
 
 ### Step 1: Install dependencies 
 
@@ -33,12 +33,10 @@ If your setup is successful, you'll see the following output:
 | System Tool | 7-Zip                |
 | System Tool | Zenity               |
 
-### Step 2: Install Lampray
-
-You can use the pre-built executable or build from source to install Lampray.
+### Step 2: Download Lampray 
 
 !!! tip
-    If you're new to Linux or the command-line, we recommended using the pre-built executable.
+    You can use any of the following options to install Lampray. If you're new to Linux, or the command-line, we recommended using the pre-built executable.
 
 === "Pre-built executable"
 
@@ -118,9 +116,9 @@ If they don't already exist, the following files and directories will be created
 └── Lampray
 ```
 
-!!! tip
-    For more information, see [Directory structure](./directory-structure.md).
+!!! note 
+    For more information, see [Directory structure](./configuration.md#directory-structure).
 
 ## Next steps 
 
-Now that you've installed and launched Lampray, you can start [modding your games](./modding-games.md) and [customizing Lampray](./customizing-lampray.md)!
+Now that you've installed and launched Lampray, you can start [modding games](./modding-games.md) and [customizing Lampray](./configuration.md)!

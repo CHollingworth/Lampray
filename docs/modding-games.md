@@ -1,9 +1,9 @@
-# Modding games 
+# Modding games
 
-Learn how to add and remove mods after you're finished [setting up Lampray](./index.md).
+> Learn how to add and remove mods on Linux using Lampray.
 
-!!! tip
-    In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./customizing-lampray.md#setting-the-path-to-7-zip).
+!!! warning 
+    In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./configuration.md#setting-the-path-to-7-zip).
 
 ## Step 1: Set the paths
 
