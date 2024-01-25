@@ -1,30 +1,110 @@
-# Getting started 
+# Getting started
 
-> Lampray is a mod manager for gaming on Linux. Whether you're new to Lampray or a long-time user, the docs are a valuable way to learn how to build, use, and customize Lampray.
+Lampray is a mod manager for gaming on Linux! Learn how to install and launch Lampray, so you can start [modding your games](./modding-games.md). 
 
-## Installation 
+## Setting up Lampray 
 
-> To build Lampray from source, see [Building from source](./building-from-source.md).
+### Step 1: Install dependencies 
 
-Download the [latest release](https://github.com/CHollingworth/Lampray/releases) of Lampray, then move the executable to any location of your choice. For example:
+You can install dependencies manually, or you can use the setup script. To use the setup script, clone the Lampray repository into your home directory, then execute the script:
+
+```
+git clone git@github.com:CHollingworth/Lampray.git ~
+~/Lampray/setup.sh
+``` 
+
+If your setup is successful, you'll see the following output:
 
 ```bash
-mv ~/Downloads/Lampray ~
+==> 💁 [ASDF] Done ✅
 ```
 
-Give Lampray the execute permission.
+#### Dependencies
 
-```bash
-chmod +x ~/Lampray
-```
+| Type        | Name                 |
+|-------------|----------------------|
+| Build Tool  | C++                  |
+| Build Tool  | CMake                |
+| Build Tool  | GCC                  |
+| Build Tool  | ninja-build          |
+| Library     | libcurl4-openssl-dev |
+| Library     | pkg-config           |
+| Library     | SDL2                 |
+| System Tool | 7-Zip                |
+| System Tool | Zenity               |
 
-Launch the Lampray application.
+### Step 2: Install Lampray
+
+You can use the pre-built executable or build from source to install Lampray.
+
+!!! tip
+    If you're new to Linux or the command-line, we recommended using the pre-built executable.
+
+=== "Pre-built executable"
+
+    To install Lampray using the pre-built executable, download the [latest release](https://github.com/CHollingworth/Lampray/releases) of Lampray.
+
+    Move the executable to any location of your choice.
+    
+    ```bash
+    mv ~/Downloads/Lampray ~
+    ```
+    
+    Finally, give Lampray the execute permission.
+    
+    ```bash
+    chmod +x ~/Lampray
+    ```
+
+=== "Assisted build"
+
+    To build Lampray using the included build script, then open or clone the Lampray repository.
+    
+    ```
+    git clone git@github.com:CHollingworth/Lampray.git ~
+    ```
+
+    Build your Lampray executable using the build script.
+
+    ```bash
+    ~/Lampray/build.sh
+    ```
+
+=== "Manual build"
+
+    To Lampray manually, open or clone the Lampray repository.
+
+    ```
+    git clone git@github.com:CHollingworth/Lampray.git ~
+    ``` 
+
+    Generate and configure the build files.
+    
+    ```bash
+    cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=ninja -G Ninja -S ./ -B ./Build
+    ```
+    
+    Open the newly created `Build` directory.
+    
+    ```bash
+    cd Build
+    ```
+    
+    Build the Lampray executable.
+    
+    ```bash
+    ninja
+    ```
+
+### Step 3: Launch Lampray
+
+To launch Lampray, run the following command:
 
 ```bash
 ~/Lampray/Build/Lampray
 ```
 
-The first time you run Lampray, the following files and directories will be created:
+If they don't already exist, the following files and directories will be created the first time you launch Lampray:
 
 ```bash
 ~
@@ -38,8 +118,9 @@ The first time you run Lampray, the following files and directories will be crea
 └── Lampray
 ```
 
+!!! tip
+    For more information, see [Directory structure](./directory-structure.md).
+
 ## Next steps 
 
-- [Managing mods](./managing-mods.md)
-- [Customizing Lampray](./customizing-lampray.md)
-- [Mod types](./mod-types/index.md)
+Now that you've installed and launched Lampray, you can start [modding your games](./modding-games.md) and [customizing Lampray](./customizing-lampray.md)!

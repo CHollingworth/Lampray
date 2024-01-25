@@ -1,13 +1,6 @@
 # Customizing Lampray
 
-> Learn how to customize Lampray's fonts, transparency, color theme, and more.
-
-## Prerequisites
-
-Before you can customize Lampray, you'll need to complete one of the following:
-
-- [Download the latest release](../README.md#quick-start)
-- [Build from source](./building-from-source.md).
+Learn how to customize Lampray's fonts, transparency, color theme, and more.
 
 ## Setting the path to 7-Zip
 

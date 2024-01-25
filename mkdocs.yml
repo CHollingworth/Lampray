@@ -1,18 +1,42 @@
 site_name: Lampray Docs
+
+# Standard theme with dark mode enabled
+# For feature descriptions, see: https://squidfunk.github.io/mkdocs-material/setup/
 theme:
+  logo: assets/lampray-logo.png
   name: material
+  palette:
+    scheme: slate
+    primary: red
   features:
+    - content.code.copy
+    - content.tabs.link
     - navigation.path
     - navigation.indexes
     - navigation.expand
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      toc_depth: 3
+
+# Global site navigation
 nav:
-  - Getting started: index.md
-  - Building from source: building-from-source.md
-  - Managing mods: managing-mods.md
+  - Getting started: 'index.md'
+  - Modding games: 'modding-games.md'
   - Mod types:
-      - mod-types/index.md
-      - Baldur's Gate 3: mod-types/baldurs-gate-3.md
-      - Cyberpunk 2077: mod-types/cyberpunk-2077.md
-  - Customizing Lampray: customizing-lampray.md
-  - About Lampray: about-lampray.md
-  - Frequently Asked Questions: frequently-asked-questions.md
+      - 'mod-types/index.md'
+      - Baldur's Gate 3: 'mod-types/baldurs-gate-3.md'
+      - Cyberpunk 2077: 'mod-types/cyberpunk-2077.md'
+  - Customizing Lampray: 'customizing-lampray.md'
+  - Directory structure: 'directory-structure.md'
+  - Frequently Asked Questions: 'frequently-asked-questions.md'

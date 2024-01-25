@@ -1,93 +1,74 @@
 # Baldur's Gate 3 mod types
 
-> These are the various mod types you can select when [modding your game](../managing-mods.md) for Baldur's Gate 3 (BG3).
+These are the various mod types you can select when [modding your game](../modding-games.md) for Baldur's Gate 3 (BG3).
 
-## Standard Mods
+## Standard mod
 
-Mods using a single `.pak` file. Typically, these are mods that are dependent on other mods.
+Mods using a single `.pak` file. Typically, these are mods that are dependent on other mods. 
 
-### Example
+!!! example
+    ``` shell title="Deployed from"
+    ~/Lamp_Data/Deployment/Baldur's Gate 3/Mods
+    ```
 
-**Deployed from:**
+    ``` shell title="Deployed to"
+    ~/users/steamuser/Appdata/Local/Larian Studios/Baldur's Gate 3/Mods
+    ```
 
-```bash
-~/Lamp_Data/Deployment/Baldur's Gate 3/Mods
-```
+## Engine injection 
 
-**Deployed to:**
+Mods containing DLL's that need to be loaded with the game via NativeModLoader.
 
-```bash
-~/users/steamuser/Appdata/Local/Larian Studios/Baldur's Gate 3/Mods
-```
+!!! example
+    ``` shell title="Deployed from"
+    ~/Lamp_Data/Deployment/Baldur's Gate 3/bin/NativeMods
+    ```
 
-## Engine Injection 
+    ``` shell title="Deployed to"
+    ~/.steam/debian-installation/steamapps/common/Baldurs Gate 3/bin/NativeMods
+    ```
 
-Mods containing DLL's that need to be loaded with the game via NativeModLoader. 
+## Bin overwrite
 
-### Example
+Mods that directly overwrite files in the `/BG3/bin` directory, such as mods that overwrite an executable or core DLLs. This mod type is rare, so it's unlikely you'll need to use this option.
 
-**Deployed from:**
+!!! warning
+    Lampray cannot undo This operation.
 
-```bash
-~/Lamp_Data/Deployment/Baldur's Gate 3/bin/NativeMods
-```
+!!! example
+    ``` shell title="Deployed from"
+    ~/Lamp_Data/Deployment/Baldur's Gate 3/bin
+    ```
 
-**Deployed to:**
+    ``` shell title="Deployed to"
+    ~/.steam/debian-installation/steamapps/common/Baldurs Gate 3/bin
+    ```
 
-```bash
-~/.steam/debian-installation/steamapps/common/Baldurs Gate 3/bin/NativeMods
-```
+## Data overwrite
 
-## Bin Overwrite
+Mods containing loose files, such as textures or meshes for characters and objects. To verify, check if the mod's `.zip` file contains multiple loose files or a single `.pak` file. If it contains loose files, choose **Data Overwrite**.
 
-Mods that directly overwrite files in the `/BG3/bin` directory, such as mods that overwrite an executable or core DLLs. (Only a few mods will ever need this.) _(Lampray cannot undo This operation)._
+!!! warning
+    Lampray cannot undo This operation.
 
-### Example
+!!! example
+    ``` shell title="Deployed from"
+    ~/Lamp_Data/Deployment/Baldur's Gate 3/Data
+    ```
 
-**Deployed from:**
+    ``` shell title="Deployed to"
+    ~/.steam/debian-installation/steamapps/common/Baldurs Gate 3/Data/Generated/Public/SharedDev/Assets/Characters/_Models/path/to/some/modelfile
+    ```
 
-```bash
-~/Lamp_Data/Deployment/Baldur's Gate 3/bin
-```
-
-**Deployed to:**
-
-```bash
-~/.steam/debian-installation/steamapps/common/Baldurs Gate 3/bin
-```
-
-## Data Overwrite
-
-Mods containing loose files, such as textures or meshes for characters and objects. To verify, check if the mod's `.zip` file contains multiple loose files or a single `.pak` file. If it contains loose files, choose **Data Overwrite**. _(Lampray cannot undo This operation)._
-
-### Example
-
-**Deployed from:**
-
-```bash
-~/Lamp_Data/Deployment/Baldur's Gate 3/Data
-```
-
-**Deployed to:**
-
-```bash
-~/.steam/debian-installation/steamapps/common/Baldurs Gate 3/Data/Generated/Public/SharedDev/Assets/Characters/_Models/path/to/some/modelfile
-```
-
-## No Json Mod 
+## No JSON mod 
 
 Mods that contain a single `.pak` file, but **do not** depend on other mods, such as the ImprovedUI, ModFixer, and Better Containers mods.
 
-### Example
+!!! example
+    ``` shell title="Deployed from"
+    ~/Lamp_Data/Deployment/Baldur's Gate 3/Mods
+    ```
 
-**Deployed from:**
-
-```bash
-~/Lamp_Data/Deployment/Baldur's Gate 3/Mods
-```
-
-**Deployed to:**
-
-```bash
-~/.steam/debian-installation/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios/Baldurs Gate 3/Mods
-```
+    ``` shell title="Deployed to"
+    ~/.steam/debian-installation/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios/Baldurs Gate 3/Mods
+    ```
