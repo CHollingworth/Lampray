@@ -1,0 +1,18 @@
+site_name: Lampray Docs
+theme:
+  name: material
+  features:
+    - navigation.path
+    - navigation.indexes
+    - navigation.expand
+nav:
+  - Getting started: index.md
+  - Building from source: building-from-source.md
+  - Managing mods: managing-mods.md
+  - Mod types:
+      - mod-types/index.md
+      - Baldur's Gate 3: mod-types/baldurs-gate-3.md
+      - Cyberpunk 2077: mod-types/cyberpunk-2077.md
+  - Customizing Lampray: customizing-lampray.md
+  - About Lampray: about-lampray.md
+  - Frequently Asked Questions: frequently-asked-questions.md

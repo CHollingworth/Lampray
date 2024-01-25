@@ -26,7 +26,7 @@ You'll need to complete the following steps anytime you add or remove mods using
 1. Download your mods from a mod repository, such as Nexus Mods.
 2. At the top corner, choose the game you'd like to mod.
 3. Drag and drop the `.zip` packages for each mod into Lampray.
-4. Enable each mod, choose their mod type, then set their load order. For more information about each mod type, see [Mod types](./mod-types/supported-games.md). 
+4. Enable each mod, choose their mod type, then set their load order. For more information about each mod type, see [Mod types](./mod-types/index.md). 
 5. Select **Deploy**.
 6. When Lampray is finished deploying your mods, exit Lampray, then launch your game.
 

@@ -7,7 +7,7 @@ Lampray is a mod manager for gaming on Linux! If you'd like to help improve Lamp
 - [Join the Discord](https://discord.gg/5macMedevy)
 - [Contribute](./CONTRIBUTING.md)
 
-If you'd like to learn more about Lampray, see [Lampray Docs](./docs/lampray-docs.md).
+If you'd like to learn more about Lampray, see [Lampray Docs](./docs/index.md).
 
 ## Dependencies
 
