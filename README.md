@@ -5,7 +5,7 @@ Lampray is a mod manager for gaming on Linux! If you'd like to help improve Lamp
 - [Report an issue](https://github.com/CHollingworth/Lampray/issues/new?assignees=&labels=bug&projects=&template=-game--bug-report.md&title=)
 - [Request a feature](https://github.com/CHollingworth/Lampray/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=)
 - [Join the Discord](https://discord.gg/5macMedevy)
-- [Contribute](./CONTRIBUTING.md)
+- [Contribute](./docs/contributing.md)
 
 If you'd like to learn more about Lampray, see [Lampray Docs](./docs/index.md).
 
@@ -36,7 +36,7 @@ If your setup is successful, you'll see the following output:
 | System Tool | 7-Zip                |
 | System Tool | Zenity               |
 
-> **Note:** In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./docs/configuration.md#setting-the-path-to-7-zip).
+> **Note:** In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./docs/customization.md#setting-the-path-to-7-zip).
 
 ## Quick start
 

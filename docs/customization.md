@@ -1,6 +1,6 @@
-# Configuration 
+# Customizing Lampray
 
-> Learn how to configure your Lampray installation by setting custom paths, fonts, colors, and more.
+> Learn how to set custom paths, fonts, colors, and more for your Lampray installation.
 
 ## Directory structure
 
@@ -25,13 +25,13 @@ The directory that stores your mods' `.zip` files when you drag and drop your mo
 
 ### `Config`
 
-The directory that stores your Lampray configuration files, such as `conf.mdf` which is used to [customize Lampray](configuration.md).
+The directory that stores your Lampray configuration files, such as `conf.mdf` which is used to [customize Lampray](customization.md).
 
 ### `Mod_Lists`
 
 The directory containing your games' `.mdf` files which lists the installed game, its mods, and the corresponding [mod types](./mod-types/index.md). This directory is fully managed by Lampray, so there's no need to modify this directory or its contents.
 
-## Set path to 7-Zip
+## Custom 7-Zip path
 
 In most cases, Lampray can find your 7-Zip installation automatically. However, if it's located in a non-standard location, you'll need to manually set the path to `7z.so` in Lampray.
 

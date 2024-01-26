@@ -3,15 +3,15 @@
 > Learn how to add and remove mods on Linux using Lampray.
 
 !!! warning 
-    In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./configuration.md#setting-the-path-to-7-zip).
+    In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./customization.md#setting-the-path-to-7-zip).
 
-## Step 1: Set the paths
+## Step 1: Set paths
 
 You'll need to set the path to your Steam library and game data in Lampray, so your mods are added to the right directories.
 
 In Lampray, select **Lampray** > **Steam Directory**, then follow the on-screen instructions to set the path to your Steam game's root directory and `AppData` directory.
 
-## Step 2: Manage your mods
+## Step 2: Manage mods
 
 You'll need to complete the following steps anytime you want to add or remove mods.
 

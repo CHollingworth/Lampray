@@ -6,7 +6,7 @@
 
 ### Step 1: Install dependencies 
 
-You can install dependencies manually, or you can use the setup script. To use the setup script, clone the Lampray repository into your home directory, then execute the script:
+You can install dependencies manually, or you can use the setup script. To use the setup script, clone the Lampray repository into your home directory, then execute `setup.sh`. 
 
 ```
 git clone git@github.com:CHollingworth/Lampray.git ~
@@ -33,7 +33,7 @@ If your setup is successful, you'll see the following output:
 | System Tool | 7-Zip                |
 | System Tool | Zenity               |
 
-### Step 2: Download Lampray 
+### Step 2: Prepare executable 
 
 !!! tip
     You can use any of the following options to install Lampray. If you're new to Linux, or the command-line, we recommended using the pre-built executable.
@@ -56,9 +56,9 @@ If your setup is successful, you'll see the following output:
 
 === "Assisted build"
 
-    To build Lampray using the included build script, then open or clone the Lampray repository.
+    To build Lampray using the included build script, open or clone the Lampray repository.
     
-    ```
+    ```bash
     git clone git@github.com:CHollingworth/Lampray.git ~
     ```
 
@@ -67,12 +67,18 @@ If your setup is successful, you'll see the following output:
     ```bash
     ~/Lampray/build.sh
     ```
+    
+    If your build is successful, you'll see the following output:
+
+    ```bash
+    📦 Build complete
+    ```
 
 === "Manual build"
 
     To Lampray manually, open or clone the Lampray repository.
 
-    ```
+    ```bash
     git clone git@github.com:CHollingworth/Lampray.git ~
     ``` 
 
@@ -96,7 +102,7 @@ If your setup is successful, you'll see the following output:
 
 ### Step 3: Launch Lampray
 
-To launch Lampray, run the following command:
+To launch Lampray, run:
 
 ```bash
 ~/Lampray/Build/Lampray
@@ -117,8 +123,8 @@ If they don't already exist, the following files and directories will be created
 ```
 
 !!! note 
-    For more information, see [Directory structure](./configuration.md#directory-structure).
+    For more information, see [Directory structure](./customization.md#directory-structure).
 
 ## Next steps 
 
-Now that you've installed and launched Lampray, you can start [modding games](./modding-games.md) and [customizing Lampray](./configuration.md)!
+Now that you've installed and launched Lampray, you can start [modding games](./modding-games.md) and [customizing Lampray](./customization.md)!

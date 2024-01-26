@@ -33,10 +33,11 @@ markdown_extensions:
 # Global site navigation
 nav:
   - Getting started: 'index.md'
-  - Configuration: 'configuration.md'
   - Modding games: 'modding-games.md'
   - Mod types:
       - 'mod-types/index.md'
       - Baldur's Gate 3: 'mod-types/baldurs-gate-3.md'
       - Cyberpunk 2077: 'mod-types/cyberpunk-2077.md'
+  - Customization: 'customization.md'
   - Troubleshooting: 'troubleshooting.md'
+  - Contributing: 'contributing.md'
