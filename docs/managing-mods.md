@@ -15,6 +15,13 @@ You'll need to set the path to your Steam library and game data in Lampray, so y
 
 At the top of the window, select **Lampray** > **Steam Directory**, then follow the on-screen instructions to set the path to your Steam game's root directory and `AppData` directory.
 
+For Steam Deck you need either to connect a keyboard or install **CoreKeyboard** in desktop mode via Discover app (it can be found in the bottom left part of the screen, it has a blue bag icon). To set the path to the game you need to click `Lampray - Baldur's Gate 3 - Default` in the top left corner with your right trackpad and choose `Game Configuration`.  
+
+This is where you need to use CoreKeyboard. Press Ctrl + H to see hidden folders and files. Current paths for Baldur's Gate are:
+` /home/deck/.steam/steamapps/common/Baldurs Gate 3`
+and
+`/home/deck/.steam/steamapps/compdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios/Baldur’s Gate 3`.
+
 ## Step 2: Manage your mods
 
 You'll need to complete the following steps anytime you add or remove mods using Lampray:
