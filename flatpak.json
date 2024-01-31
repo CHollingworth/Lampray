@@ -4,7 +4,12 @@
   "runtime-version": "23.08",
   "sdk": "org.freedesktop.Sdk",
   "command": "Lampray",
-  "finish-args": ["--share=ipc", "--socket=wayland", "--device=dri"],
+  "finish-args": [
+    "--share=ipc",
+    "--socket=wayland",
+    "--device=dri",
+    "--filesystem=host"
+  ],
   "build-options": {
     "cflags": "-O2 -g",
     "cxxflags": "-O2 -g",
