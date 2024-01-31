@@ -25,6 +25,9 @@ ipch
 *.VC.db
 *.VC.VC.opendb
 
+## Flatpak artifacts
+*.flatpak-builder
+
 ## Commonly used CMake directories
 build*/
 
