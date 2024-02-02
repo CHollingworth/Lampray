@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.0.0](https://github.com/CHollingworth/Lampray/compare/v1.3.2...v2.0.0) (2024-01-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* **Filesystem:** Started Support for overlay filesystems instead of copying.
+
+### Features
+
+* Add a basic notification system ([#114](https://github.com/CHollingworth/Lampray/issues/114)) ([3dc1c14](https://github.com/CHollingworth/Lampray/commit/3dc1c14fea53c151b9f38a098f36c8d972c4d25e))
+* Add default text for game path configuration buttons ([#111](https://github.com/CHollingworth/Lampray/issues/111)) ([ee1145d](https://github.com/CHollingworth/Lampray/commit/ee1145d67f586947510651b2e8de32fc283305c0))
+* Added Translation Support. ([0b73828](https://github.com/CHollingworth/Lampray/commit/0b73828732fdd0b0952cda08665b157af6fe162b))
+* **Filesystem:** Started Support for overlay filesystems instead of copying. ([1d8bb90](https://github.com/CHollingworth/Lampray/commit/1d8bb90a75489557e86c124f77fdaee0917501f9))
+
+
+### Bug Fixes
+
+* Display full separator name when slashes are used ([#108](https://github.com/CHollingworth/Lampray/issues/108)) ([f6d57f9](https://github.com/CHollingworth/Lampray/commit/f6d57f91012fbd1e491b934c589a370fa780b20f))
+* Installed p7zip not found due to path being omitted ([#112](https://github.com/CHollingworth/Lampray/issues/112)) ([9bf68a6](https://github.com/CHollingworth/Lampray/commit/9bf68a6f16eb2e6e3e178565c896ae81c1df7df1))
+* Modified BG3 to use overlay. ([af4af84](https://github.com/CHollingworth/Lampray/commit/af4af845dddd3011eddea1e8e708d4a463e08aa4))
+* Updating the 'Building Lampray' doc internetisaiah ([#113](https://github.com/CHollingworth/Lampray/issues/113)) ([51413c5](https://github.com/CHollingworth/Lampray/commit/51413c5ca3e976c2e94b26a183c6fe0a9efaa696))
+
 ## [1.3.2](https://github.com/CHollingworth/Lampray/compare/v1.3.1...v1.3.2) (2023-12-18)
 
 
