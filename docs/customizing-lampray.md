@@ -39,20 +39,24 @@ You can customize your color theme by editing `Lamp_Data/Config/Conf.mdf`.
 
 ### Pre-made Colour Schemes
 
-#### Default
-
+#### Campfire (by Invisable Friend)
 ```sql
-<Colour_WindowBackground>0f0f0f-ef</Colour_WindowBackground>
-<Colour_MenuBar>232323-ff</Colour_MenuBar>
-<Colour_Text>ffffff-ff</Colour_Text>
-<Colour_Button>4296f9-66</Colour_Button>
-<Colour_Hover>4296f9-ff</Colour_Hover>
-<Colour_Pressed>0f87f9-ff</Colour_Pressed>
-<Colour_InputBG>28497a-89</Colour_InputBG>
-<Colour_Separator>6d6d7f-7f</Colour_Separator>
-<Colour_SearchHighlight>4c004c-ff</Colour_SearchHighlight>
+Colour_Text=#FBF1C7FF
+Colour_WindowBackground=#282828FF
+Colour_ToolTipAndTypes=#282828FF
+Colour_InputBG=#181818FF
+Colour_MenuBar=#1D2021FF
+Colour_Button=#D65D0EFF
+Colour_Hover=#FE8019FF
+Colour_Pressed=#AF3A03FF
+Colour_MenuItems=#282828FF
+Colour_HeadHover=#504945FF
+Colour_HeadPressed=#928374FF
+Colour_Separator=#282828FF
+Colour_SeparatorHover=#282828FF
+Colour_SearchHighlight=#504945FF
+Colour_ButtonAlt=#98971AFF
 ```
-
 #### Light Mode
 
 ```sql
@@ -66,36 +70,6 @@ You can customize your color theme by editing `Lamp_Data/Config/Conf.mdf`.
 <Colour_Separator>636363-9e</Colour_Separator>
 <Colour_SearchHighlight>4c004c-ff</Colour_SearchHighlight>
 <Colour_ToolTipAndTypes>ffffff-f9</Colour_ToolTipAndTypes>
-```
-
-#### ImGui 
-
-```sql
-<Colour_WindowBackground>0f0f0f-ef</Colour_WindowBackground>
-<Colour_MenuBar>232323-ff</Colour_MenuBar>
-<Colour_Text>ffffff-ff</Colour_Text>
-<Colour_Button>4296f9-66</Colour_Button>
-<Colour_Hover>4296f9-ff</Colour_Hover>
-<Colour_Pressed>0f87f9-ff</Colour_Pressed>
-<Colour_InputBG>28497a-89</Colour_InputBG>
-<Colour_Separator>6d6d7f-7f</Colour_Separator>
-<Colour_SearchHighlight>4c004c-ff</Colour_SearchHighlight>
-<Colour_ToolTipAndTypes>141414-ef</Colour_ToolTipAndTypes>
-```
-
-#### ImGui Classic
-
-```sql
-<Colour_WindowBackground>000000-d8</Colour_WindowBackground>
-<Colour_MenuBar>66668c-cc</Colour_MenuBar>
-<Colour_Text>e5e5e5-ff</Colour_Text>
-<Colour_Button>59669b-9e</Colour_Button>
-<Colour_Hover>667ab5-c9</Colour_Hover>
-<Colour_Pressed>7589cc-ff</Colour_Pressed>
-<Colour_InputBG>6d6d6d-63</Colour_InputBG>
-<Colour_Separator>7f7f7f-99</Colour_Separator>
-<Colour_SearchHighlight>4c004c-ff</Colour_SearchHighlight>
-<Colour_ToolTipAndTypes>1c1c23-ea</Colour_ToolTipAndTypes>
 ```
 
 #### Warlock Purple
