@@ -1,3 +1,4 @@
+---
 on:
   push:
     branches:
@@ -83,4 +84,37 @@ jobs:
           else
             gh release upload ${RELEASE_TAG} ./build/Lampray#lamp-${RELEASE_TAG}
           fi
-          
+
+      - uses: actions/upload-artifact@v4
+        id: artifact-upload
+        with:
+          name: lampray-release-binary
+          path: ./build/Lamp
+
+  FlatPak:
+    needs:
+      - ReleaseAutomation
+    runs-on: ubuntu-22.04
+
+    container:
+      # gnome-45
+      # https://hub.docker.com/layers/bilelmoussaoui/flatpak-github-actions/gnome-45/images/sha256-16e884b42f6cfdbed3c2baaa3f2da621c7f4db25e53036b3b814ad0b67fcf5e2?context=explore
+      image: bilelmoussaoui/flatpak-github-actions@sha256:16e884b42f6cfdbed3c2baaa3f2da621c7f4db25e53036b3b814ad0b67fcf5e2
+      options: --privileged
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: lampray-release-binary
+
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: lampray.flatpak
+          manifest-path: org.github.chollingworth.Lampray.yml
+          cache-key: flatpak-builder-${{ github.sha }}
+
+      - uses: actions/upload-artifact@v4
+        id: artifact-upload
+        with:
+          name: lampray-release-binary
+          path: ./build/Lamp

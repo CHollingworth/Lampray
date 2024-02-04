@@ -1,3 +1,4 @@
+
 # Building from source
 
 > Learn how to build Lampray from source. When you're finished, you'll be able to [mod your games using Lampray](./managing-mods.md).
@@ -7,7 +8,9 @@
 To clone the Lampray repository into your home directory, run the following command:
 
 ```
-git clone git@github.com:CHollingworth/Lampray.git ~
+cd ~
+git clone git@github.com:CHollingworth/Lampray.git
+cd ./Lampray
 ```
 
 ## Step 2: Install dependencies
@@ -30,13 +33,13 @@ Lampray requires the following:
 
 You can either these dependencies manually or use the included setup script. To use the setup script, run the following command:
 
-```bash
-~/Lampray/setup.sh
+```sh
+./setup.sh
 ```
 
 If your setup is successful, you'll see the following output:
 
-```bash
+```sh
 ==> 💁 [ASDF] Done ✅
 ```
 
@@ -48,7 +51,7 @@ You can build Lampray by [using the Lampray build script](#build-script-recommen
 
 To build Lampray using the included build script, run the following command:
 
-```bash
+```sh
 ~/Lampray/build.sh
 ```
 
@@ -60,7 +63,7 @@ If your build is successful, you'll see the following output:
 
 Finally, launch Lampray.
 
-```bash
+```sh
 ~/Lampray/Build/Lampray
 ```
 
@@ -68,24 +71,24 @@ Finally, launch Lampray.
 
 To generate and configure Lampray's build files manually, run the following command:
 
-```bash
+```sh
 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=ninja -G Ninja -S ./ -B ./Build
 ```
 
 Open the newly created `Build` directory.
 
-```bash
+```sh
 cd Build
 ```
 
 Build the Lampray executable.
 
-```bash
+```sh
 ninja
 ```
 
 Finally, launch Lampray.
 
-```bash
+```sh
 ~/Lampray/Build/Lampray
 ```

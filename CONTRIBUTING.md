@@ -36,7 +36,8 @@ Push your changes to your forked repository.
 2. Fill in the pull request title with the following format
     1. for new features, `feat: your feature oneliner name`
     2. for bugfixes or minor changes: `fix: your bugfix oneline name`
-    3. for other kinds, see https://www.conventionalcommits.org/en/v1.0.0/#summary
+    3. for fixes or features to ci: `chore(ci): your ci change oneline name`
+    4. for other kinds, see https://www.conventionalcommits.org/en/v1.0.0/#summary
 3. Follow the pull request template and fill in detailed description of your changes.
 
 ## 9.  Discuss and Review
