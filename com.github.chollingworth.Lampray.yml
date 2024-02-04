@@ -1,4 +1,4 @@
-id: io.github.chollingworth.Lampray
+id: com.github.chollingworth.Lampray
 runtime: org.freedesktop.Platform
 runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
