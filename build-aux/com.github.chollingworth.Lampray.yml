@@ -17,11 +17,16 @@ build-options:
   arch:
     x86_64:
       cflags: "-O3 -g" # Use -O3 for x86_64 builds
+cleanup:
+  - "/app/*"
+  - "!/app/src" # Don't remove the source code
+  - "!/app/bin/Lampray" # Don't remove the built binary
 modules:
   - name: Lampray
     buildsystem: cmake-ninja
     builddir: true
     build-commands:
+      - cp -r . /app/src # Copy the source code to the build directory
       - install -D Lampray /app/bin/Lampray
     config-opts:
       - -DCMAKE_BUILD_TYPE=Debug
