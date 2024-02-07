@@ -1,0 +1,31 @@
+app-id: com.github.chollingworth.Lampray
+runtime: org.freedesktop.Platform
+runtime-version: "23.08"
+sdk: org.freedesktop.Sdk
+command: Lampray
+only-arches:
+  - x86_64 # Only build for x86_64
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11 # Enable X11 support
+  - --device=dri
+  - --filesystem=host
+build-options:
+  env:
+    V: "1" # Enable verbose build output for all build systems
+  arch:
+    x86_64:
+      cflags: "-O3 -g" # Use -O3 for x86_64 builds
+modules:
+  - name: Lampray
+    buildsystem: cmake-ninja
+    builddir: true
+    build-commands:
+      - install -D Lampray /app/bin/Lampray
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Debug
+      - -DCMAKE_MAKE_PROGRAM=ninja
+    sources:
+      - type: dir
+        path: "../"

@@ -1,0 +1,12 @@
+name: p7zip
+buildsystem: simple
+build-commands:
+  - install -d /app/p7zip
+  - unzip linux-cmake-p7zip.zip -d /app/p7zip
+cleanup:
+  - "*"
+sources:
+  - type: archive
+    url: https://github.com/p7zip-project/p7zip/releases/download/v17.05/linux-cmake-p7zip.zip
+    sha256: 5c14a69015342c0724bfa2c6937dea1989858c29dc725b8c2fbe2ef0f584e0a7
+    dest: .

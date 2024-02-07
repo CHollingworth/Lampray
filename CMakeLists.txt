@@ -3,9 +3,6 @@ project(Lampray)
 
 set(CMAKE_CXX_STANDARD 17)
 
-
-
-
 add_executable(Lampray main.cpp
         third-party/imgui/imconfig.h
         third-party/imgui/imgui.cpp
@@ -50,9 +47,6 @@ add_executable(Lampray main.cpp
         Lampray/Lang/lampLang.h
 )
 
-
-
-
 find_package(PkgConfig REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/third-party/bit7z/lib/x64/libbit7z64.a )
@@ -60,7 +54,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/third-part
 
 target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/third-party/nfd/lib/libnfd.a )
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/third-party/nfd/include/include/nfd.h )
-
 
 # Find the SDL2 package
 find_package(SDL2 REQUIRED)
@@ -82,7 +75,5 @@ find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
 
-
 target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/third-party/l4z/liblz4.so)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/third-party/l4z/)
-
