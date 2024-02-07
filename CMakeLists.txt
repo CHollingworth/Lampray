@@ -85,4 +85,3 @@ target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
 
 target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/third-party/l4z/liblz4.so)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/third-party/l4z/)
-
