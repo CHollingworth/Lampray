@@ -21,6 +21,7 @@ cleanup:
   - "/app/*"
   - "!/app/src" # Don't remove the source code
   - "!/app/bin/Lampray" # Don't remove the built binary
+  - "!/app/p7zip" # Don't remove the p7zip directory
 modules:
   - name: Lampray
     buildsystem: cmake-ninja
@@ -34,3 +35,4 @@ modules:
     sources:
       - type: dir
         path: "../"
+  - "modules/50-p7zip.yml"
