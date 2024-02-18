@@ -588,12 +588,22 @@ namespace Lamp::Core{
                 ImGui::Text("%s", displayString.c_str());
                 ImGui::Text("%s", toolTip.c_str());
 
-                // set some default text to make the button more obvious when the path is not set (instead of just having small colored box that is not obviously clickable)
-                if(stringTarget == ""){
-                    stringTarget = (std::string) lampLang::LS("LAMPRAY_SELECT_PATH");
+                // I think 4096 is the max length of a path on linux, but I may be wrong, and this may need to be changed.
+                static char gamePathBuf[4096] = "";
+                strncpy(gamePathBuf, stringTarget.c_str(), sizeof(gamePathBuf));
+
+                ImGui::InputText(("##"+keyPath+"_text_input").c_str(), gamePathBuf, 4096);
+
+                // if the user has changed the text field, save the changes to avoid them getting wiped out when they leave the text input
+                // I dislike updating the config file on each character change, but this should function for now
+                if(strcmp(gamePathBuf, stringTarget.c_str()) != 0){
+                    Lamp::Core::FS::lampIO::saveKeyData(keyPath,gamePathBuf,Lamp::Games::getInstance().currentGame->Ident().ShortHand);
+                    Lamp::Games::getInstance().currentGame->KeyInfo()[keyPath] = gamePathBuf;
                 }
 
-                if(ImGui::Button((stringTarget+"##"+displayString).c_str())) {
+                ImGui::SameLine();
+
+                if(ImGui::Button(((std::string) lampLang::LS("LAMPRAY_SELECT_PATH")+"##"+keyPath).c_str())) {
                     nfdchar_t *outPath = NULL;
                     nfdresult_t result = NFD_PickFolder(NULL, &outPath);
 
