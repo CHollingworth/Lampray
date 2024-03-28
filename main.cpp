@@ -116,6 +116,7 @@ int main(int, char**)
     file.close();
 
     Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampControl::getFormattedTimeAndDate()+" | | Battle Control Online, Welcome Back Commander.", Lamp::Core::Base::lampLog::LOG);
+    Lamp::Core::Base::lampLog::getInstance().log("Lampray version: " + Lamp::Core::FS::lampUpdate::getInstance().versionNumber);
 
     Lamp::Games::getInstance();
 
