@@ -135,6 +135,14 @@ namespace Lamp::Game {
             return returnModTypes;
         }
 
+        /**
+         * @brief Checks if all necessary paths are configured for the given game.
+         * @return true if all necessary paths are set for this game, otherwise false.
+         */
+        virtual bool installPathSet(){
+            return true;
+        }
+
     protected:
         /**
          * @brief Protected constructor for the game control class.
