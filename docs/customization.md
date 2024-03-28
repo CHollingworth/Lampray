@@ -1,15 +1,37 @@
 # Customizing Lampray
 
-> Learn how to customize Lampray's fonts, transparency, color theme, and more.
+> Learn how to set custom paths, fonts, colors, and more for your Lampray installation.
 
-## Prerequisites
+## Directory structure
 
-Before you can customize Lampray, you'll need to complete one of the following:
+These are the primary directories used to configure Lampray:
 
-- [Download the latest release](../README.md#quick-start)
-- [Build from source](./building-from-source.md).
+```bash
+Lampray
+└── Build
+    └── Lamp_Data 
+        ├── Archive
+        ├── Config
+        └── Mod_Lists 
+```
 
-## Setting the path to 7-Zip
+### `Lamp_Data`
+
+The directory where Lampray stores all the necessary files needed for deployment before you [deploy your mods](modding-games.md#adding-mods). This directory is fully managed by Lampray, so there's no need to modify this directory or its contents.
+
+### `Archives`
+
+The directory that stores your mods' `.zip` files when you drag and drop your mods' `.zip` files into Lampray. This directory is fully managed by Lampray, so there's no need to modify this directory or its contents.
+
+### `Config`
+
+The directory that stores your Lampray configuration files, such as `conf.mdf` which is used to [customize Lampray](customization.md).
+
+### `Mod_Lists`
+
+The directory containing your games' `.mdf` files which lists the installed game, its mods, and the corresponding [mod types](./mod-types/index.md). This directory is fully managed by Lampray, so there's no need to modify this directory or its contents.
+
+## Custom 7-Zip path
 
 In most cases, Lampray can find your 7-Zip installation automatically. However, if it's located in a non-standard location, you'll need to manually set the path to `7z.so` in Lampray.
 
@@ -19,7 +41,7 @@ First open `~/Lampray/Config/config.mdf` in your text editor, then find and repl
 <bit7zLibaryLocation>/usr/lib/p7zip/7z.so</bit7zLibaryLocation>
 ```
 
-## Customizing your font
+## Custom fonts
 
 You can customize your font by creating a `Lamp_Font` directory within `Lamp_Data` and adding a `.ttf` file. Your file tree should be similar to the following:
 
@@ -33,11 +55,11 @@ Lamp_Data
 └── Mod_Lists
 ```
 
-## Customizing your color theme
+## Custom themes
 
 You can customize your color theme by editing `Lamp_Data/Config/Conf.mdf`.
 
-### Pre-made Colour Schemes
+### Pre-made themes 
 
 #### Campfire (by Invisable Friend)
 ```sql

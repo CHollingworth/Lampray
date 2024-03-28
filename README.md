@@ -1,17 +1,28 @@
-# ![alt text](https://cdn.discordapp.com/attachments/1160692058017763581/1175551711281168456/LMP-64.png?ex=656ba4d8&is=65592fd8&hm=ccaf321556119a09510514835ccadded74ee8bcc02fb48ec5697d5e9defcdd22&) Lampray 
+# ![Lampray logo](https://cdn.discordapp.com/attachments/1160692058017763581/1175551711281168456/LMP-64.png?ex=656ba4d8&is=65592fd8&hm=ccaf321556119a09510514835ccadded74ee8bcc02fb48ec5697d5e9defcdd22&) Lampray 
 
 Lampray is a mod manager for gaming on Linux! If you'd like to help improve Lampray, you can:
 
 - [Report an issue](https://github.com/CHollingworth/Lampray/issues/new?assignees=&labels=bug&projects=&template=-game--bug-report.md&title=)
 - [Request a feature](https://github.com/CHollingworth/Lampray/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=)
 - [Join the Discord](https://discord.gg/5macMedevy)
-- [Contribute](./CONTRIBUTING.md)
+- [Contribute](./docs/contributing.md)
 
-If you'd like to learn more about Lampray, see [Lampray Docs](./docs/lampray-docs.md).
+If you'd like to learn more about Lampray, see [Lampray Docs](./docs/index.md).
 
 ## Dependencies
 
-Lampray requires the following:
+You can install dependencies manually, or you can use the setup script. To use the setup script, clone the Lampray repository into your home directory, then execute the script:
+
+```
+git clone git@github.com:CHollingworth/Lampray.git ~
+~/Lampray/setup.sh
+``` 
+
+If your setup is successful, you'll see the following output:
+
+```bash
+==> 💁 [ASDF] Done ✅
+```
 
 | Type        | Name                 |
 |-------------|----------------------|
@@ -25,19 +36,19 @@ Lampray requires the following:
 | System Tool | 7-Zip                |
 | System Tool | Zenity               |
 
-> **Note:** In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./docs/customizing-lampray.md#setting-the-path-to-7-zip).
+> **Note:** In most cases, Lampray can find your 7-zip installation. However, if it's located in a non-standard location, you'll need to [manually set the path to 7-Zip](./docs/customization.md#setting-the-path-to-7-zip).
 
 ## Quick start
 
-> To build Lampray from source, see [Building from source](./docs/building-from-source.md).
+> For a full walkthrough, or for building Lampray from source, see [Installing Lampray](./docs/index.md).
 
-Download the [latest release](https://github.com/CHollingworth/Lampray/releases) of Lampray, then move the executable to any location of your choice. For example:
+To install Lampray using the pre-built executable, download the [latest release](https://github.com/CHollingworth/Lampray/releases) of Lampray, then move the executable to any location of your choice.
 
 ```bash
 mv ~/Downloads/Lampray ~
 ```
 
-Give Lampray the execute permission.
+Finally, give Lampray the execute permission.
 
 ```bash
 chmod +x ~/Lampray
@@ -63,7 +74,7 @@ The first time you run Lampray, the following files and directories will be crea
 └── Lampray
 ```
 
-Now you're ready to [mod your game](./docs/managing-mods.md).
+Now you're ready to [mod your game](./docs/modding-games.md).
 
 ## Supported games
 
