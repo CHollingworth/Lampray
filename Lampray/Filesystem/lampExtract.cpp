@@ -27,13 +27,16 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
                                                      true, Base::lampLog::LMP_EXTRACTIONFALED);
         }
     } else if (std::regex_match((std::string)mod->ArchivePath, std::regex("^.*\\.(rar)$"))) {
-
-        // Rar Extraction Goes Here!
-
-        //[mod->ArchivePath] Path to the archive to extract
-
-        //[workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string()] Folder path for files to extract to.
-
+        try {
+            bit7z::Bit7zLibrary lib{Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation};
+            bit7z::BitArchiveReader reader{lib, mod->ArchivePath, bit7z::BitFormat::Rar};
+            reader.test();
+            reader.extract(workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string());
+            return Base::lampLog::getInstance().pLog({1, "Extraction Successful. : "+ mod->ArchivePath},  Base::lampLog::LOG);
+        } catch (const bit7z::BitException &ex) {
+            return Base::lampLog::getInstance().pLog({0, "Could not extract file : "+ mod->ArchivePath},  Base::lampLog::ERROR,
+                                                     true, Base::lampLog::LMP_EXTRACTIONFALED);
+        }
     } else if (std::regex_match((std::string)mod->ArchivePath, std::regex("^.*\\.(7z)$"))) {
         try {
             bit7z::Bit7zLibrary lib{Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation};
