@@ -192,9 +192,7 @@ void Lamp::Core::FS::lampIO::fileDrop(const char *inputPath) {
         std::filesystem::path path(inputPath);
         std::error_code ec;
         if (std::filesystem::is_regular_file(path, ec)) {
-            // Reenable rar support here.
-            //if (std::regex_match(path.filename().string(), std::regex("^.*\\.(zip|rar|7z)$"))) {
-            if (std::regex_match(path.filename().string(), std::regex("^.*\\.(zip|7z)$"))) {
+            if (std::regex_match(path.filename().string(), std::regex("^.*\\.(zip|rar|7z)$"))) {
                 std::filesystem::path targetDIR = Core::lampConfig::getInstance().archiveDataPath +
                         Lamp::Games::getInstance().currentGame->Ident().ReadableName; // Roi Danton many thanks again!
                 auto target = targetDIR / path.filename();
