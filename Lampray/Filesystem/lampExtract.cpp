@@ -52,7 +52,7 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
         } else {
             // unrar seems to exist, so use it instead
             auto rar_base_out = workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string();
-            auto unrar_cmd_string = "unrar e \"" + (std::string)mod->ArchivePath + "\" \""+rar_base_out+"\"";
+            auto unrar_cmd_string = "unrar e \"" + (std::string)mod->ArchivePath + "\" \""+rar_base_out+"\"  > /dev/null 2>&1";
             //system(("unrar e \"" + (std::string)mod->ArchivePath + "\" \""+workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string()+"\"").c_str());
             system(unrar_cmd_string.c_str());
         }
