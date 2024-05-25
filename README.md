@@ -1,4 +1,4 @@
-# ![alt text](https://cdn.discordapp.com/attachments/1160692058017763581/1175551711281168456/LMP-64.png?ex=656ba4d8&is=65592fd8&hm=ccaf321556119a09510514835ccadded74ee8bcc02fb48ec5697d5e9defcdd22&) Lampray 
+# ![Lampray](logo/LMP-64.png) Lampray
 
 Lampray is a mod manager for gaming on Linux! If you'd like to help improve Lampray, you can:
 
