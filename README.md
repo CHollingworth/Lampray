@@ -69,7 +69,7 @@ Now you're ready to [mod your game](./docs/managing-mods.md).
 
 ### Currently supported
 
-> **Note:** At this time, mods using `.rar` files are not supported.
+> **Note:** At this time, mods using `.rar` files have limited support.
 
 - Baldur's Gate 3
 - Cyberpunk 2077

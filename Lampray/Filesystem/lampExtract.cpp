@@ -27,22 +27,51 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
                                                      true, Base::lampLog::LMP_EXTRACTIONFALED);
         }
     } else if (std::regex_match((std::string)mod->ArchivePath, std::regex("^.*\\.(rar)$"))) {
+
+        auto rar_base_out = workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string();
+
+        if(!system("which 7z > /dev/null 2>&1")) {
+            auto sevenz_cmd_string = "7z e \"" + (std::string)mod->ArchivePath + "\" -o\""+rar_base_out+"\"  > /dev/null 2>&1";
+            int result = system(sevenz_cmd_string.c_str());
+
+            if(result == 0){
+                return Base::lampLog::getInstance().pLog({1, "Extraction Successful with 7z : " + mod->ArchivePath},  Base::lampLog::LOG);
+            } else{
+                // do not return so we can attempt the next method as well
+                Base::lampLog::getInstance().pLog({0, "Could not extract file with 7z : " + mod->ArchivePath},
+                                                     Base::lampLog::ERROR, false, Base::lampLog::LMP_EXTRACTIONFALED);
+            }
+        }
+
+        if(!system("which unrar > /dev/null 2>&1")){
+            auto unrar_cmd_string = "unrar e \"" + (std::string)mod->ArchivePath + "\" \""+rar_base_out+"\"  > /dev/null 2>&1";
+            int result = system(unrar_cmd_string.c_str());
+            if(result == 0){
+                return Base::lampLog::getInstance().pLog({1, "Extraction Successful with unrar : " + mod->ArchivePath},  Base::lampLog::LOG);
+            } else{
+                // do not return so we can attempt the next method as well
+                Base::lampLog::getInstance().pLog({0, "Could not extract file with unrar : " + mod->ArchivePath},
+                                                     Base::lampLog::ERROR, false, Base::lampLog::LMP_EXTRACTIONFALED);
+            }
+        }
+
         try {
             bit7z::Bit7zLibrary lib{Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation};
             bit7z::BitArchiveReader reader{lib, mod->ArchivePath, bit7z::BitFormat::Rar5};
             reader.test();
-            reader.extract(workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string());
+            reader.extract(rar_base_out);
             return Base::lampLog::getInstance().pLog({1, "Extraction Successful. : "+ mod->ArchivePath},  Base::lampLog::LOG);
         } catch (const bit7z::BitException &ex) {
+            // try using an alternate Rar format
             try {
                 bit7z::Bit7zLibrary lib{Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation};
                 bit7z::BitArchiveReader reader{lib, mod->ArchivePath, bit7z::BitFormat::Rar};
                 reader.test();
-                reader.extract(workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string());
+                reader.extract(rar_base_out);
                 return Base::lampLog::getInstance().pLog({1, "Extraction Successful. : "+ mod->ArchivePath},  Base::lampLog::LOG);
             } catch (const bit7z::BitException &ex2) {
                 return Base::lampLog::getInstance().pLog({0, "Could not extract file : "+ mod->ArchivePath + "\nMessages:\n" + ex.what() + "\n" + ex2.what()},
-                                                     Base::lampLog::ERROR, true, Base::lampLog::LMP_EXTRACTIONFALED);
+                                                        Base::lampLog::ERROR, true, Base::lampLog::LMP_EXTRACTIONFALED);
             }
         }
     } else if (std::regex_match((std::string)mod->ArchivePath, std::regex("^.*\\.(7z)$"))) {
