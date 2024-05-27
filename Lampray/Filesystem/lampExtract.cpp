@@ -39,7 +39,7 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
             } else{
                 // do not return so we can attempt the next method as well
                 Base::lampLog::getInstance().pLog({0, "Could not extract file with 7z : " + mod->ArchivePath},
-                                                     Base::lampLog::ERROR, true, Base::lampLog::LMP_EXTRACTIONFALED);
+                                                     Base::lampLog::ERROR, false, Base::lampLog::LMP_EXTRACTIONFALED);
             }
         }
 
@@ -51,7 +51,7 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
             } else{
                 // do not return so we can attempt the next method as well
                 Base::lampLog::getInstance().pLog({0, "Could not extract file with unrar : " + mod->ArchivePath},
-                                                     Base::lampLog::ERROR, true, Base::lampLog::LMP_EXTRACTIONFALED);
+                                                     Base::lampLog::ERROR, false, Base::lampLog::LMP_EXTRACTIONFALED);
             }
         }
 
