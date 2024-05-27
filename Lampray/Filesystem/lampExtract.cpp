@@ -31,8 +31,8 @@ Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lamp
         auto rar_base_out = workingDir + "/ext/" + std::filesystem::path(mod->ArchivePath).filename().stem().string();
 
         if(!system("which 7z > /dev/null 2>&1")) {
-            auto unrar_cmd_string = "7z e \"" + (std::string)mod->ArchivePath + "\" -o\""+rar_base_out+"\"  > /dev/null 2>&1";
-            int result = system(unrar_cmd_string.c_str());
+            auto sevenz_cmd_string = "7z e \"" + (std::string)mod->ArchivePath + "\" -o\""+rar_base_out+"\"  > /dev/null 2>&1";
+            int result = system(sevenz_cmd_string.c_str());
 
             if(result == 0){
                 return Base::lampLog::getInstance().pLog({1, "Extraction Successful with 7z : " + mod->ArchivePath},  Base::lampLog::LOG);
