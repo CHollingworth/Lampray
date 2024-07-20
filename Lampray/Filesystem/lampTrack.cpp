@@ -1,6 +1,7 @@
 //
 // Created by charles on 10/10/23.
 //
+#include <algorithm>
 #include <filesystem>
 #include "lampFS.h"
 std::string Lamp::Core::FS::lampTrack::getHash(std::filesystem::path filePath) {
@@ -320,7 +321,3 @@ void Lamp::Core::FS::lampTrack::deleteModFile(const std::filesystem::path &modFi
         Lamp::Core::Base::lampLog::getInstance().log("ModFile not found or is not a regular file: " + (std::string)modFilePath, Lamp::Core::Base::lampLog::LOG);
     }
 }
-
-
-
-
