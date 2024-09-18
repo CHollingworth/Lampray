@@ -133,9 +133,9 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
     // Create the version node
     pugi::xml_node version = save.append_child("version");
     version.append_attribute("major").set_value(4);
-    version.append_attribute("minor").set_value(2);
-    version.append_attribute("revision").set_value(0);
-    version.append_attribute("build").set_value(100);
+    version.append_attribute("minor").set_value(7);
+    version.append_attribute("revision").set_value(1);
+    version.append_attribute("build").set_value(3);
 
     // Create the region node
     pugi::xml_node region = save.append_child("region");
@@ -148,13 +148,6 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
     // Create the children node
     pugi::xml_node children = node.append_child("children");
 
-    // Create the ModOrder node
-    pugi::xml_node modOrder = children.append_child("node");
-    modOrder.append_attribute("id").set_value("ModOrder");
-
-    // Create the children node for ModOrder (empty in your example)
-    pugi::xml_node modOrderChildren = modOrder.append_child("children");
-
     // Create the Mods node
     pugi::xml_node mods = children.append_child("node");
     mods.append_attribute("id").set_value("Mods");
@@ -162,13 +155,9 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
     // Create the children node for Mods (empty in your example)
     pugi::xml_node modsChildren = mods.append_child("children");
 
-
-
-
-
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 4;
     Core::Base::lampLog::getInstance().log("Cleaning modsettings.lsx", Core::Base::lampLog::warningLevel::LOG);
-    pugi::xml_node modOrderNode = doc.select_node("//node[@id='ModOrder']").node();
+    pugi::xml_node modOrderNode = doc.select_node("//node[@id='Mods']").node();
     pugi::xml_node modsNode = doc.select_node("//node[@id='Mods']").node();
 
     if (modOrderNode) {
@@ -179,7 +168,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
             modOrderNode.append_child("children");
         }
     } else {
-        return {-1, "ModOrder section not found."};
+        return {-1, "Mods section not found."};
     }
     if (modsNode) {
         pugi::xml_node childrenNode = modsNode.child("children");
@@ -216,7 +205,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
 
     pugi::xml_node uuidAttrib = newShortDescNode.append_child("attribute");
     uuidAttrib.append_attribute("id") = "UUID";
-    uuidAttrib.append_attribute("type") = "FixedString";
+    uuidAttrib.append_attribute("type") = "guid";
     uuidAttrib.append_attribute("value") = "28ac9ce2-2aba-8cda-b3b5-6e922f71b6b8";
 
 

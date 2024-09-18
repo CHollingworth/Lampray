@@ -100,17 +100,8 @@ namespace Lamp::Core::Parse{
                 return false;
             }
 
-            pugi::xml_node moduleNode = doc.select_node("//node[@id='ModOrder']").node();
+            pugi::xml_node moduleNode = doc.select_node("//node[@id='Mods']").node();
             pugi::xml_node childrenNode = moduleNode.child("children");
-            pugi::xml_node newNode = childrenNode.append_child("node");
-            newNode.append_attribute("id") = "Module";
-            pugi::xml_node attributes = newNode.append_child("attribute");
-            attributes.append_attribute("id") = "UUID";
-            attributes.append_attribute("value") = UUID.c_str();
-            attributes.append_attribute("type") = "FixedString";
-
-            pugi::xml_node modsNode = doc.select_node("//node[@id='Mods']").node();
-            childrenNode = modsNode.child("children");
 
             pugi::xml_node newShortDescNode = childrenNode.append_child("node");
             newShortDescNode.append_attribute("id") = "ModuleShortDesc";
@@ -132,7 +123,7 @@ namespace Lamp::Core::Parse{
 
             pugi::xml_node uuidAttrib = newShortDescNode.append_child("attribute");
             uuidAttrib.append_attribute("id") = "UUID";
-            uuidAttrib.append_attribute("type") = "FixedString";
+            uuidAttrib.append_attribute("type") = "guid";
             uuidAttrib.append_attribute("value") = UUID.c_str();
 
 
@@ -331,17 +322,8 @@ namespace Lamp::Core::Parse{
 
                             std::string UUID = mod["UUID"];
 
-                            pugi::xml_node moduleNode = doc.select_node("//node[@id='ModOrder']").node();
+                            pugi::xml_node moduleNode = doc.select_node("//node[@id='Mods']").node();
                             pugi::xml_node childrenNode = moduleNode.child("children");
-                            pugi::xml_node newNode = childrenNode.append_child("node");
-                            newNode.append_attribute("id") = "Module";
-                            pugi::xml_node attributes = newNode.append_child("attribute");
-                            attributes.append_attribute("id") = "UUID";
-                            attributes.append_attribute("value") = UUID.c_str();
-                            attributes.append_attribute("type") = "FixedString";
-
-                            pugi::xml_node modsNode = doc.select_node("//node[@id='Mods']").node();
-                            childrenNode = modsNode.child("children");
 
                             pugi::xml_node newShortDescNode = childrenNode.append_child("node");
                             newShortDescNode.append_attribute("id") = "ModuleShortDesc";
@@ -363,7 +345,7 @@ namespace Lamp::Core::Parse{
 
                             pugi::xml_node uuidAttrib = newShortDescNode.append_child("attribute");
                             uuidAttrib.append_attribute("id") = "UUID";
-                            uuidAttrib.append_attribute("type") = "FixedString";
+                            uuidAttrib.append_attribute("type") = "guid";
                             uuidAttrib.append_attribute("value") = UUID.c_str();
 
 
