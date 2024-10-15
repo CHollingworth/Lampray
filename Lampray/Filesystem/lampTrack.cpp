@@ -1,6 +1,7 @@
 //
 // Created by charles on 10/10/23.
 //
+#include <algorithm>
 #include <filesystem>
 #include "lampFS.h"
 std::string Lamp::Core::FS::lampTrack::getHash(std::filesystem::path filePath) {
