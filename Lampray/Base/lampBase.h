@@ -538,7 +538,8 @@ namespace Lamp::Core::Base{
             LMP_KEYSAVEFAILED,     ///< Failed to save a key.
             LMP_KEYLOADFAILED,     ///< Failed to load a key.
             LMP_EXTRACTIONFALED,   ///< Archive extraction failed.
-            LMP_NOCONFIG           ///< Configuration file not found.
+            LMP_NOCONFIG,          ///< Configuration file not found.
+            LMP_FILEHANDLEFAILED,  ///< Failed to handle file being added.
         };
 
         std::list<std::string> poplist = {};

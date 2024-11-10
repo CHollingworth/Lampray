@@ -123,6 +123,14 @@ namespace Lamp::Core::FS{
         static lampReturn loadKeyData(lampString key, Lamp::Core::FS::lampString game);
 
         /**
+         * @brief Handles files either via drag&drop or the add mod button.
+         *
+         * This function handles the file passed to it via drag and drop or the add mod button and registers the mod file.
+         * @param path The path to the file
+         */
+        static void handleFile(const std::filesystem::path &path);
+
+        /**
          * @brief Empties a folder with optional filtering by file extension.
          *
          * This function empties a folder by deleting its contents, optionally filtering by a specific file extension.
