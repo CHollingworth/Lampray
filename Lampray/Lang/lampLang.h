@@ -158,6 +158,7 @@ For more information, please refer to <https://unlicense.org>)");
                 addLangNode("LAMPRAY_ABT", "About");
                 addLangNode("LAMPRAY_ABT1", "Created by");
                 addLangNode("LAMPRAY_QUIT", "Quit");
+                addLangNode("LAMPRAY_ADD_MOD_BUTTON", "Add Mod");
                 addLangNode("LAMPRAY_MODLIST_ENABLE", "Enabled");
                 addLangNode("LAMPRAY_MODLIST_DISABLE", "Disabled");
                 addLangNode("LAMPRAY_MODLIST_EXPND", "Expand");

@@ -191,6 +191,19 @@ namespace Lamp::Core{
          */
             void createImguiMenu(){
                 ImGuiIO &io = ImGui::GetIO();
+                // Add mod button
+                if (ImGui::Button(lampLang::LS("LAMPRAY_ADD_MOD_BUTTON"), ImVec2(io.DisplaySize.x, 0.0f))) {
+                    nfdchar_t *modPath = nullptr;
+                    if (nfdresult_t result = NFD_OpenDialog("zip,rar,7z,tar.xz,tar.gz,.pak", nullptr, &modPath); result == NFD_OKAY) {
+                        puts("Got a file!");
+                        puts(modPath);
+                        FS::lampIO::handleFile(modPath);
+                    } else if (result == NFD_CANCEL) {
+                        puts("Cancelled!");
+                    } else {
+                        printf("Error: %s\n", NFD_GetError());
+                    }
+                }
                 ImGui::SetNextItemWidth(io.DisplaySize.x);
                 if (ImGui::InputTextWithHint("##searcher",lampLang::LS("LAMPRAY_MODLIST_SEARCH"), lampConfig::getInstance().searchBuffer, 250)) {
                     lampConfig::getInstance().listHighlight = findClosestMatchPosition();
