@@ -129,12 +129,12 @@ int main(int, char**)
         Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
     }
     Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"]=(std::string)Lamp::Core::FS::lampIO::loadKeyData("showIntroMenu","LAMP CONFIG").returnReason;
-    Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibaryLocation","LAMP CONFIG").returnReason;
+    Lamp::Core::lampConfig::getInstance().bit7zLibraryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibraryLocation","LAMP CONFIG").returnReason;
     bool found7z = Lamp::Core::lampConfig::getInstance().init();
     if(!found7z){
         Lamp::Core::lampNotification::getInstance().pushErrorNotification(Lamp::Core::lampLang::getInstance().LS("LAMPRAY_ERROR_7Z"));
     }
-    Lamp::Core::FS::lampIO::saveKeyData("bit7zLibaryLocation", Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation, "LAMP CONFIG");
+    Lamp::Core::FS::lampIO::saveKeyData("bit7zLibraryLocation", Lamp::Core::lampConfig::getInstance().bit7zLibraryLocation, "LAMP CONFIG");
 
     Lamp::Core::lampMenu Menus;
     // This is a very inefficent way of doing this.

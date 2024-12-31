@@ -197,7 +197,7 @@ void Lamp::Core::FS::lampShare::importProfile() {
     Lamp::Core::lampControl::getInstance().inDeployment = true;
     Lamp::Core::lampControl::getInstance().deploymentStageTitle = "Importing Profile";
     Lamp::Core::lampControl::getInstance().deplopmentTracker = {0,11};
-    bit7z::Bit7zLibrary lib{Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation};
+    bit7z::Bit7zLibrary lib{Lamp::Core::lampConfig::getInstance().bit7zLibraryLocation};
     std::filesystem::create_directories("import/");
     nfdchar_t *outPath = NULL;
     nfdresult_t result = NFD_OpenDialog( "lampProfile", NULL, &outPath );
@@ -329,7 +329,7 @@ void Lamp::Core::FS::lampShare::exportProfile(std::string profileNameS) {
         Lamp::Core::lampControl::getInstance().inDeployment = true;
         Lamp::Core::lampControl::getInstance().deploymentStageTitle = "Creating "+profileName +".lampProfile";
         Lamp::Core::lampControl::getInstance().deplopmentTracker = {0,3};
-        bit7z::Bit7zLibrary lib{Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation};
+        bit7z::Bit7zLibrary lib{Lamp::Core::lampConfig::getInstance().bit7zLibraryLocation};
         std::vector<Lamp::Core::Base::lampMod::Mod *> TempModList = Lamp::Core::FS::lampIO::loadModList(
                 Lamp::Games::getInstance().currentGame->Ident().ShortHand, profileName);
         std::map<std::string, std::string> files_map = {};

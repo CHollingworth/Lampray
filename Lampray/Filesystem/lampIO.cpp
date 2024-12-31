@@ -211,7 +211,7 @@ void Lamp::Core::FS::lampIO::fileDrop(const char *inputPath) {
                 }
             } if(std::regex_match(path.filename().string(), std::regex("^.*\\.(pak)$"))){
                 if((std::string)Lamp::Games::getInstance().currentGame->Ident().ReadableName == "Baldur's Gate 3") {
-                    bit7z::Bit7zLibrary lib{ Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation };
+                    bit7z::Bit7zLibrary lib{ Lamp::Core::lampConfig::getInstance().bit7zLibraryLocation };
                     bit7z::BitArchiveWriter archive{ lib, bit7z::BitFormat::SevenZip };
                     archive.addFile(path);
                     archive.compressTo(lampConfig::getInstance().archiveDataPath+"/"+path.filename().string()+" LMP.zip" );
