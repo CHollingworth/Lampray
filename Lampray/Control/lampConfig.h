@@ -44,7 +44,7 @@ namespace Lamp::Core {
         const lampString DeploymentDataPath = baseDataPath + "Deployment/";
         const lampString workingPaths = baseDataPath + "WorkingDirectories/";
 
-        lampString bit7zLibaryLocation = "";
+        lampString bit7zLibraryLocation = "";
 
         const bool defaultCheckForUpdateAtStart = true;
         bool checkForUpdatesAtStartup = true;

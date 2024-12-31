@@ -7,17 +7,17 @@
 bool Lamp::Core::lampConfig::init() {
         Base::lampLog::getInstance().log("Initializing Lampray");
 
-        if((std::string)bit7zLibaryLocation == "") {
+        if((std::string)bit7zLibraryLocation == "") {
             Base::lampLog::getInstance().log("Searching for 7z.so");
             std::filesystem::path f{"/usr/libexec/p7zip/7z.so"};
             if (std::filesystem::exists(f)) {
-                bit7zLibaryLocation = "/usr/libexec/p7zip/7z.so";
+                bit7zLibraryLocation = "/usr/libexec/p7zip/7z.so";
             } else if (exists(std::filesystem::path{"/usr/lib/p7zip/7z.so"})) {
-                bit7zLibaryLocation = "/usr/lib/p7zip/7z.so";
+                bit7zLibraryLocation = "/usr/lib/p7zip/7z.so";
             } else if (exists(std::filesystem::path{"/usr/lib64/p7zip/7z.so"})) {
-                bit7zLibaryLocation = "/usr/lib64/p7zip/7z.so";
+                bit7zLibraryLocation = "/usr/lib64/p7zip/7z.so";
             } else if (exists(std::filesystem::path{"/usr/libexec/7z.so"})) {
-                bit7zLibaryLocation = "/usr/libexec/7z.so";
+                bit7zLibraryLocation = "/usr/libexec/7z.so";
             } else {
                 Base::lampLog::getInstance().log("Fatal. Cannot locate 7z.so", Base::lampLog::ERROR, true,
                                                  Base::lampLog::LMP_NO7ZP);
