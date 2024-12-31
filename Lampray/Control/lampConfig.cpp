@@ -18,6 +18,8 @@ bool Lamp::Core::lampConfig::init() {
                 bit7zLibraryLocation = "/usr/lib64/p7zip/7z.so";
             } else if (exists(std::filesystem::path{"/usr/libexec/7z.so"})) {
                 bit7zLibraryLocation = "/usr/libexec/7z.so";
+            } else if (exists(std::filesystem::path{"/usr/lib/7zip/7z.so"})) {
+                bit7zLibraryLocation = "/usr/lib/7zip/7z.so";
             } else {
                 Base::lampLog::getInstance().log("Fatal. Cannot locate 7z.so", Base::lampLog::ERROR, true,
                                                  Base::lampLog::LMP_NO7ZP);
