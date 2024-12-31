@@ -134,6 +134,27 @@ namespace Lamp::Core::Base{
                 return data < other.data;
             }
 
+
+            /**
+             *  brief Custom equality operator for lampStrings
+             *
+             * @param other The lampString to compare with
+             * @return true if the contents of the strings are the same, false otherwise.
+             */
+            bool operator==(const lampString& other) const {
+              return data == other.data;
+            }
+
+            /**
+             * @brief Custom equality operator for C-style strings
+             *
+             * @param the string to compare to
+             * @return true if the contents of the strings are the same, fale otherwise.
+             */
+            bool operator==(const char* other) const {
+              return data == other;
+            }
+
             /**
              * @brief Custom operator to convert a lampString to a C-style string (const char*).
              *
