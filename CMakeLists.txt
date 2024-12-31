@@ -39,7 +39,7 @@ add_executable(Lampray main.cpp
         Lampray/Filesystem/lampUpdate.cpp
         Lampray/Control/lampGames.h
         Lampray/Filesystem/lampShare.cpp
-        "Lampray/Menu/lampCustomise .h"
+        Lampray/Menu/lampCustomise.h
         Lampray/Filesystem/lampTrack.cpp
         game-data/C77/C77.cpp
         game-data/C77/C77.h

@@ -4,7 +4,7 @@
 #include "Lampray/Lang/lampLang.h"
 #include "Lampray/Control/lampControl.h"
 #include "Lampray/Menu/lampMenu.h"
-#include "Lampray/Menu/lampCustomise .h"
+#include "Lampray/Menu/lampCustomise.h"
 #include <stdio.h>
 #include "SDL2/SDL.h"
 
