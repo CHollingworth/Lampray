@@ -35,10 +35,9 @@ namespace Lamp::Core {
         }
 
         lampConfig(lampConfig const&) = delete;
-        void operator=(lampConfig const&)  = delete;
+        void operator=(lampConfig const&) = delete;
 
-        //((std::string)std::getenv("HOME")) + "/.lamp/
-        const lampString baseDataPath = "Lamp_Data/";
+        const lampString baseDataPath = lampString(std::getenv("HOME")) + "/.lampray/";
         const lampString saveDataPath = baseDataPath + "Mod_Lists/";
         const lampString archiveDataPath = baseDataPath + "Archives/";
         const lampString ConfigDataPath = baseDataPath + "Config/";
