@@ -2,6 +2,7 @@
 // Created by charles on 27/09/23.
 //
 
+#include <filesystem>
 #include <regex>
 #include "BG3.h"
 #include "../../Lampray/Control/lampControl.h"
@@ -232,15 +233,11 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
 
     Lamp::Core::lampControl::getInstance().deplopmentTracker.first = 6;
 
-    if(std::filesystem::is_empty(keyInfo["installDirPath"])){
-        // Overlay did exist, not anymore.
-    }
-
     std::filesystem::path installPath(keyInfo["installDirPath"]);
     if (std::filesystem::exists(installPath) && std::filesystem::is_directory(installPath) &&
             std::filesystem::exists(installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string())) &&
             std::filesystem::is_directory(installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string()))) {
-        if(std::filesystem::is_empty(std::filesystem::path(keyInfo["installDirPath"]))){
+        if(std::filesystem::is_empty(installPath)){
             system(("pkexec umount \""+Lamp::Games::getInstance().currentGame->KeyInfo()["installDirPath"]+"\"").c_str());
             try {
                 std::filesystem::rename(
@@ -251,28 +248,29 @@ Lamp::Game::lampReturn Lamp::Game::BG3::preCleanUp() {
             }
 
             skipMount = false;
-        }else {
+        } else {
             skipMount = true;
         }
+    }
+    
+    std::filesystem::path appPath(keyInfo["appDataPath"]);
+    std::filesystem::path tempAppPath(appPath.parent_path() / ("Lampray Managed - " + appPath.stem().string()));
+    
+    if(std::filesystem::exists(appPath) && std::filesystem::is_directory(appPath)
+        && std::filesystem::exists(tempAppPath) && std::filesystem::is_directory(tempAppPath)) {
+        
         if(std::filesystem::is_empty(std::filesystem::path(KeyInfo()["appDataPath"]+"/Mods"))){
             system(("pkexec umount \""+Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods\"").c_str());
             try {
-                std::filesystem::rename(std::filesystem::path(KeyInfo()["appDataPath"] + "/Mods").parent_path() /
-                                        ("Lampray Managed - " +
-                                         std::filesystem::path(KeyInfo()["appDataPath"] + "/Mods").stem().string()),
-                                        std::filesystem::path(KeyInfo()["appDataPath"] + "/Mods"));
+                std::filesystem::rename(tempAppPath / "Mods",
+                                        appPath / "Mods");
             } catch (std::exception ex) {
 
             }
             skipMount = false;
+        } else {
+          skipMount = true;
         }
-
-        std::cout << "The version directory exists in the parent path." << std::endl;
-    } else {
-        if(std::filesystem::is_empty(keyInfo["installDirPath"])){
-            // panic
-        }
-        // we good
     }
 
 //    std::string managedString = std::string("Lampray Managed - ") + gamePath.filename().string();
