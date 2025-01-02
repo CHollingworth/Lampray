@@ -4,9 +4,9 @@ project(Lampray)
 set(CMAKE_CXX_STANDARD 17)
 
 
+option(USE_XDG_DIRECTORY "Use XDG directory to store data instead of the working directory" ON)
 
-
-add_executable(Lampray main.cpp
+add_executable(${PROJECT_NAME} main.cpp
         third-party/imgui/imconfig.h
         third-party/imgui/imgui.cpp
         third-party/imgui/imgui.h
@@ -50,6 +50,9 @@ add_executable(Lampray main.cpp
         Lampray/Lang/lampLang.h
 )
 
+if(USE_XDG_DIRECTORY) 
+  target_compile_definitions(${PROJECT_NAME} PUBLIC USE_XDG)
+endif(USE_XDG_DIRECTORY)
 
 
 

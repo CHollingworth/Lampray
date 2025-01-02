@@ -7,6 +7,7 @@
 
 #include <list>
 #include <filesystem>
+#include <variant>
 #include "../../game-data/gameControl.h"
 #include "../Base/lampBase.h"
 
@@ -36,8 +37,8 @@ namespace Lamp::Core {
 
         lampConfig(lampConfig const&) = delete;
         void operator=(lampConfig const&) = delete;
-
-        const lampString baseDataPath = lampString(std::getenv("HOME")) + "/.lampray/";
+    
+        const lampString baseDataPath = getBaseDataPath();
         const lampString saveDataPath = baseDataPath + "Mod_Lists/";
         const lampString archiveDataPath = baseDataPath + "Archives/";
         const lampString ConfigDataPath = baseDataPath + "Config/";
@@ -77,6 +78,23 @@ namespace Lamp::Core {
          * The constructor is private to ensure that only one instance of `lampConfig` can exist.
          */
         lampConfig(){};
+
+        static lampString getBaseDataPath() {
+          std::string ret = "";
+#ifdef USE_XDG
+          char *xdg_data_home = std::getenv("XDG_DATA_HOME");
+
+          if (!xdg_data_home) {
+            ret += std::getenv("HOME"); 
+            ret += "/.local/share";
+          }
+          
+          ret += "/lampray/";
+#else 
+          ret = "Lamp_Data/";
+#endif
+          return lampString(ret);
+        }
     };
 };
 #endif //LAMP_LAMPCONFIG_H
