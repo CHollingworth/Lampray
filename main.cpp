@@ -1,3 +1,4 @@
+#include "Lampray/Control/lampConfig.h"
 #include "third-party/imgui/imgui.h"
 #include "third-party/imgui/imgui_impl_sdl2.h"
 #include "third-party/imgui/imgui_impl_sdlrenderer2.h"
@@ -47,7 +48,7 @@ int main(int, char**)
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer2_Init(renderer);
 
-    std::filesystem::path fontFolder("Lamp_Font/");
+    auto fontFolder = Lamp::Core::lampConfig::getInstance().baseDataPath + "Fonts/";
 
     // Check if the "Font" folder exists
     if (std::filesystem::is_directory(fontFolder)) {
@@ -61,26 +62,19 @@ int main(int, char**)
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    std::string languageCheck = Lamp::Core::FS::lampIO::loadKeyData("LanguagePath", "LAMP CONFIG");
-    Lamp::Core::lampLang::getInstance().CurrentLanguage = Lamp::Core::lampLang::LanguageContainer();
-
-    if(languageCheck != ""){
-        if (!std::filesystem::exists(languageCheck)) {
-            Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampLang::getInstance().CurrentLanguage.build(languageCheck).returnReason);
-        }else{
-            if (!std::filesystem::exists("Lamp_Language/English (UK).xml")) {
-                Lamp::Core::lampLang::getInstance().createEnglishUK();
-            }
-            Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampLang::getInstance().CurrentLanguage.build("Lamp_Language/English (UK).xml").returnReason);
-        }
-    }else{
-        if (!std::filesystem::exists("Lamp_Language/English (UK).xml")) {
-            Lamp::Core::lampLang::getInstance().createEnglishUK();
-        }
-        Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampLang::getInstance().CurrentLanguage.build("Lamp_Language/English (UK).xml").returnReason);
+    std::string preferredLanguage = Lamp::Core::FS::lampIO::loadKeyData("LanguagePath", "LAMP CONFIG");
+    Lamp::Core::lampLang::getInstance().CurrentLanguage = Lamp::Core::lampLang::LanguageContainer(); 
+    
+    auto languageLoaded = Lamp::Core::lampLang::getInstance()
+                          .CurrentLanguage.build(preferredLanguage);
+    Lamp::Core::Base::lampLog::getInstance().log(languageLoaded.returnReason);
+    if(!languageLoaded) {
+        auto path = Lamp::Core::lampLang::getInstance().createEnglishUK();
+        Lamp::Core::Base::lampLog::getInstance().log(
+          Lamp::Core::lampLang::getInstance()
+            .CurrentLanguage.build(path)
+              .returnReason);
     }
-
-
 
 
 
