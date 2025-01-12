@@ -1,5 +1,35 @@
 # Changelog
 
+## [2.0.0](https://github.com/CHollingworth/Lampray/compare/v1.3.2...v2.0.0) (2025-01-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* **Filesystem:** Started Support for overlay filesystems instead of copying.
+
+### Features
+
+* Add a basic notification system ([#114](https://github.com/CHollingworth/Lampray/issues/114)) ([3dc1c14](https://github.com/CHollingworth/Lampray/commit/3dc1c14fea53c151b9f38a098f36c8d972c4d25e))
+* Add default text for game path configuration buttons ([#111](https://github.com/CHollingworth/Lampray/issues/111)) ([ee1145d](https://github.com/CHollingworth/Lampray/commit/ee1145d67f586947510651b2e8de32fc283305c0))
+* Add text input fields for entering game configuration paths ([#120](https://github.com/CHollingworth/Lampray/issues/120)) ([#133](https://github.com/CHollingworth/Lampray/issues/133)) ([e70be9f](https://github.com/CHollingworth/Lampray/commit/e70be9fbee247810dcb1fabe2fdf1f62fd84b917))
+* Add warning notifications when game paths are not set ([#124](https://github.com/CHollingworth/Lampray/issues/124)) ([c90e038](https://github.com/CHollingworth/Lampray/commit/c90e0384a9db2333c64794bc56261d2c91915579))
+* added instruction for steam deck ([#127](https://github.com/CHollingworth/Lampray/issues/127)) ([25dee96](https://github.com/CHollingworth/Lampray/commit/25dee96ae74bed8992dcc824945fe0386722ca5b))
+* Added Translation Support. ([0b73828](https://github.com/CHollingworth/Lampray/commit/0b73828732fdd0b0952cda08665b157af6fe162b))
+* changed directory for where data is stored to be fixed (+ some code fixes) ([#164](https://github.com/CHollingworth/Lampray/issues/164)) ([29d9296](https://github.com/CHollingworth/Lampray/commit/29d92967452f4634b03273fbc457c9a307e94ebf))
+* **Filesystem:** Started Support for overlay filesystems instead of copying. ([1d8bb90](https://github.com/CHollingworth/Lampray/commit/1d8bb90a75489557e86c124f77fdaee0917501f9))
+* Include the current Lampray version in the log for debugging ([#140](https://github.com/CHollingworth/Lampray/issues/140)) ([99c0201](https://github.com/CHollingworth/Lampray/commit/99c0201b7f8d2f54ce797468b5676f6bf5b8b2f1))
+* patch 7 compatible ([#159](https://github.com/CHollingworth/Lampray/issues/159)) ([88b11dd](https://github.com/CHollingworth/Lampray/commit/88b11dd3b5a342088bbec6a51164d11819d29b98))
+* Re-enable rar support ([#144](https://github.com/CHollingworth/Lampray/issues/144)) ([c549fbf](https://github.com/CHollingworth/Lampray/commit/c549fbfbd6ad18b2eca0a6d17b6066d1f74c54b7))
+
+
+### Bug Fixes
+
+* Display full separator name when slashes are used ([#108](https://github.com/CHollingworth/Lampray/issues/108)) ([f6d57f9](https://github.com/CHollingworth/Lampray/commit/f6d57f91012fbd1e491b934c589a370fa780b20f))
+* Fixed the readme logo ([#145](https://github.com/CHollingworth/Lampray/issues/145)) ([7ca24b6](https://github.com/CHollingworth/Lampray/commit/7ca24b6a5dfaf7e52927f42ae81cd9e031c11090))
+* Installed p7zip not found due to path being omitted ([#112](https://github.com/CHollingworth/Lampray/issues/112)) ([9bf68a6](https://github.com/CHollingworth/Lampray/commit/9bf68a6f16eb2e6e3e178565c896ae81c1df7df1))
+* Modified BG3 to use overlay. ([af4af84](https://github.com/CHollingworth/Lampray/commit/af4af845dddd3011eddea1e8e708d4a463e08aa4))
+* Updating the 'Building Lampray' doc internetisaiah ([#113](https://github.com/CHollingworth/Lampray/issues/113)) ([51413c5](https://github.com/CHollingworth/Lampray/commit/51413c5ca3e976c2e94b26a183c6fe0a9efaa696))
+
 ## [1.3.2](https://github.com/CHollingworth/Lampray/compare/v1.3.1...v1.3.2) (2023-12-18)
 
 
