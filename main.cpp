@@ -1,10 +1,11 @@
+#include "Lampray/Control/lampConfig.h"
 #include "third-party/imgui/imgui.h"
 #include "third-party/imgui/imgui_impl_sdl2.h"
 #include "third-party/imgui/imgui_impl_sdlrenderer2.h"
 #include "Lampray/Lang/lampLang.h"
 #include "Lampray/Control/lampControl.h"
 #include "Lampray/Menu/lampMenu.h"
-#include "Lampray/Menu/lampCustomise .h"
+#include "Lampray/Menu/lampCustomise.h"
 #include <stdio.h>
 #include "SDL2/SDL.h"
 
@@ -47,7 +48,7 @@ int main(int, char**)
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer2_Init(renderer);
 
-    std::filesystem::path fontFolder("Lamp_Font/");
+    auto fontFolder = Lamp::Core::lampConfig::getInstance().baseDataPath + "Fonts/";
 
     // Check if the "Font" folder exists
     if (std::filesystem::is_directory(fontFolder)) {
@@ -61,26 +62,19 @@ int main(int, char**)
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    std::string languageCheck = Lamp::Core::FS::lampIO::loadKeyData("LanguagePath", "LAMP CONFIG");
-    Lamp::Core::lampLang::getInstance().CurrentLanguage = Lamp::Core::lampLang::LanguageContainer();
-
-    if(languageCheck != ""){
-        if (!std::filesystem::exists(languageCheck)) {
-            Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampLang::getInstance().CurrentLanguage.build(languageCheck).returnReason);
-        }else{
-            if (!std::filesystem::exists("Lamp_Language/English (UK).xml")) {
-                Lamp::Core::lampLang::getInstance().createEnglishUK();
-            }
-            Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampLang::getInstance().CurrentLanguage.build("Lamp_Language/English (UK).xml").returnReason);
-        }
-    }else{
-        if (!std::filesystem::exists("Lamp_Language/English (UK).xml")) {
-            Lamp::Core::lampLang::getInstance().createEnglishUK();
-        }
-        Lamp::Core::Base::lampLog::getInstance().log(Lamp::Core::lampLang::getInstance().CurrentLanguage.build("Lamp_Language/English (UK).xml").returnReason);
+    std::string preferredLanguage = Lamp::Core::FS::lampIO::loadKeyData("LanguagePath", "LAMP CONFIG");
+    Lamp::Core::lampLang::getInstance().CurrentLanguage = Lamp::Core::lampLang::LanguageContainer(); 
+    
+    auto languageLoaded = Lamp::Core::lampLang::getInstance()
+                          .CurrentLanguage.build(preferredLanguage);
+    Lamp::Core::Base::lampLog::getInstance().log(languageLoaded.returnReason);
+    if(!languageLoaded) {
+        auto path = Lamp::Core::lampLang::getInstance().createEnglishUK();
+        Lamp::Core::Base::lampLog::getInstance().log(
+          Lamp::Core::lampLang::getInstance()
+            .CurrentLanguage.build(path)
+              .returnReason);
     }
-
-
 
 
 
@@ -129,12 +123,12 @@ int main(int, char**)
         Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
     }
     Lamp::Core::lampConfig::getInstance().lampFlags["showIntroMenu"]=(std::string)Lamp::Core::FS::lampIO::loadKeyData("showIntroMenu","LAMP CONFIG").returnReason;
-    Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibaryLocation","LAMP CONFIG").returnReason;
+    Lamp::Core::lampConfig::getInstance().bit7zLibraryLocation = (std::string)Lamp::Core::FS::lampIO::loadKeyData("bit7zLibraryLocation","LAMP CONFIG").returnReason;
     bool found7z = Lamp::Core::lampConfig::getInstance().init();
     if(!found7z){
         Lamp::Core::lampNotification::getInstance().pushErrorNotification(Lamp::Core::lampLang::getInstance().LS("LAMPRAY_ERROR_7Z"));
     }
-    Lamp::Core::FS::lampIO::saveKeyData("bit7zLibaryLocation", Lamp::Core::lampConfig::getInstance().bit7zLibaryLocation, "LAMP CONFIG");
+    Lamp::Core::FS::lampIO::saveKeyData("bit7zLibraryLocation", Lamp::Core::lampConfig::getInstance().bit7zLibraryLocation, "LAMP CONFIG");
 
     Lamp::Core::lampMenu Menus;
     // This is a very inefficent way of doing this.

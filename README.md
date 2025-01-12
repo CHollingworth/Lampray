@@ -51,6 +51,17 @@ Launch the Lampray application.
 
 The first time you run Lampray, the following files and directories will be created:
 
+If the CMake option `USE_XDG_DIRECTORY` is set (default):
+```bash
+~
+└── $XDG_DATA_HOME
+    ├── Archives
+    ├── Config
+    ├── Deployment
+    ├── Language
+    └── Mod_Lists
+```
+If `USE_XDG_DIRECTORY` is not set:
 ```bash
 ~
 ├── imgui.ini
@@ -58,11 +69,11 @@ The first time you run Lampray, the following files and directories will be crea
 │   ├── Archives
 │   ├── Config
 │   ├── Deployment
+│   ├── Language
 │   └── Mod_Lists
 ├── lamp.log
 └── Lampray
 ```
-
 Now you're ready to [mod your game](./docs/managing-mods.md).
 
 ## Supported games

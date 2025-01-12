@@ -5,10 +5,12 @@
 #ifndef LAMPRAY_LAMPLANG_H
 #define LAMPRAY_LAMPLANG_H
 
+#include <filesystem>
 #include <string>
 #include <map>
 #include <pugixml.hpp>
 #include <unordered_set>
+#include "../Control/lampConfig.h"
 #include "../Base/lampBase.h"
 
 namespace Lamp {
@@ -49,10 +51,10 @@ namespace Lamp {
 
                 }
 
-                Base::lampTypes::lampReturn build(Base::lampTypes::lampString filePath){
+                Base::lampTypes::lampReturn build(const std::filesystem::path& filePath){
 
                     if (!std::filesystem::exists(filePath)) {
-                        return {false, "File not found: " + filePath};
+                        return {false, "File not found: " + filePath.string()};
                     }
 
                     // Load the XML document
@@ -68,7 +70,7 @@ namespace Lamp {
                     if (langNode) {
                         LanguageName = langNode.attribute("name").value();
                     } else {
-                        return {false,"Failed to load language. No Name."};
+                        return {false, "Failed to load language. No Name."};
                     }
 
                     for (pugi::xml_node node = langNode.child("LangNode"); node; node = node.next_sibling("LangNode")) {
@@ -93,7 +95,7 @@ namespace Lamp {
 
             LanguageContainer CurrentLanguage;
 
-            void createEnglishUK(){
+            std::filesystem::path createEnglishUK(){
                 pugi::xml_document doc;
                 auto root = doc.append_child("LamprayLang");
                 root.append_attribute("name").set_value("English (UK)");
@@ -194,8 +196,13 @@ This action cannot be undone.)");
                 addLangNode("LAMPRAY_SELECT_PATH", "Select Path");
                 addLangNode("LAMPRAY_ERROR_7Z", "Failed to find 7z.so! Many actions, such as deployment, will not function correctly. See the wiki for more information.");
                 addLangNode("LAMPRAY_WARN_GAME_PATH", " directories are not set. Deployment will not work until you have set them in the Game Configuration menu.");
-                std::filesystem::create_directories("Lamp_Language/");
-                doc.save_file("Lamp_Language/English (UK).xml");
+
+                auto baseDirectory = Lamp::Core::lampConfig::getInstance().baseDataPath + "Language/";
+                std::filesystem::create_directory(baseDirectory);
+                
+                std::filesystem::path path = baseDirectory + "English (UK).xml";
+                doc.save_file(path.c_str());
+                return path; 
             }
 
         private:

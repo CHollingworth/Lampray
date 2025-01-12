@@ -1,10 +1,9 @@
 //
 // Created by charles on 27/09/23.
-//
-#include "lampMenu.h"
-#include "lampCustomise .h"
-#include "../Lang/lampLang.h"
 #include <cstdlib>
+#include "lampMenu.h"
+#include "lampCustomise.h"
+#include "../Lang/lampLang.h"
 #include "../Control/lampNotification.h"
 
 void Lamp::Core::lampMenu::RunMenus() {

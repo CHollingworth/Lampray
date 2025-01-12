@@ -16,7 +16,7 @@ In most cases, Lampray can find your 7-Zip installation automatically. However, 
 First open `~/Lampray/Config/config.mdf` in your text editor, then find and replace the following line with the path to your `7z.so` utility.
 
 ```sql
-<bit7zLibaryLocation>/usr/lib/p7zip/7z.so</bit7zLibaryLocation>
+<bit7zLibraryLocation>/usr/lib/p7zip/7z.so</bit7zLibraryLocation>
 ```
 
 ## Customizing your font
