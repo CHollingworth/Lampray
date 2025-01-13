@@ -188,11 +188,12 @@ namespace Lamp {
                         ImGui::DragFloat(lampLang::LS("LAMPRAY_CUSTOM_FONT"), &io.FontGlobalScale, 0.005f, MIN_SCALE, MAX_SCALE, "%.2f",
                                          ImGuiSliderFlags_AlwaysClamp);
                     }
+#ifdef CHECK_FOR_UPDATES
                     if (ImGui::CollapsingHeader(lampLang::LS("LAMPRAY_UPDATE_RULES"))) {
                         ImGui::Checkbox(lampLang::LS("LAMPRAY_UPDATE_RULES1")+" (Check_Updates_Startup)",
                                         &lampConfig::getInstance().checkForUpdatesAtStartup);
                     }
-
+#endif
 
                 if (ImGui::CollapsingHeader(lampLang::LS("LAMPRAY_CUSTOM_LANG"))) {
                     std::vector<std::string> xmlFiles;

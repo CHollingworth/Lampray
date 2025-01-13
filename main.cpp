@@ -119,6 +119,9 @@ int main(int, char**)
     if(loadedCheckUpdates == "0" || loadedCheckUpdates == "false"){
         checkForUpdates = false;
     }
+#ifdef CHECK_FOR_UPDATES
+	checkForUpdates = false;
+#endif
     if(checkForUpdates){
         Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
     }
