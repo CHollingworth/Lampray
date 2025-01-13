@@ -62,21 +62,21 @@ namespace Lamp {
                 return Core::Base::lampLog::getInstance().pLog({0, "Game Configuration not set."}, Core::Base::lampLog::warningLevel::WARNING, true, Core::Base::lampLog::LMP_NOCONFIG);
             }
 
-            Core::Base::LampSequencer::add("BG3 Deployment Queue", [this]() -> lampReturn {
+            Core::Base::LampSequencer::add("C77 Deployment Queue", [this]() -> lampReturn {
                 Lamp::Core::lampControl::getInstance().deploymentStageTitle = "Preparing";
                 auto result = preCleanUp();
                 if(!result) Core::Base::lampLog::getInstance().log("Pre cleanup has failed.", Core::Base::lampLog::warningLevel::ERROR, true, Core::Base::lampLog::LMP_CLEANUPFAILED);
                 return result;
             });
 
-            Core::Base::LampSequencer::add("BG3 Deployment Queue", [this]() -> lampReturn {
+            Core::Base::LampSequencer::add("C77 Deployment Queue", [this]() -> lampReturn {
                 Lamp::Core::lampControl::getInstance().deploymentStageTitle = "Pre Deployment";
                 auto result = preDeployment();
                 if(!result) Core::Base::lampLog::getInstance().log("Pre Deployment has failed.", Core::Base::lampLog::warningLevel::ERROR, true, Core::Base::lampLog::LMP_PREDEPLOYFAILED);
                 return result;
             });
 
-            Core::Base::LampSequencer::add("BG3 Deployment Queue", [this]() -> lampReturn {
+            Core::Base::LampSequencer::add("C77 Deployment Queue", [this]() -> lampReturn {
                 Lamp::Core::lampControl::getInstance().deploymentStageTitle = "Deploying";
                 auto result = deployment();
                 if(!result) Core::Base::lampLog::getInstance().log("Deployment has failed.", Core::Base::lampLog::warningLevel::ERROR, true, Core::Base::lampLog::LMP_DEOPLYMENTFAILED);
@@ -84,7 +84,7 @@ namespace Lamp {
             });
 
 
-            Core::Base::LampSequencer::run("BG3 Deployment Queue");
+            Core::Base::LampSequencer::run("C77 Deployment Queue");
             Lamp::Core::lampControl::getInstance().inDeployment = false;
             return false;
         }
