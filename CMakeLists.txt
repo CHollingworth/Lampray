@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 option(USE_XDG_DIRECTORY "Use XDG directory to store data instead of the working directory" ON)
+option(CHECK_FOR_UPDATES "Enables checking for updates from the Github repo" ON)
 
 add_executable(${PROJECT_NAME} main.cpp
         third-party/imgui/imconfig.h
@@ -54,6 +55,10 @@ if(USE_XDG_DIRECTORY)
   target_compile_definitions(${PROJECT_NAME} PUBLIC USE_XDG)
 endif(USE_XDG_DIRECTORY)
 
+
+if(CHECK_FOR_UPDATES)
+  target_compile_definitions(${PROJECT_NAME} PUBLIC CHECK_FOR_UPDATES)
+endif(CHECK_FOR_UPDATES)
 
 
 find_package(PkgConfig REQUIRED)

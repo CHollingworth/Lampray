@@ -283,10 +283,11 @@ void Lamp::Core::lampMenu::DefaultMenuBar() {
             }
 
 
-
+#ifdef CHECK_FOR_UPDATES
             if (ImGui::MenuItem(lampLang::LS("LAMPRAY_UPDATE_CHECK"))) {
                 Lamp::Core::FS::lampUpdate::getInstance().checkForUpdates();
             }
+#endif
 
             if (ImGui::MenuItem(lampLang::LS("LAMPRAY_CUSTOM"))) {
                 currentMenu = CUSTOMIZE;
