@@ -128,6 +128,7 @@ Lamp::Core::lampReturn Lamp::Core::FS::lampExtract::caseInsensitiveFolderCopyRec
     for (const auto& entry : fs::recursive_directory_iterator(sourceDirectory)) {
         if (fs::is_directory(entry) &&
             caseInsensitiveStringCompare(entry.path().filename().string(), targetDirectoryName)) {
+            fs::create_directories(destinationDirectory);
             lampReturn result = copyDirectoryRecursively(entry, destinationDirectory);
             if (!result) {
                 return result; // Propagate the error if copying failed
