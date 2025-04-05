@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <string>
 #include <array>
-#include "../../third-party/imgui/imgui.h"
+#include "imgui.h"
 
 
 namespace Lamp::Core{

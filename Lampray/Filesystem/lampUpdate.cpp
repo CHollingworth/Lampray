@@ -6,7 +6,7 @@
 #include <curl/curl.h>
 #include <string>
 #include <iostream>
-#include "../../third-party/imgui/imgui.h"
+#include "imgui.h"
 
 void Lamp::Core::FS::lampUpdate::checkForUpdates() {
     CURL* curl = curl_easy_init();

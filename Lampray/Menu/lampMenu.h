@@ -5,7 +5,7 @@
 #ifndef LAMP_LAMPMENU_H
 #define LAMP_LAMPMENU_H
 
-#include "../../third-party/imgui/imgui.h"
+#include "imgui.h"
 #include "../Filesystem/lampFS.h"
 #include "../Control/lampGames.h"
 #include "../Control/lampControl.h"

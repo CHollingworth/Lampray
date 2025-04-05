@@ -11,7 +11,7 @@
 #include "../Base/lampBase.h"
 #include "../Filesystem/lampFS.h"
 #include "lampGames.h"
-#include "../../third-party/nfd/include/nfd.h"
+#include "nfd.h"
 #include "../Lang/lampLang.h"
 
 namespace Lamp::Core{

@@ -115,10 +115,25 @@ void Lamp::Core::lampMenu::ModMenu() {
     if(ImGui::Button(lampLang::LS("LAMPRAY_RESET"))) {
         Lamp::Core::FS::lampTrack::reset(Lamp::Games::getInstance().currentGame->Ident().ReadableName);
         std::filesystem::path installPath(Lamp::Games::getInstance().currentGame->KeyInfo()["installDirPath"]);
-        system(("pkexec umount \""+Lamp::Games::getInstance().currentGame->KeyInfo()["installDirPath"]+"\"").c_str());
-        std::filesystem::rename(installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string()), Lamp::Games::getInstance().currentGame->KeyInfo()["installDirPath"]);
-        system(("pkexec umount \""+Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods\"").c_str());
-        std::filesystem::rename(std::filesystem::path(Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods").parent_path() / ("Lampray Managed - " + std::filesystem::path(Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods").stem().string()), std::filesystem::path(Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods"));
+        // TODO getmntent should be used to check if we should unmount in the first place
+        if (auto const rc = system(("pkexec umount \"" + Lamp::Games::getInstance() .currentGame->KeyInfo()["installDirPath"] + "\"") .c_str()); !rc) {
+            try {
+                std::filesystem::rename( installPath.parent_path() / ("Lampray Managed - " + installPath.stem().string()), Lamp::Games::getInstance() .currentGame->KeyInfo()["installDirPath"]);
+            } catch (std::filesystem::filesystem_error const &e) {
+                Lamp::Core::lampNotification::getInstance().pushErrorNotification("Failed rename install dir");
+            }
+        } else {
+            Lamp::Core::lampNotification::getInstance().pushErrorNotification("Failed to unmount overlayed install dir");
+        }
+        if (auto const rc = system(("pkexec umount \""+Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods\"").c_str()); !rc) {
+            try {
+                std::filesystem::rename(std::filesystem::path(Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods").parent_path() / ("Lampray Managed - " + std::filesystem::path(Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods").stem().string()), std::filesystem::path(Lamp::Games::getInstance().currentGame->KeyInfo()["appDataPath"]+"/Mods"));
+            } catch (std::filesystem::filesystem_error const &e) {
+                Lamp::Core::lampNotification::getInstance().pushErrorNotification("Failed rename mod dir");
+            }
+        } else {
+            Lamp::Core::lampNotification::getInstance().pushErrorNotification("Failed to unmount overlayed mod dir");
+        }
     }
 
 

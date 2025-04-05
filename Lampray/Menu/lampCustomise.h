@@ -5,10 +5,10 @@
 #ifndef LAMP_LAMPCUSTOMISE_H
 #define LAMP_LAMPCUSTOMISE_H
 
-#include "../../third-party/imgui/imgui.h"
+#include "imgui.h"
 #include "../Base/lampBase.h"
 #include "../Filesystem/lampFS.h"
-#include "../../third-party/imgui/imgui_internal.h"
+#include "imgui_internal.h"
 
 namespace Lamp {
     namespace Core {

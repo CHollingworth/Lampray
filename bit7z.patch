@@ -1,0 +1,12 @@
+diff --git i/include/bit7z/bitabstractarchivehandler.hpp w/include/bit7z/bitabstractarchivehandler.hpp
+index 8b0a176c..e4936b3b 100644
+--- i/include/bit7z/bitabstractarchivehandler.hpp
++++ w/include/bit7z/bitabstractarchivehandler.hpp
+@@ -10,6 +10,7 @@
+ #ifndef BITABSTRACTARCHIVEHANDLER_HPP
+ #define BITABSTRACTARCHIVEHANDLER_HPP
+ 
++#include <algorithm>
+ #include <cstdint>
+ #include <functional>
+ 

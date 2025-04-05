@@ -6,7 +6,6 @@
 #include <regex>
 #include "BG3.h"
 #include "../../Lampray/Control/lampControl.h"
-#include "../../third-party/json/json.hpp"
 
 Lamp::Game::lampReturn Lamp::Game::BG3::registerArchive(Lamp::Game::lampString Path, int ArchiveModType) {
     if(ArchiveModType < 0){
@@ -407,6 +406,7 @@ Lamp::Game::lampReturn Lamp::Game::BG3::deployment() {
         };
         Lamp::Core::FS::lampTrack::handleFile(E);
     Lamp::Core::lampControl::getInstance().deplopmentTracker = {4,4};
+    return true;
 }
 
 Lamp::Game::lampReturn Lamp::Game::BG3::postDeploymentTasks() {

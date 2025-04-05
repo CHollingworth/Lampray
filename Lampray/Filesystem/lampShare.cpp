@@ -5,13 +5,15 @@
 #include <climits>
 
 #include "lampFS.h"
-#include "../../third-party/nfd/include/nfd.h"
+#include "nfd.h"
 
 #include "../Control/lampGames.h"
 #include "bit7zlibrary.hpp"
 #include "bitfilecompressor.hpp"
 #include "bitarchivereader.hpp"
 #include "../Control/lampControl.h"
+
+using namespace bit7z;
 
 bool Lamp::Core::FS::lampShare::compressFile(const std::string& inputFile, const std::string& outputFile) {
     // Open the input file for reading

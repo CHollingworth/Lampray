@@ -9,6 +9,8 @@
 #include "bitarchivereader.hpp"
 #include "bitexception.hpp"
 
+using namespace bit7z;
+
 Lamp::Core::FS::lampReturn Lamp::Core::FS::lampExtract::extract(const Base::lampMod::Mod *mod) {
     if(!mod->enabled) return false;
     std::string workingDir = Lamp::Core::lampConfig::getInstance().DeploymentDataPath + Lamp::Games::getInstance().currentGame->Ident().ReadableName;

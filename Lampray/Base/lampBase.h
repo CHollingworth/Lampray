@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 #include <sstream>
-#include "../../third-party/imgui/imgui.h"
+#include "imgui.h"
 #include "../Control/lampNotification.h"
 #include <iomanip>
 #include <functional>

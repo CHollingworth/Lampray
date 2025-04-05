@@ -8,8 +8,8 @@
 #include <string>
 #include <regex>
 #include "../Control/lampConfig.h"
-#include "../../third-party/json/json.hpp"
-#include "../../third-party/l4z/lz4frame.h"
+#include "nlohmann/json.hpp"
+#include "lz4frame.h"
 #include <lz4.h>
 
 namespace Lamp::Core::Parse{
